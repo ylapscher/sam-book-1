@@ -96,64 +96,6 @@ const Card = styled.div`
   }
 `;
 
-const HowItWorksSection = styled(Section)`
-  background-color: var(--accent-color);
-  padding: 6rem 2rem;
-  text-align: center;
-
-  h2 {
-    font-size: 3.5rem;
-    margin-bottom: 2rem;
-  }
-
-  p.subtitle {
-    font-size: 1.75rem;
-    color: var(--secondary-color);
-    font-family: 'Fraunces', serif;
-    max-width: 800px;
-    margin: 0 auto 4rem;
-  }
-`;
-
-const StepsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-`;
-
-const Step = styled.div`
-  text-align: center;
-
-  .step-number {
-    color: var(--primary-color);
-    font-family: 'Fraunces', serif;
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 2rem;
-    svg {
-      width: 100%;
-      height: 100%;
-      stroke: var(--primary-color);
-    }
-  }
-
-  p {
-    font-size: 1.25rem;
-  }
-`;
-
 const FAQ = styled.div`
   max-width: 800px;
   margin: 2rem auto;
