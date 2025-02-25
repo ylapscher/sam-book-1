@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import GlobalStyles from './styles/GlobalStyles';
 
@@ -33,22 +33,85 @@ const ProductGrid = styled.div`
   }
 `;
 
-const ProductImages = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+const ProductImagesContainer = styled.div`
+  display: flex;
+  gap: 2rem;
+  position: relative;
+`;
+
+const ThumbnailList = styled.div`
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  margin-bottom: 2rem;
+  width: 75px;
 
   img {
     width: 100%;
     height: auto;
     border-radius: 4px;
-    border: 1px solid #DDDDDD;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &.active {
+      border-color: #222222;
+    }
+  }
+`;
+
+const MainImageContainer = styled.div`
+  flex: 1;
+  position: relative;
+  
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+`;
+
+const NavigationButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+
+  &.prev {
+    left: 10px;
+  }
+
+  &.next {
+    right: 10px;
   }
 `;
 
 const ProductInfo = styled.div`
   padding: 0 2rem;
+
+  p.subtitle {
+    font-size: 20px;
+    color: #595959;
+    margin-bottom: 2rem;
+  }
 
   @media (max-width: 1024px) {
     padding: 0;
@@ -194,7 +257,127 @@ const SubmitButton = styled.button`
   }
 `;
 
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const CarouselContainer = styled.div`
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  
+  img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+`;
+
+const CarouselButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &.prev {
+    left: -50px;
+  }
+
+  &.next {
+    right: -50px;
+  }
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const Header = styled.header`
+  width: 100%;
+  padding: 3rem 2rem;
+  background: white;
+  border-bottom: 1px solid #DDDDDD;
+`;
+
+const HeaderContent = styled.div`
+  max-width: 1400px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: 48px;
+    font-weight: 500;
+    color: #222222;
+  }
+`;
+
 function App() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = [
+    { src: "/images/pink-cover.jpg", alt: "Pink cover with flowers" },
+    { src: "/images/blue-cover.jpg", alt: "Blue cover with clouds" },
+    { src: "/images/sample-page-1.jpg", alt: "Sample page from the book" },
+    { src: "/images/sample-page-2.jpg", alt: "Another sample page" }
+  ];
+
+  const handleThumbnailClick = (index) => {
+    setCurrentImageIndex(index);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? images.length - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === images.length - 1 ? 0 : prev + 1
+    );
+  };
+
   useEffect(() => {
     // Add Stripe script
     const script = document.createElement('script');
@@ -212,19 +395,44 @@ function App() {
     <>
       <GlobalStyles />
       <AppContainer>
+        <Header>
+          <HeaderContent>
+            <h1>Sam's Story: A Journey Through Generations</h1>
+          </HeaderContent>
+        </Header>
         <MainContent>
           <ProductGrid>
-            <ProductImages>
-              <img src="/images/pink-cover.jpg" alt="Pink cover with flowers" />
-              <img src="/images/blue-cover.jpg" alt="Blue cover with clouds" />
-              <img src="/images/sample-page-1.jpg" alt="Sample page from the book" />
-              <img src="/images/sample-page-2.jpg" alt="Another sample page" />
-            </ProductImages>
-            
-            <ProductInfo>
-              <h1>Sam's Story: A Journey Through Generations</h1>
-              <p>Create a personalized children's book that celebrates your family's unique heritage</p>
+            <ProductImagesContainer>
+              <ThumbnailList>
+                {images.map((image, index) => (
+                  <img
+                    key={image.src}
+                    src={image.src}
+                    alt={image.alt}
+                    onClick={() => handleThumbnailClick(index)}
+                    className={currentImageIndex === index ? 'active' : ''}
+                  />
+                ))}
+              </ThumbnailList>
               
+              <MainImageContainer>
+                <img
+                  src={images[currentImageIndex].src}
+                  alt={images[currentImageIndex].alt}
+                />
+                <NavigationButton className="prev" onClick={handlePrevImage}>
+                  ‹
+                </NavigationButton>
+                <NavigationButton className="next" onClick={handleNextImage}>
+                  ›
+                </NavigationButton>
+              </MainImageContainer>
+            </ProductImagesContainer>
+
+            <ProductInfo>
+              <p className="subtitle">
+                Create a personalized children's book that celebrates your family's unique heritage
+              </p>
               <Price>$34.99+</Price>
               
               <stripe-buy-button
