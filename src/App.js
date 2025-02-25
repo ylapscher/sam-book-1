@@ -96,30 +96,62 @@ const Card = styled.div`
   }
 `;
 
-// Components
-const Hero = styled.section`
-  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
-              url('/images/hero-bg.jpg') center/cover;
+const HowItWorksSection = styled(Section)`
+  background-color: var(--accent-color);
   padding: 6rem 2rem;
   text-align: center;
+
+  h2 {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+  }
+
+  p.subtitle {
+    font-size: 1.75rem;
+    color: var(--secondary-color);
+    font-family: 'Fraunces', serif;
+    max-width: 800px;
+    margin: 0 auto 4rem;
+  }
 `;
 
-const HeroContent = styled.div`
-  max-width: 800px;
+const StepsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  max-width: 1200px;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 `;
 
-const Title = styled.h1`
-  font-size: 3rem;
-  color: #4a4a4a;
-  margin-bottom: 1rem;
-  font-family: 'Comic Sans MS', cursive;
-`;
+const Step = styled.div`
+  text-align: center;
 
-const Subtitle = styled.h2`
-  font-size: 1.5rem;
-  color: #666;
-  margin-bottom: 2rem;
+  .step-number {
+    color: var(--primary-color);
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 2rem;
+    svg {
+      width: 100%;
+      height: 100%;
+      stroke: var(--primary-color);
+    }
+  }
+
+  p {
+    font-size: 1.25rem;
+  }
 `;
 
 const FAQ = styled.div`
@@ -131,12 +163,11 @@ const FAQItem = styled.div`
   margin-bottom: 2rem;
 
   h3 {
-    color: #ff6b6b;
     margin-bottom: 0.5rem;
   }
 
   p {
-    color: #666;
+    color: var(--secondary-color);
     line-height: 1.6;
   }
 `;
