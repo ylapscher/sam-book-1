@@ -1,0 +1,21 @@
+[build]
+  publish = "build"
+
+[functions]
+  directory = "functions"
+
+# Configure form handling
+[build.processing.html]
+  pretty_urls = true
+
+# Increase form upload size limit
+[build.environment]
+  MAX_FILE_SIZE = "10485760" # 10MB in bytes
+
+# Prevent CORS issues for form submissions
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type" 

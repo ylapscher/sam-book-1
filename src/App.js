@@ -443,12 +443,9 @@ function App() {
     const form = e.target;
     const formData = new FormData(form);
     
-    // Add this specific header for Netlify forms with file uploads
+    // For forms with file uploads, don't include Content-Type headers
     fetch("/", {
       method: "POST",
-      headers: { 
-        "Accept": "application/json" 
-      },
       body: formData
     })
       .then(response => {
@@ -597,7 +594,9 @@ function App() {
               <Form
                 name="family-story"
                 method="POST"
-                data-netlify="true"
+                netlify="true"
+                action="/"
+                data-netlify="true" 
                 data-netlify-honeypot="bot-field"
                 encType="multipart/form-data"
                 onSubmit={handleFormSubmit}
@@ -605,6 +604,7 @@ function App() {
               >
                 <input type="hidden" name="form-name" value="family-story" />
                 <input type="hidden" name="bot-field" />
+                <input type="hidden" name="form-set-encoding" value="multipart/form-data" />
                 <input type="hidden" name="max-file-size" value="10485760" />
                 
                 {formSuccess && (

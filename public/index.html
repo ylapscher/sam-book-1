@@ -32,22 +32,24 @@
     
     <!-- Hidden form for Netlify form detection -->
     <form name="family-story" netlify netlify-honeypot="bot-field" hidden>
-      <input type="text" name="parentFirstName" />
-      <input type="text" name="parentLastName" />
-      <input type="email" name="parentEmail" />
-      <input type="tel" name="parentPhone" />
-      <input type="text" name="babyFirstName" />
-      <input type="text" name="babyLastName" />
-      <input type="text" name="babyGender" />
-      <input type="date" name="babyDOB" />
+      <input type="text" name="parentName" />
+      <input type="text" name="parentOrigin" />
+      <input type="text" name="grandparentName" />
       <input type="text" name="grandparentOrigin" />
       <input type="text" name="settlementLocation" />
+      <select name="childGender">
+        <option value="boy">Boy</option>
+        <option value="girl">Girl</option>
+      </select>
+      <select name="coverStyle">
+        <option value="pink-flowers">Pink with Flowers</option>
+        <option value="blue-clouds">Blue with Clouds</option>
+      </select>
       <input type="file" name="parentBabyPhoto" />
       <input type="file" name="datingPhoto" />
       <input type="file" name="babyPhoto" />
       <input type="file" name="familyPhoto" />
       <textarea name="family-story"></textarea>
-      <input type="text" name="referred" />
     </form>
     
     <!--

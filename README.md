@@ -42,17 +42,6 @@ The following environment variables are required:
 - `REACT_APP_STRIPE_PUBLISHABLE_KEY`: Your Stripe publishable key
 - `REACT_APP_STRIPE_BUY_BUTTON_ID`: Your Stripe Buy Button ID
 
-## Deployment
-
-This site is configured for deployment on Netlify. Simply connect your GitHub repository to Netlify, and it will automatically:
-- Build the React application
-- Handle form submissions
-- Process file uploads
-
-## Contributing
-
-If you'd like to contribute, please fork the repository and make changes as you'd like. Pull requests are warmly welcome.
-
 ## License
 
 All rights reserved. © Sam's Story
