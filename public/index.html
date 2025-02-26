@@ -29,6 +29,30 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    
+    <!-- Hidden form for Netlify form detection -->
+    <form name="family-story" netlify netlify-honeypot="bot-field" hidden enctype="multipart/form-data">
+      <input type="hidden" name="form-name" value="family-story" />
+      <input type="hidden" name="bot-field" />
+      <input name="parentName" />
+      <input name="parentOrigin" />
+      <input name="grandparentName" />
+      <input name="grandparentOrigin" />
+      <input name="settlementLocation" />
+      <select name="childGender">
+        <option value="boy">Boy</option>
+        <option value="girl">Girl</option>
+      </select>
+      <select name="coverStyle">
+        <option value="pink-flowers">Pink with Flowers</option>
+        <option value="blue-clouds">Blue with Clouds</option>
+      </select>
+      <input type="file" name="parentBabyPhoto" />
+      <input type="file" name="datingPhoto" />
+      <input type="file" name="babyPhoto" />
+      <input type="file" name="familyPhoto" />
+    </form>
+    
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

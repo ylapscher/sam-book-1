@@ -245,13 +245,25 @@ const FileUpload = styled.div`
   margin-top: 0.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
 
   &:hover {
     border-color: var(--primary-color);
   }
 
   input {
-    display: none;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  label {
+    display: block;
+    cursor: pointer;
   }
 `;
 
@@ -294,6 +306,11 @@ const HeaderContent = styled.div`
 function App() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [openFAQs, setOpenFAQs] = useState({});
+  const [stripeLoaded, setStripeLoaded] = useState(false);
+  const [stripeError, setStripeError] = useState(false);
+  const [formSubmitting, setFormSubmitting] = useState(false);
+  const [formSuccess, setFormSuccess] = useState(false);
+  const [formError, setFormError] = useState(null);
 
   const images = [
     { src: "/images/pink-cover.jpg", alt: "Pink cover with flowers" },
@@ -325,16 +342,59 @@ function App() {
     }));
   };
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setFormSubmitting(true);
+    setFormError(null);
+    
+    const form = e.target;
+    const formData = new FormData(form);
+    
+    fetch("/", {
+      method: "POST",
+      body: formData
+    })
+      .then(response => {
+        if (response.ok) {
+          setFormSubmitting(false);
+          setFormSuccess(true);
+          form.reset();
+          window.scrollTo(0, 0);
+        } else {
+          throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+        }
+      })
+      .catch(error => {
+        setFormSubmitting(false);
+        setFormError("There was a problem submitting your form. Please try again.");
+        console.error("Form submission error:", error);
+      });
+  };
+
   useEffect(() => {
     // Add Stripe script
     const script = document.createElement('script');
     script.src = 'https://js.stripe.com/v3/buy-button.js';
     script.async = true;
+    
+    // Handle success
+    script.onload = () => {
+      setStripeLoaded(true);
+    };
+    
+    // Handle errors
+    script.onerror = () => {
+      console.log('Stripe script failed to load. This could be due to an ad blocker.');
+      setStripeError(true);
+    };
+    
     document.body.appendChild(script);
 
     return () => {
       // Cleanup script on component unmount
-      document.body.removeChild(script);
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
     };
   }, []);
 
@@ -382,11 +442,28 @@ function App() {
               </p>
               <Price>$34.99+</Price>
               
-              <stripe-buy-button
-                buy-button-id="buy_btn_1QvpRoKo6NlmNYnt0SlX4NnU"
-                publishable-key="pk_live_51MfrNYKo6NlmNYntKY84p45P0y7pUQowfb7ZobQt6AAENqJS1XvBojxEgrXJrtfMHmwYBcprSuRX0QxPWsCkpLOG00EHKs3tZ5"
-              >
-              </stripe-buy-button>
+              {!stripeError ? (
+                stripeLoaded ? (
+                  <stripe-buy-button
+                    buy-button-id="buy_btn_1QvpRoKo6NlmNYnt0SlX4NnU"
+                    publishable-key="pk_live_51MfrNYKo6NlmNYntKY84p45P0y7pUQowfb7ZobQt6AAENqJS1XvBojxEgrXJrtfMHmwYBcprSuRX0QxPWsCkpLOG00EHKs3tZ5"
+                  >
+                  </stripe-buy-button>
+                ) : (
+                  <div style={{ 
+                    textAlign: "center", 
+                    padding: "1rem", 
+                    border: "1px solid #ddd", 
+                    borderRadius: "4px" 
+                  }}>
+                    <p>Loading payment options...</p>
+                  </div>
+                )
+              ) : (
+                <SubmitButton onClick={() => window.location.href = "mailto:orders@ourfamilystorybook.com?subject=Book Order"}>
+                  Contact Us to Order
+                </SubmitButton>
+              )}
 
               <Section>
                 <h2>How It Works</h2>
@@ -417,129 +494,161 @@ function App() {
                 data-netlify="true"
                 data-netlify-honeypot="bot-field"
                 encType="multipart/form-data"
+                onSubmit={handleFormSubmit}
               >
                 <input type="hidden" name="form-name" value="family-story" />
                 <input type="hidden" name="bot-field" />
                 <input type="hidden" name="max-file-size" value="10485760" />
                 
-                <FormGrid>
-                  <div>
-                    <FormGroup>
-                      <label htmlFor="parentName">Parent's Name *</label>
-                      <input type="text" name="parentName" id="parentName" required />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label htmlFor="parentOrigin">Parent's Country of Origin *</label>
-                      <input type="text" name="parentOrigin" id="parentOrigin" required />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label htmlFor="grandparentName">Grandparent's Name *</label>
-                      <input type="text" name="grandparentName" id="grandparentName" required />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label htmlFor="grandparentOrigin">Grandparent's Country of Origin *</label>
-                      <input type="text" name="grandparentOrigin" id="grandparentOrigin" required />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label htmlFor="settlementLocation">Where Family Settled *</label>
-                      <input type="text" name="settlementLocation" id="settlementLocation" required />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label htmlFor="childGender">Book For *</label>
-                      <select name="childGender" id="childGender" required>
-                        <option value="">Select...</option>
-                        <option value="boy">Boy</option>
-                        <option value="girl">Girl</option>
-                      </select>
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label htmlFor="coverStyle">Cover Style *</label>
-                      <select name="coverStyle" id="coverStyle" required>
-                        <option value="">Select...</option>
-                        <option value="pink-flowers">Pink with Flowers</option>
-                        <option value="blue-clouds">Blue with Clouds</option>
-                      </select>
-                    </FormGroup>
+                {formSuccess && (
+                  <div style={{ 
+                    background: "#e6f7e6", 
+                    padding: "1rem", 
+                    borderRadius: "4px", 
+                    marginBottom: "2rem",
+                    textAlign: "center"
+                  }}>
+                    <h3 style={{ color: "#2e7d32" }}>Thank you for your submission!</h3>
+                    <p>We'll review your information and contact you soon about your personalized book.</p>
                   </div>
-
-                  <div>
-                    <FormGroup>
-                      <label>Parent's Baby Photo *</label>
-                      <FileUpload>
-                        <label htmlFor="parentBabyPhoto">
-                          Click to upload or drag and drop (Max 10MB)
-                          <input 
-                            type="file" 
-                            name="parentBabyPhoto" 
-                            id="parentBabyPhoto" 
-                            accept="image/*"
-                            max-size="10485760"
-                            required 
-                          />
-                        </label>
-                      </FileUpload>
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label>Parents' Dating Photo *</label>
-                      <FileUpload>
-                        <label htmlFor="datingPhoto">
-                          Click to upload or drag and drop (Max 10MB)
-                          <input 
-                            type="file" 
-                            name="datingPhoto" 
-                            id="datingPhoto" 
-                            accept="image/*"
-                            max-size="10485760"
-                            required 
-                          />
-                        </label>
-                      </FileUpload>
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label>Baby's Recent Photo *</label>
-                      <FileUpload>
-                        <label htmlFor="babyPhoto">
-                          Click to upload or drag and drop (Max 10MB)
-                          <input 
-                            type="file" 
-                            name="babyPhoto" 
-                            id="babyPhoto" 
-                            accept="image/*"
-                            max-size="10485760"
-                            required 
-                          />
-                        </label>
-                      </FileUpload>
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label>Current Family Photo *</label>
-                      <FileUpload>
-                        <label htmlFor="familyPhoto">
-                          Click to upload or drag and drop (Max 10MB)
-                          <input 
-                            type="file" 
-                            name="familyPhoto" 
-                            id="familyPhoto" 
-                            accept="image/*"
-                            max-size="10485760"
-                            required 
-                          />
-                        </label>
-                      </FileUpload>
-                    </FormGroup>
+                )}
+                
+                {formError && (
+                  <div style={{ 
+                    background: "#ffebee", 
+                    padding: "1rem", 
+                    borderRadius: "4px", 
+                    marginBottom: "2rem",
+                    textAlign: "center"
+                  }}>
+                    <h3 style={{ color: "#c62828" }}>Form Submission Error</h3>
+                    <p>{formError}</p>
                   </div>
-                </FormGrid>
+                )}
+                
+                {!formSuccess && (
+                  <>
+                    <FormGrid>
+                      <div>
+                        <FormGroup>
+                          <label htmlFor="parentName">Parent's Name *</label>
+                          <input type="text" name="parentName" id="parentName" required />
+                        </FormGroup>
 
-                <SubmitButton type="submit">Submit Your Story</SubmitButton>
+                        <FormGroup>
+                          <label htmlFor="parentOrigin">Parent's Country of Origin *</label>
+                          <input type="text" name="parentOrigin" id="parentOrigin" required />
+                        </FormGroup>
+
+                        <FormGroup>
+                          <label htmlFor="grandparentName">Grandparent's Name *</label>
+                          <input type="text" name="grandparentName" id="grandparentName" required />
+                        </FormGroup>
+
+                        <FormGroup>
+                          <label htmlFor="grandparentOrigin">Grandparent's Country of Origin *</label>
+                          <input type="text" name="grandparentOrigin" id="grandparentOrigin" required />
+                        </FormGroup>
+
+                        <FormGroup>
+                          <label htmlFor="settlementLocation">Where Family Settled *</label>
+                          <input type="text" name="settlementLocation" id="settlementLocation" required />
+                        </FormGroup>
+
+                        <FormGroup>
+                          <label htmlFor="childGender">Book For *</label>
+                          <select name="childGender" id="childGender" required>
+                            <option value="">Select...</option>
+                            <option value="boy">Boy</option>
+                            <option value="girl">Girl</option>
+                          </select>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <label htmlFor="coverStyle">Cover Style *</label>
+                          <select name="coverStyle" id="coverStyle" required>
+                            <option value="">Select...</option>
+                            <option value="pink-flowers">Pink with Flowers</option>
+                            <option value="blue-clouds">Blue with Clouds</option>
+                          </select>
+                        </FormGroup>
+                      </div>
+
+                      <div>
+                        <FormGroup>
+                          <label>Parent's Baby Photo *</label>
+                          <FileUpload>
+                            <label htmlFor="parentBabyPhoto">
+                              Click to upload or drag and drop (Max 10MB)
+                            </label>
+                            <input 
+                              type="file" 
+                              name="parentBabyPhoto" 
+                              id="parentBabyPhoto" 
+                              accept="image/*"
+                              required 
+                            />
+                          </FileUpload>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <label>Parents' Dating Photo *</label>
+                          <FileUpload>
+                            <label htmlFor="datingPhoto">
+                              Click to upload or drag and drop (Max 10MB)
+                            </label>
+                            <input 
+                              type="file" 
+                              name="datingPhoto" 
+                              id="datingPhoto" 
+                              accept="image/*"
+                              required 
+                            />
+                          </FileUpload>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <label>Baby's Recent Photo *</label>
+                          <FileUpload>
+                            <label htmlFor="babyPhoto">
+                              Click to upload or drag and drop (Max 10MB)
+                            </label>
+                            <input 
+                              type="file" 
+                              name="babyPhoto" 
+                              id="babyPhoto" 
+                              accept="image/*"
+                              required 
+                            />
+                          </FileUpload>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <label>Current Family Photo *</label>
+                          <FileUpload>
+                            <label htmlFor="familyPhoto">
+                              Click to upload or drag and drop (Max 10MB)
+                            </label>
+                            <input 
+                              type="file" 
+                              name="familyPhoto" 
+                              id="familyPhoto" 
+                              accept="image/*"
+                              required 
+                            />
+                          </FileUpload>
+                        </FormGroup>
+                      </div>
+                    </FormGrid>
+                    
+                    <SubmitButton 
+                      type="submit" 
+                      disabled={formSubmitting}
+                    >
+                      {formSubmitting ? "Submitting..." : "Submit Your Story"}
+                    </SubmitButton>
+                  </>
+                )}
               </Form>
             </Section>
           </FormSection>
