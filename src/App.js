@@ -216,6 +216,60 @@ const Form = styled.form`
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &.submitting {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  display: flex;
+  flex-direction: column;
+  
+  .form-footer {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  
+  button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 180px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+  
+  .loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 `;
 
 const FormGroup = styled.div`
@@ -248,22 +302,40 @@ const FileUpload = styled.div`
   position: relative;
 
   &:hover {
-    border-color: var(--primary-color);
+    border-color: #4b9cd3;
   }
 
   input {
-    opacity: 0;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    opacity: 0;
     cursor: pointer;
   }
 
   label {
     display: block;
-    cursor: pointer;
+    color: #666;
+    margin-bottom: 0;
+  }
+
+  &.file-uploaded {
+    border-color: #2e7d32;
+    background-color: #e6f7e6;
+  }
+
+  .upload-success {
+    color: #2e7d32;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .upload-success svg {
+    margin-right: 0.5rem;
   }
 `;
 
@@ -311,6 +383,12 @@ function App() {
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
   const [formError, setFormError] = useState(null);
+  const [fileUploads, setFileUploads] = useState({
+    parentBabyPhoto: false,
+    datingPhoto: false,
+    babyPhoto: false,
+    familyPhoto: false
+  });
 
   const images = [
     { src: "/images/pink-cover.jpg", alt: "Pink cover with flowers" },
@@ -342,6 +420,21 @@ function App() {
     }));
   };
 
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (files && files.length > 0) {
+      setFileUploads(prev => ({
+        ...prev,
+        [name]: true
+      }));
+    } else {
+      setFileUploads(prev => ({
+        ...prev,
+        [name]: false
+      }));
+    }
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
     setFormSubmitting(true);
@@ -350,8 +443,12 @@ function App() {
     const form = e.target;
     const formData = new FormData(form);
     
+    // Add this specific header for Netlify forms with file uploads
     fetch("/", {
       method: "POST",
+      headers: { 
+        "Accept": "application/json" 
+      },
       body: formData
     })
       .then(response => {
@@ -359,9 +456,18 @@ function App() {
           setFormSubmitting(false);
           setFormSuccess(true);
           form.reset();
+          // Reset file upload states
+          setFileUploads({
+            parentBabyPhoto: false,
+            datingPhoto: false,
+            babyPhoto: false,
+            familyPhoto: false
+          });
           window.scrollTo(0, 0);
         } else {
-          throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+          return response.text().then(text => {
+            throw new Error(`Server responded with ${response.status}: ${text || response.statusText}`);
+          });
         }
       })
       .catch(error => {
@@ -495,6 +601,7 @@ function App() {
                 data-netlify-honeypot="bot-field"
                 encType="multipart/form-data"
                 onSubmit={handleFormSubmit}
+                className={formSubmitting ? "submitting" : ""}
               >
                 <input type="hidden" name="form-name" value="family-story" />
                 <input type="hidden" name="bot-field" />
@@ -577,7 +684,7 @@ function App() {
                       <div>
                         <FormGroup>
                           <label>Parent's Baby Photo *</label>
-                          <FileUpload>
+                          <FileUpload className={fileUploads.parentBabyPhoto ? "file-uploaded" : ""}>
                             <label htmlFor="parentBabyPhoto">
                               Click to upload or drag and drop (Max 10MB)
                             </label>
@@ -587,13 +694,22 @@ function App() {
                               id="parentBabyPhoto" 
                               accept="image/*"
                               required 
+                              onChange={handleFileChange}
                             />
+                            {fileUploads.parentBabyPhoto && (
+                              <div className="upload-success">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
+                                </svg>
+                                File uploaded successfully
+                              </div>
+                            )}
                           </FileUpload>
                         </FormGroup>
 
                         <FormGroup>
                           <label>Parents' Dating Photo *</label>
-                          <FileUpload>
+                          <FileUpload className={fileUploads.datingPhoto ? "file-uploaded" : ""}>
                             <label htmlFor="datingPhoto">
                               Click to upload or drag and drop (Max 10MB)
                             </label>
@@ -603,13 +719,22 @@ function App() {
                               id="datingPhoto" 
                               accept="image/*"
                               required 
+                              onChange={handleFileChange}
                             />
+                            {fileUploads.datingPhoto && (
+                              <div className="upload-success">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
+                                </svg>
+                                File uploaded successfully
+                              </div>
+                            )}
                           </FileUpload>
                         </FormGroup>
 
                         <FormGroup>
                           <label>Baby's Recent Photo *</label>
-                          <FileUpload>
+                          <FileUpload className={fileUploads.babyPhoto ? "file-uploaded" : ""}>
                             <label htmlFor="babyPhoto">
                               Click to upload or drag and drop (Max 10MB)
                             </label>
@@ -619,13 +744,22 @@ function App() {
                               id="babyPhoto" 
                               accept="image/*"
                               required 
+                              onChange={handleFileChange}
                             />
+                            {fileUploads.babyPhoto && (
+                              <div className="upload-success">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
+                                </svg>
+                                File uploaded successfully
+                              </div>
+                            )}
                           </FileUpload>
                         </FormGroup>
 
                         <FormGroup>
                           <label>Current Family Photo *</label>
-                          <FileUpload>
+                          <FileUpload className={fileUploads.familyPhoto ? "file-uploaded" : ""}>
                             <label htmlFor="familyPhoto">
                               Click to upload or drag and drop (Max 10MB)
                             </label>
@@ -635,18 +769,33 @@ function App() {
                               id="familyPhoto" 
                               accept="image/*"
                               required 
+                              onChange={handleFileChange}
                             />
+                            {fileUploads.familyPhoto && (
+                              <div className="upload-success">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
+                                </svg>
+                                File uploaded successfully
+                              </div>
+                            )}
                           </FileUpload>
                         </FormGroup>
                       </div>
                     </FormGrid>
                     
-                    <SubmitButton 
-                      type="submit" 
-                      disabled={formSubmitting}
-                    >
-                      {formSubmitting ? "Submitting..." : "Submit Your Story"}
-                    </SubmitButton>
+                    <div className="form-footer">
+                      <button type="submit" disabled={formSubmitting}>
+                        {formSubmitting ? (
+                          <>
+                            <span className="loading-spinner"></span>
+                            Submitting...
+                          </>
+                        ) : (
+                          "Submit"
+                        )}
+                      </button>
+                    </div>
                   </>
                 )}
               </Form>
