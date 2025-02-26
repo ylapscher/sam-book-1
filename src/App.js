@@ -125,14 +125,14 @@ const Price = styled.div`
 `;
 
 const Section = styled.section`
-  padding: 3rem 2rem;
+  padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
   border-top: 1px solid #DDDDDD;
 
   h2 {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
@@ -161,19 +161,35 @@ const Card = styled.div`
 
 const FAQ = styled.div`
   max-width: 800px;
-  margin: 2rem auto;
+  margin: 1rem auto;
 `;
 
 const FAQItem = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
 
   h3 {
     margin-bottom: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    &::after {
+      content: "${props => props.isOpen ? '▼' : '▶'}";
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+    }
   }
 
   p {
     color: var(--secondary-color);
     line-height: 1.6;
+    max-height: ${props => props.isOpen ? '1000px' : '0'};
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    margin-bottom: ${props => props.isOpen ? '1rem' : '0'};
   }
 `;
 
@@ -189,8 +205,8 @@ const FormGrid = styled.div`
 
 const FormSection = styled.section`
   background: var(--light-gray);
-  padding: 4rem 2rem;
-  margin: 4rem 0;
+  padding: 2rem;
+  margin: 2rem 0;
 `;
 
 const Form = styled.form`
@@ -257,83 +273,6 @@ const SubmitButton = styled.button`
   }
 `;
 
-const Modal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-const CarouselContainer = styled.div`
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  
-  img {
-    max-width: 100%;
-    max-height: 90vh;
-    object-fit: contain;
-  }
-`;
-
-const CarouselButton = styled.button`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 1;
-  }
-
-  &.prev {
-    left: -50px;
-  }
-
-  &.next {
-    right: -50px;
-  }
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: -40px;
-  right: 0;
-  background: white;
-  border: none;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 1;
-  }
-`;
-
 const Header = styled.header`
   width: 100%;
   padding: 3rem 2rem;
@@ -354,6 +293,7 @@ const HeaderContent = styled.div`
 
 function App() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [openFAQs, setOpenFAQs] = useState({});
 
   const images = [
     { src: "/images/pink-cover.jpg", alt: "Pink cover with flowers" },
@@ -378,6 +318,13 @@ function App() {
     );
   };
 
+  const toggleFAQ = (index) => {
+    setOpenFAQs(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
+
   useEffect(() => {
     // Add Stripe script
     const script = document.createElement('script');
@@ -397,7 +344,7 @@ function App() {
       <AppContainer>
         <Header>
           <HeaderContent>
-            <h1>Sam's Story: A Journey Through Generations</h1>
+            <h1>Our Family Story Book</h1>
           </HeaderContent>
         </Header>
         <MainContent>
@@ -468,9 +415,12 @@ function App() {
                 name="family-story"
                 method="POST"
                 data-netlify="true"
+                data-netlify-honeypot="bot-field"
                 encType="multipart/form-data"
               >
                 <input type="hidden" name="form-name" value="family-story" />
+                <input type="hidden" name="bot-field" />
+                <input type="hidden" name="max-file-size" value="10485760" />
                 
                 <FormGrid>
                   <div>
@@ -523,8 +473,15 @@ function App() {
                       <label>Parent's Baby Photo *</label>
                       <FileUpload>
                         <label htmlFor="parentBabyPhoto">
-                          Click to upload or drag and drop
-                          <input type="file" name="parentBabyPhoto" id="parentBabyPhoto" accept="image/*" required />
+                          Click to upload or drag and drop (Max 10MB)
+                          <input 
+                            type="file" 
+                            name="parentBabyPhoto" 
+                            id="parentBabyPhoto" 
+                            accept="image/*"
+                            max-size="10485760"
+                            required 
+                          />
                         </label>
                       </FileUpload>
                     </FormGroup>
@@ -533,8 +490,15 @@ function App() {
                       <label>Parents' Dating Photo *</label>
                       <FileUpload>
                         <label htmlFor="datingPhoto">
-                          Click to upload or drag and drop
-                          <input type="file" name="datingPhoto" id="datingPhoto" accept="image/*" required />
+                          Click to upload or drag and drop (Max 10MB)
+                          <input 
+                            type="file" 
+                            name="datingPhoto" 
+                            id="datingPhoto" 
+                            accept="image/*"
+                            max-size="10485760"
+                            required 
+                          />
                         </label>
                       </FileUpload>
                     </FormGroup>
@@ -543,8 +507,15 @@ function App() {
                       <label>Baby's Recent Photo *</label>
                       <FileUpload>
                         <label htmlFor="babyPhoto">
-                          Click to upload or drag and drop
-                          <input type="file" name="babyPhoto" id="babyPhoto" accept="image/*" required />
+                          Click to upload or drag and drop (Max 10MB)
+                          <input 
+                            type="file" 
+                            name="babyPhoto" 
+                            id="babyPhoto" 
+                            accept="image/*"
+                            max-size="10485760"
+                            required 
+                          />
                         </label>
                       </FileUpload>
                     </FormGroup>
@@ -553,8 +524,15 @@ function App() {
                       <label>Current Family Photo *</label>
                       <FileUpload>
                         <label htmlFor="familyPhoto">
-                          Click to upload or drag and drop
-                          <input type="file" name="familyPhoto" id="familyPhoto" accept="image/*" required />
+                          Click to upload or drag and drop (Max 10MB)
+                          <input 
+                            type="file" 
+                            name="familyPhoto" 
+                            id="familyPhoto" 
+                            accept="image/*"
+                            max-size="10485760"
+                            required 
+                          />
                         </label>
                       </FileUpload>
                     </FormGroup>
@@ -569,20 +547,20 @@ function App() {
           <Section>
             <h2>Frequently Asked Questions</h2>
             <FAQ>
-              <FAQItem>
-                <h3>What makes this book special?</h3>
+              <FAQItem isOpen={openFAQs[0]}>
+                <h3 onClick={() => toggleFAQ(0)}>What makes this book special?</h3>
                 <p>Our personalized children's book tells your family's unique immigration story using real names, places, and photos, helping children understand their heritage in an engaging way.</p>
               </FAQItem>
-              <FAQItem>
-                <h3>How long does it take to create?</h3>
+              <FAQItem isOpen={openFAQs[1]}>
+                <h3 onClick={() => toggleFAQ(1)}>How long does it take to create?</h3>
                 <p>Once you've provided all information and photos, it typically takes 2-3 weeks to create, print, and deliver your personalized book.</p>
               </FAQItem>
-              <FAQItem>
-                <h3>What information do I need to provide?</h3>
+              <FAQItem isOpen={openFAQs[2]}>
+                <h3 onClick={() => toggleFAQ(2)}>What information do I need to provide?</h3>
                 <p>You'll need to share family names, countries of origin, settlement locations, and family photos including baby pictures and current photos.</p>
               </FAQItem>
-              <FAQItem>
-                <h3>Can I preview the book before ordering?</h3>
+              <FAQItem isOpen={openFAQs[3]}>
+                <h3 onClick={() => toggleFAQ(3)}>Can I preview the book before ordering?</h3>
                 <p>Yes! We'll create a digital preview of your book for your approval before printing. You can request revisions if needed.</p>
               </FAQItem>
             </FAQ>
@@ -608,7 +586,7 @@ function App() {
         </MainContent>
 
         <Footer>
-          <p>&copy; {new Date().getFullYear()} Sam's Story. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Our Family Story Book. All rights reserved.</p>
         </Footer>
       </AppContainer>
     </>
