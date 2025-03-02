@@ -1,47 +1,46 @@
-# Sam's Story: A Personalized Children's Book Website
+# Our Family Story Book
 
-This is a single-page React application for ordering personalized children's books that tell a family's immigration story. The website allows customers to create custom books featuring their family's unique journey, incorporating personal photos and stories into a beautifully illustrated children's book.
+A personalized children's book that celebrates your family's unique heritage and immigration journey, perfect for sharing your family's story with the next generation.
 
-## Features
+## About Our Books
 
-- **Product Showcase**: Visual display of both book cover options (pink with flowers and blue with clouds) and sample pages
-- **Stripe Integration**: Secure payment processing through Stripe's Buy Button
-- **Custom Form**: Comprehensive form to collect:
-  - Family member names
-  - Countries of origin
-  - Settlement locations
-  - Multiple family photos (baby pictures, dating photos, current family photos)
-- **Book Customization**: Options for:
-  - Book recipient's gender
-  - Cover style selection
-- **Netlify Form Integration**: Secure form submission and file upload handling
+Our Family Story Book creates custom children's books that tell the story of your family's immigration journey. Each book is uniquely crafted to feature:
 
-## Technical Stack
+- Your family's real names and places
+- Actual photos of family members
+- Beautiful illustrations that bring your story to life
+- Culturally authentic representations of your heritage
 
-- React
-- Styled Components for styling
-- Stripe for payments
-- Netlify for form handling and hosting
+## How It Works
 
-## Local Development
+1. **Share Your Story**: Provide details about your family's journey, including names, countries of origin, and where your family settled
+   
+2. **Add Your Photos**: Upload treasured family photos that will be incorporated directly into your book:
+   - Parent's baby photo
+   - Parents' dating photo
+   - Baby's recent photo
+   - Current family photo
+   
+3. **Choose Your Style**: Select a beautiful cover design and customize the book for a boy or girl
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm start
-   ```
-4. Open [http://localhost:3000](http://localhost:3000) to view it in your browser
+4. **Receive Your Book**: Your personalized hardcover book will be created, printed, and delivered to your door
 
-## Environment Variables
+## What Makes Our Books Special
 
-The following environment variables are required:
-- `REACT_APP_STRIPE_PUBLISHABLE_KEY`: Your Stripe publishable key
-- `REACT_APP_STRIPE_BUY_BUTTON_ID`: Your Stripe Buy Button ID
+- **Personalized Storytelling**: Each book tells your unique family story, creating a meaningful connection to your heritage
+  
+- **Educational Value**: Helps children understand their cultural roots in an engaging, age-appropriate way
+  
+- **Beautiful Keepsake**: High-quality hardcover book becomes a cherished family heirloom
+  
+- **Cultural Pride**: Celebrates diverse backgrounds and instills a sense of pride in family heritage
 
-## License
+## Pricing
 
-All rights reserved. © Sam's Story
+Books start at $34.99, with options for additional customization available.
+
+Contact us at orders@ourfamilystorybook.com for special requests or questions about your order.
+
+---
+
+© Our Family Story Book. All rights reserved.

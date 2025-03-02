@@ -577,6 +577,31 @@ function App() {
     // Handle success
     script.onload = () => {
       setStripeLoaded(true);
+      
+      // Silence Stripe console errors from ad blockers
+      const originalConsoleError = console.error;
+      console.error = function(msg, ...args) {
+        // Filter out Stripe-related error messages
+        if (typeof msg === 'string' && 
+            (msg.includes('stripe.com') || 
+             msg.includes('Failed to fetch') || 
+             msg.includes('Uncaught (in promise)') ||
+             msg.includes('FetchError'))) {
+          return;
+        }
+        originalConsoleError.apply(console, [msg, ...args]);
+      };
+      
+      // Detect if network requests to Stripe might be blocked
+      setTimeout(() => {
+        const stripeBuyButton = document.querySelector('stripe-buy-button');
+        // If the button shadow DOM hasn't loaded properly after 2 seconds, assume blocked
+        if (stripeBuyButton && 
+            (!stripeBuyButton.shadowRoot || 
+             !stripeBuyButton.shadowRoot.querySelector('button'))) {
+          setStripeError(true);
+        }
+      }, 2000);
     };
     
     // Handle errors
@@ -656,11 +681,21 @@ function App() {
               
               {!stripeError ? (
                 stripeLoaded ? (
-                  <stripe-buy-button
-                    buy-button-id="buy_btn_1QvpRoKo6NlmNYnt0SlX4NnU"
-                    publishable-key="pk_live_51MfrNYKo6NlmNYntKY84p45P0y7pUQowfb7ZobQt6AAENqJS1XvBojxEgrXJrtfMHmwYBcprSuRX0QxPWsCkpLOG00EHKs3tZ5"
-                  >
-                  </stripe-buy-button>
+                  <div>
+                    <stripe-buy-button
+                      buy-button-id="buy_btn_1QvpRoKo6NlmNYnt0SlX4NnU"
+                      publishable-key="pk_live_51MfrNYKo6NlmNYntKY84p45P0y7pUQowfb7ZobQt6AAENqJS1XvBojxEgrXJrtfMHmwYBcprSuRX0QxPWsCkpLOG00EHKs3tZ5"
+                    >
+                    </stripe-buy-button>
+                    <p style={{ 
+                      fontSize: "0.8rem", 
+                      color: "#666", 
+                      marginTop: "0.5rem", 
+                      textAlign: "center" 
+                    }}>
+                      Having trouble seeing the payment button? <a href="mailto:orders@ourfamilystorybook.com?subject=Book%20Order">Email us to order</a>
+                    </p>
+                  </div>
                 ) : (
                   <div style={{ 
                     textAlign: "center", 
@@ -672,9 +707,20 @@ function App() {
                   </div>
                 )
               ) : (
-                <SubmitButton onClick={() => window.location.href = "mailto:orders@ourfamilystorybook.com?subject=Book Order"}>
-                  Contact Us to Order
-                </SubmitButton>
+                <div>
+                  <SubmitButton onClick={() => window.location.href = "mailto:orders@ourfamilystorybook.com?subject=Book Order"}>
+                    Contact Us to Order
+                  </SubmitButton>
+                  <p style={{ 
+                    fontSize: "0.8rem", 
+                    color: "#666", 
+                    marginTop: "0.5rem", 
+                    textAlign: "center" 
+                  }}>
+                    We detected that your browser may be blocking Stripe payments.
+                    Please disable your ad blocker or contact us directly.
+                  </p>
+                </div>
               )}
 
               <Section>
