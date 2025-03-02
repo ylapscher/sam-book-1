@@ -461,6 +461,21 @@ function App() {
     };
   }, []);
 
+  // Check for form submission success (Netlify adds ?submission-success to the URL)
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('submission-success')) {
+      setFormSuccess(true);
+      // Scroll to the form section to show the success message
+      setTimeout(() => {
+        const formSection = document.querySelector('.form-section');
+        if (formSection) {
+          formSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 500);
+    }
+  }, []);
+
   return (
     <>
       <GlobalStyles />
@@ -548,203 +563,236 @@ function App() {
             </ProductInfo>
           </ProductGrid>
 
-          <FormSection>
+          <FormSection className="form-section">
             <Section>
               <h2>Start Your Family's Story</h2>
-              <Form
-                name="family-story"
-                method="POST"
-                action="/success"  
-                data-netlify="true" 
-                data-netlify-honeypot="bot-field"
-                encType="multipart/form-data"
-                onSubmit={() => setFormSubmitting(true)}
-                className={formSubmitting ? "submitting" : ""}
-              >
-                <input type="hidden" name="form-name" value="family-story" />
-                <input type="hidden" name="bot-field" />
-                <input type="hidden" name="form-set-encoding" value="multipart/form-data" />
-                <input type="hidden" name="max-file-size" value="10485760" />
-                
-                {formSuccess && (
-                  <div style={{ 
-                    background: "#e6f7e6", 
-                    padding: "1rem", 
-                    borderRadius: "4px", 
-                    marginBottom: "2rem",
-                    textAlign: "center"
-                  }}>
-                    <h3 style={{ color: "#2e7d32" }}>Thank you for your submission!</h3>
-                    <p>We'll review your information and contact you soon about your personalized book.</p>
-                  </div>
-                )}
-                
-                {!formSuccess && (
-                  <>
-                    <FormGrid>
-                      <div>
-                        <FormGroup>
-                          <label htmlFor="parentName">Parent's Name *</label>
-                          <input type="text" name="parentName" id="parentName" required />
-                        </FormGroup>
+              {formSuccess ? (
+                <div style={{ 
+                  background: "#e6f7e6", 
+                  padding: "2rem", 
+                  borderRadius: "10px", 
+                  marginBottom: "2rem",
+                  textAlign: "center",
+                  maxWidth: "1000px",
+                  margin: "0 auto"
+                }}>
+                  <h3 style={{ color: "#2e7d32" }}>Thank you for your submission!</h3>
+                  <p>We've received your family story information. Our team will review it and contact you soon about your personalized book.</p>
+                </div>
+              ) : (
+                <form
+                  name="family-story" 
+                  method="POST"
+                  netlify="true"
+                  data-netlify="true"
+                  netlify-honeypot="bot-field"
+                  encType="multipart/form-data"
+                  onSubmit={() => setFormSubmitting(true)}
+                  style={{
+                    maxWidth: "1000px",
+                    margin: "0 auto",
+                    background: "white",
+                    padding: "2rem",
+                    borderRadius: "10px",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    display: "flex",
+                    flexDirection: "column"
+                  }}
+                  className={formSubmitting ? "submitting" : ""}
+                >
+                  <input type="hidden" name="form-name" value="family-story" />
+                  <input type="hidden" name="bot-field" />
+                  
+                  <FormGrid>
+                    <div>
+                      <FormGroup>
+                        <label htmlFor="parentName">Parent's Name *</label>
+                        <input type="text" name="parentName" id="parentName" required />
+                      </FormGroup>
 
-                        <FormGroup>
-                          <label htmlFor="parentOrigin">Parent's Country of Origin *</label>
-                          <input type="text" name="parentOrigin" id="parentOrigin" required />
-                        </FormGroup>
+                      <FormGroup>
+                        <label htmlFor="parentOrigin">Parent's Country of Origin *</label>
+                        <input type="text" name="parentOrigin" id="parentOrigin" required />
+                      </FormGroup>
 
-                        <FormGroup>
-                          <label htmlFor="grandparentName">Grandparent's Name *</label>
-                          <input type="text" name="grandparentName" id="grandparentName" required />
-                        </FormGroup>
+                      <FormGroup>
+                        <label htmlFor="grandparentName">Grandparent's Name *</label>
+                        <input type="text" name="grandparentName" id="grandparentName" required />
+                      </FormGroup>
 
-                        <FormGroup>
-                          <label htmlFor="grandparentOrigin">Grandparent's Country of Origin *</label>
-                          <input type="text" name="grandparentOrigin" id="grandparentOrigin" required />
-                        </FormGroup>
+                      <FormGroup>
+                        <label htmlFor="grandparentOrigin">Grandparent's Country of Origin *</label>
+                        <input type="text" name="grandparentOrigin" id="grandparentOrigin" required />
+                      </FormGroup>
 
-                        <FormGroup>
-                          <label htmlFor="settlementLocation">Where Family Settled *</label>
-                          <input type="text" name="settlementLocation" id="settlementLocation" required />
-                        </FormGroup>
+                      <FormGroup>
+                        <label htmlFor="settlementLocation">Where Family Settled *</label>
+                        <input type="text" name="settlementLocation" id="settlementLocation" required />
+                      </FormGroup>
 
-                        <FormGroup>
-                          <label htmlFor="childGender">Book For *</label>
-                          <select name="childGender" id="childGender" required>
-                            <option value="">Select...</option>
-                            <option value="boy">Boy</option>
-                            <option value="girl">Girl</option>
-                          </select>
-                        </FormGroup>
+                      <FormGroup>
+                        <label htmlFor="childGender">Book For *</label>
+                        <select name="childGender" id="childGender" required>
+                          <option value="">Select...</option>
+                          <option value="boy">Boy</option>
+                          <option value="girl">Girl</option>
+                        </select>
+                      </FormGroup>
 
-                        <FormGroup>
-                          <label htmlFor="coverStyle">Cover Style *</label>
-                          <select name="coverStyle" id="coverStyle" required>
-                            <option value="">Select...</option>
-                            <option value="pink-flowers">Pink with Flowers</option>
-                            <option value="blue-clouds">Blue with Clouds</option>
-                          </select>
-                        </FormGroup>
-                      </div>
-
-                      <div>
-                        <FormGroup>
-                          <label>Parent's Baby Photo *</label>
-                          <FileUpload className={fileUploads.parentBabyPhoto ? "file-uploaded" : ""}>
-                            <label htmlFor="parentBabyPhoto">
-                              Click to upload or drag and drop (Max 10MB)
-                            </label>
-                            <input 
-                              type="file" 
-                              name="parentBabyPhoto" 
-                              id="parentBabyPhoto" 
-                              accept="image/*"
-                              required 
-                              onChange={handleFileChange}
-                            />
-                            {fileUploads.parentBabyPhoto && (
-                              <div className="upload-success">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
-                                </svg>
-                                File uploaded successfully
-                              </div>
-                            )}
-                          </FileUpload>
-                        </FormGroup>
-
-                        <FormGroup>
-                          <label>Parents' Dating Photo *</label>
-                          <FileUpload className={fileUploads.datingPhoto ? "file-uploaded" : ""}>
-                            <label htmlFor="datingPhoto">
-                              Click to upload or drag and drop (Max 10MB)
-                            </label>
-                            <input 
-                              type="file" 
-                              name="datingPhoto" 
-                              id="datingPhoto" 
-                              accept="image/*"
-                              required 
-                              onChange={handleFileChange}
-                            />
-                            {fileUploads.datingPhoto && (
-                              <div className="upload-success">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
-                                </svg>
-                                File uploaded successfully
-                              </div>
-                            )}
-                          </FileUpload>
-                        </FormGroup>
-
-                        <FormGroup>
-                          <label>Baby's Recent Photo *</label>
-                          <FileUpload className={fileUploads.babyPhoto ? "file-uploaded" : ""}>
-                            <label htmlFor="babyPhoto">
-                              Click to upload or drag and drop (Max 10MB)
-                            </label>
-                            <input 
-                              type="file" 
-                              name="babyPhoto" 
-                              id="babyPhoto" 
-                              accept="image/*"
-                              required 
-                              onChange={handleFileChange}
-                            />
-                            {fileUploads.babyPhoto && (
-                              <div className="upload-success">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
-                                </svg>
-                                File uploaded successfully
-                              </div>
-                            )}
-                          </FileUpload>
-                        </FormGroup>
-
-                        <FormGroup>
-                          <label>Current Family Photo *</label>
-                          <FileUpload className={fileUploads.familyPhoto ? "file-uploaded" : ""}>
-                            <label htmlFor="familyPhoto">
-                              Click to upload or drag and drop (Max 10MB)
-                            </label>
-                            <input 
-                              type="file" 
-                              name="familyPhoto" 
-                              id="familyPhoto" 
-                              accept="image/*"
-                              required 
-                              onChange={handleFileChange}
-                            />
-                            {fileUploads.familyPhoto && (
-                              <div className="upload-success">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
-                                </svg>
-                                File uploaded successfully
-                              </div>
-                            )}
-                          </FileUpload>
-                        </FormGroup>
-                      </div>
-                    </FormGrid>
-                    
-                    <div className="form-footer">
-                      <button type="submit" disabled={formSubmitting}>
-                        {formSubmitting ? (
-                          <>
-                            <span className="loading-spinner"></span>
-                            Submitting...
-                          </>
-                        ) : (
-                          "Submit"
-                        )}
-                      </button>
+                      <FormGroup>
+                        <label htmlFor="coverStyle">Cover Style *</label>
+                        <select name="coverStyle" id="coverStyle" required>
+                          <option value="">Select...</option>
+                          <option value="pink-flowers">Pink with Flowers</option>
+                          <option value="blue-clouds">Blue with Clouds</option>
+                        </select>
+                      </FormGroup>
                     </div>
-                  </>
-                )}
-              </Form>
+
+                    <div>
+                      <FormGroup>
+                        <label>Parent's Baby Photo *</label>
+                        <FileUpload className={fileUploads.parentBabyPhoto ? "file-uploaded" : ""}>
+                          <label htmlFor="parentBabyPhoto">
+                            Click to upload or drag and drop (Max 10MB)
+                          </label>
+                          <input 
+                            type="file" 
+                            name="parentBabyPhoto" 
+                            id="parentBabyPhoto" 
+                            accept="image/*"
+                            required 
+                            onChange={handleFileChange}
+                          />
+                          {fileUploads.parentBabyPhoto && (
+                            <div className="upload-success">
+                              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
+                              </svg>
+                              File uploaded successfully
+                            </div>
+                          )}
+                        </FileUpload>
+                      </FormGroup>
+
+                      <FormGroup>
+                        <label>Parents' Dating Photo *</label>
+                        <FileUpload className={fileUploads.datingPhoto ? "file-uploaded" : ""}>
+                          <label htmlFor="datingPhoto">
+                            Click to upload or drag and drop (Max 10MB)
+                          </label>
+                          <input 
+                            type="file" 
+                            name="datingPhoto" 
+                            id="datingPhoto" 
+                            accept="image/*"
+                            required 
+                            onChange={handleFileChange}
+                          />
+                          {fileUploads.datingPhoto && (
+                            <div className="upload-success">
+                              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
+                              </svg>
+                              File uploaded successfully
+                            </div>
+                          )}
+                        </FileUpload>
+                      </FormGroup>
+
+                      <FormGroup>
+                        <label>Baby's Recent Photo *</label>
+                        <FileUpload className={fileUploads.babyPhoto ? "file-uploaded" : ""}>
+                          <label htmlFor="babyPhoto">
+                            Click to upload or drag and drop (Max 10MB)
+                          </label>
+                          <input 
+                            type="file" 
+                            name="babyPhoto" 
+                            id="babyPhoto" 
+                            accept="image/*"
+                            required 
+                            onChange={handleFileChange}
+                          />
+                          {fileUploads.babyPhoto && (
+                            <div className="upload-success">
+                              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
+                              </svg>
+                              File uploaded successfully
+                            </div>
+                          )}
+                        </FileUpload>
+                      </FormGroup>
+
+                      <FormGroup>
+                        <label>Current Family Photo *</label>
+                        <FileUpload className={fileUploads.familyPhoto ? "file-uploaded" : ""}>
+                          <label htmlFor="familyPhoto">
+                            Click to upload or drag and drop (Max 10MB)
+                          </label>
+                          <input 
+                            type="file" 
+                            name="familyPhoto" 
+                            id="familyPhoto" 
+                            accept="image/*"
+                            required 
+                            onChange={handleFileChange}
+                          />
+                          {fileUploads.familyPhoto && (
+                            <div className="upload-success">
+                              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
+                              </svg>
+                              File uploaded successfully
+                            </div>
+                          )}
+                        </FileUpload>
+                      </FormGroup>
+                    </div>
+                  </FormGrid>
+                  
+                  <div style={{ marginTop: "2rem", textAlign: "center" }}>
+                    <button 
+                      type="submit" 
+                      style={{
+                        backgroundColor: "var(--primary-color)",
+                        color: "white",
+                        border: "none",
+                        padding: "0.75rem 2rem",
+                        fontSize: "1.1rem",
+                        fontWeight: "600",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease",
+                        minWidth: "180px",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {formSubmitting ? (
+                        <>
+                          <span 
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              border: "3px solid rgba(255, 255, 255, 0.3)",
+                              borderRadius: "50%",
+                              borderTopColor: "white",
+                              animation: "spin 1s linear infinite",
+                              marginRight: "10px"
+                            }}
+                          ></span>
+                          Submitting...
+                        </>
+                      ) : (
+                        "Submit"
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
             </Section>
           </FormSection>
 
