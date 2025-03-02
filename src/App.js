@@ -388,6 +388,9 @@ function App() {
     babyPhoto: false,
     familyPhoto: false
   });
+  
+  // Track file size warnings
+  const [fileSizeWarning, setFileSizeWarning] = useState(null);
 
   const images = [
     { src: "/images/pink-cover.jpg", alt: "Pink cover with flowers" },
@@ -419,9 +422,105 @@ function App() {
     }));
   };
 
-  const handleFileChange = (e) => {
+  // Function to resize/compress an image file
+  const compressImage = (file, maxSizeMB = 1.5) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        
+        img.onload = () => {
+          // Create a canvas to resize the image
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          // Calculate new dimensions while maintaining aspect ratio
+          if (width > height) {
+            if (width > 1200) {
+              height = Math.round(height * (1200 / width));
+              width = 1200;
+            }
+          } else {
+            if (height > 1200) {
+              width = Math.round(width * (1200 / height));
+              height = 1200;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert to a file 
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) {
+                reject(new Error('Canvas to Blob conversion failed'));
+                return;
+              }
+              
+              // Create a new file from the blob
+              const resizedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              
+              resolve(resizedFile);
+            },
+            'image/jpeg',
+            0.7 // Quality setting (0.7 = 70% quality)
+          );
+        };
+        
+        img.onerror = (error) => {
+          reject(error);
+        };
+      };
+      
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const handleFileChange = async (e) => {
     const { name, files } = e.target;
     if (files && files.length > 0) {
+      const file = files[0];
+      
+      // Check file size - compress if over 1.5MB
+      if (file.size > 1.5 * 1024 * 1024) {
+        setFileSizeWarning(`Compressing ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)}MB)...`);
+        
+        try {
+          // Compress the image
+          const compressedFile = await compressImage(file);
+          
+          // Replace the file in the input
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(compressedFile);
+          e.target.files = dataTransfer.files;
+          
+          setFileSizeWarning(`Image compressed: ${(compressedFile.size / (1024 * 1024)).toFixed(2)}MB (was ${(file.size / (1024 * 1024)).toFixed(2)}MB)`);
+          
+          // Clear the warning after 3 seconds
+          setTimeout(() => {
+            setFileSizeWarning(null);
+          }, 3000);
+          
+        } catch (error) {
+          console.error('Error compressing image:', error);
+          setFileSizeWarning(`Warning: ${file.name} is ${(file.size / (1024 * 1024)).toFixed(2)}MB. Please use a smaller image.`);
+        }
+      } else {
+        setFileSizeWarning(null);
+      }
+      
       setFileUploads(prev => ({
         ...prev,
         [name]: true
@@ -431,7 +530,42 @@ function App() {
         ...prev,
         [name]: false
       }));
+      setFileSizeWarning(null);
     }
+  };
+
+  // Function to handle form submission validation
+  const handleFormSubmit = (e) => {
+    // Calculate total file size
+    let totalSize = 0;
+    const fileInputs = ['parentBabyPhoto', 'datingPhoto', 'babyPhoto', 'familyPhoto'];
+    
+    fileInputs.forEach(inputName => {
+      const input = document.getElementById(inputName);
+      if (input && input.files && input.files[0]) {
+        totalSize += input.files[0].size;
+      }
+    });
+    
+    // If total size is over 7.5MB (leaving some buffer), prevent submission
+    if (totalSize > 7.5 * 1024 * 1024) {
+      e.preventDefault();
+      setFileSizeWarning(`Your total uploads are ${(totalSize / (1024 * 1024)).toFixed(2)}MB, which exceeds Netlify's 8MB limit. Please use smaller images.`);
+      
+      // Scroll to warning
+      setTimeout(() => {
+        const warningElement = document.querySelector('.file-size-warning');
+        if (warningElement) {
+          warningElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+      
+      return false;
+    }
+    
+    // Continue with submission
+    setFormSubmitting(true);
+    // The form will submit normally
   };
 
   useEffect(() => {
@@ -587,7 +721,7 @@ function App() {
                   data-netlify="true"
                   netlify-honeypot="bot-field"
                   encType="multipart/form-data"
-                  onSubmit={() => setFormSubmitting(true)}
+                  onSubmit={handleFormSubmit}
                   style={{
                     maxWidth: "1000px",
                     margin: "0 auto",
@@ -602,6 +736,22 @@ function App() {
                 >
                   <input type="hidden" name="form-name" value="family-story" />
                   <input type="hidden" name="bot-field" />
+                  
+                  {fileSizeWarning && (
+                    <div 
+                      className="file-size-warning"
+                      style={{
+                        backgroundColor: "#fff3cd",
+                        color: "#856404",
+                        padding: "1rem",
+                        borderRadius: "4px",
+                        marginBottom: "1.5rem",
+                        fontWeight: "bold"
+                      }}
+                    >
+                      {fileSizeWarning}
+                    </div>
+                  )}
                   
                   <FormGrid>
                     <div>
@@ -654,7 +804,7 @@ function App() {
                         <label>Parent's Baby Photo *</label>
                         <FileUpload className={fileUploads.parentBabyPhoto ? "file-uploaded" : ""}>
                           <label htmlFor="parentBabyPhoto">
-                            Click to upload or drag and drop (Max 10MB)
+                            Click to upload or drag and drop (Max 1.5MB recommended)
                           </label>
                           <input 
                             type="file" 
@@ -679,7 +829,7 @@ function App() {
                         <label>Parents' Dating Photo *</label>
                         <FileUpload className={fileUploads.datingPhoto ? "file-uploaded" : ""}>
                           <label htmlFor="datingPhoto">
-                            Click to upload or drag and drop (Max 10MB)
+                            Click to upload or drag and drop (Max 1.5MB recommended)
                           </label>
                           <input 
                             type="file" 
@@ -704,7 +854,7 @@ function App() {
                         <label>Baby's Recent Photo *</label>
                         <FileUpload className={fileUploads.babyPhoto ? "file-uploaded" : ""}>
                           <label htmlFor="babyPhoto">
-                            Click to upload or drag and drop (Max 10MB)
+                            Click to upload or drag and drop (Max 1.5MB recommended)
                           </label>
                           <input 
                             type="file" 
@@ -729,7 +879,7 @@ function App() {
                         <label>Current Family Photo *</label>
                         <FileUpload className={fileUploads.familyPhoto ? "file-uploaded" : ""}>
                           <label htmlFor="familyPhoto">
-                            Click to upload or drag and drop (Max 10MB)
+                            Click to upload or drag and drop (Max 1.5MB recommended)
                           </label>
                           <input 
                             type="file" 
@@ -749,6 +899,25 @@ function App() {
                           )}
                         </FileUpload>
                       </FormGroup>
+
+                      <div style={{ 
+                        marginTop: "1rem", 
+                        fontSize: "0.85rem", 
+                        color: "#666",
+                        padding: "0.5rem",
+                        backgroundColor: "#f9f9f9",
+                        borderRadius: "4px"
+                      }}>
+                        <p style={{ margin: "0 0 0.5rem 0", fontWeight: "bold" }}>Important Notes:</p>
+                        <ul style={{ margin: "0", paddingLeft: "1.2rem" }}>
+                          <li>Total file size must be under 8MB</li>
+                          <li>Use small/compressed images when possible</li>
+                          <li>Most phone photos need to be resized before upload</li>
+                        </ul>
+                        <p style={{ margin: "0.5rem 0 0 0", fontSize: "0.8rem" }}>
+                          Having trouble with uploads? <a href="mailto:orders@ourfamilystorybook.com?subject=Photo%20Upload" style={{ color: "#4b9cd3" }}>Email us your photos directly</a>.
+                        </p>
+                      </div>
                     </div>
                   </FormGrid>
                   
