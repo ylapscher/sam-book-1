@@ -443,6 +443,9 @@ function App() {
     const form = e.target;
     const formData = new FormData(form);
     
+    // For Netlify forms, add the form-name field
+    formData.append("form-name", "family-story");
+    
     // For forms with file uploads, don't include Content-Type headers
     fetch("/", {
       method: "POST",
@@ -594,7 +597,6 @@ function App() {
               <Form
                 name="family-story"
                 method="POST"
-                netlify="true"
                 action="/"
                 data-netlify="true" 
                 data-netlify-honeypot="bot-field"
