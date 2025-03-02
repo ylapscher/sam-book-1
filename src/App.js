@@ -382,7 +382,6 @@ function App() {
   const [stripeError, setStripeError] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
-  const [formError, setFormError] = useState(null);
   const [fileUploads, setFileUploads] = useState({
     parentBabyPhoto: false,
     datingPhoto: false,
@@ -433,48 +432,6 @@ function App() {
         [name]: false
       }));
     }
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setFormSubmitting(true);
-    setFormError(null);
-    
-    const form = e.target;
-    const formData = new FormData(form);
-    
-    // For Netlify forms, add the form-name field
-    formData.append("form-name", "family-story");
-    
-    // For forms with file uploads, don't include Content-Type headers
-    fetch("/", {
-      method: "POST",
-      body: formData
-    })
-      .then(response => {
-        if (response.ok) {
-          setFormSubmitting(false);
-          setFormSuccess(true);
-          form.reset();
-          // Reset file upload states
-          setFileUploads({
-            parentBabyPhoto: false,
-            datingPhoto: false,
-            babyPhoto: false,
-            familyPhoto: false
-          });
-          window.scrollTo(0, 0);
-        } else {
-          return response.text().then(text => {
-            throw new Error(`Server responded with ${response.status}: ${text || response.statusText}`);
-          });
-        }
-      })
-      .catch(error => {
-        setFormSubmitting(false);
-        setFormError("There was a problem submitting your form. Please try again.");
-        console.error("Form submission error:", error);
-      });
   };
 
   useEffect(() => {
@@ -597,11 +554,11 @@ function App() {
               <Form
                 name="family-story"
                 method="POST"
-                action="/"
+                action="/success"  
                 data-netlify="true" 
                 data-netlify-honeypot="bot-field"
                 encType="multipart/form-data"
-                onSubmit={handleFormSubmit}
+                onSubmit={() => setFormSubmitting(true)}
                 className={formSubmitting ? "submitting" : ""}
               >
                 <input type="hidden" name="form-name" value="family-story" />
@@ -619,19 +576,6 @@ function App() {
                   }}>
                     <h3 style={{ color: "#2e7d32" }}>Thank you for your submission!</h3>
                     <p>We'll review your information and contact you soon about your personalized book.</p>
-                  </div>
-                )}
-                
-                {formError && (
-                  <div style={{ 
-                    background: "#ffebee", 
-                    padding: "1rem", 
-                    borderRadius: "4px", 
-                    marginBottom: "2rem",
-                    textAlign: "center"
-                  }}>
-                    <h3 style={{ color: "#c62828" }}>Form Submission Error</h3>
-                    <p>{formError}</p>
                   </div>
                 )}
                 
