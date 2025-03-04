@@ -72,12 +72,22 @@ const MainImageContainer = styled.div`
     height: auto;
     border-radius: 4px;
   }
+
+  .navigation-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+  }
 `;
 
 const NavigationButton = styled.button`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  position: relative;
   background: white;
   border: none;
   border-radius: 50%;
@@ -88,19 +98,23 @@ const NavigationButton = styled.button`
   justify-content: center;
   font-size: 24px;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 2;
+  transition: all 0.3s ease;
+  pointer-events: auto;
 
   &:hover {
     background: #f5f5f5;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
   }
 
   &.prev {
-    left: 10px;
+    left: -24px;
   }
 
   &.next {
-    right: 10px;
+    right: -24px;
   }
 `;
 
@@ -375,6 +389,78 @@ const HeaderContent = styled.div`
   }
 `;
 
+const CollapsibleSection = styled.div`
+  border-bottom: 1px solid #DDDDDD;
+  margin-bottom: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const CollapsibleHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  cursor: pointer;
+  
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .icon {
+    font-size: 24px;
+    transition: transform 0.3s ease;
+    transform: ${props => props.isOpen ? 'rotate(180deg)' : 'rotate(0)'};
+  }
+`;
+
+const CollapsibleContent = styled.div`
+  max-height: ${props => props.isOpen ? '500px' : '0'};
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding-bottom: ${props => props.isOpen ? '1.5rem' : '0'};
+`;
+
+const QuoteSection = styled.div`
+  background-color: #F8B6D1;
+  padding: 6rem 2rem;
+  text-align: center;
+  margin-top: 4rem;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: url("data:image/svg+xml,%3Csvg width='100%25' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 C40,20 40,0 80,0 C120,0 120,20 160,20 C200,20 200,0 240,0 C280,0 280,20 320,20 C360,20 360,0 400,0 C440,0 440,20 480,20 C520,20 520,0 560,0 C600,0 600,20 640,20 C680,20 680,0 720,0 C760,0 760,20 800,20' fill='white' /%3E%3C/svg%3E") repeat-x;
+  }
+  
+  .quote {
+    font-size: 42px;
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    line-height: 1.4;
+    color: #333;
+    font-family: Georgia, serif;
+  }
+  
+  .attribution {
+    font-size: 20px;
+    color: #555;
+    font-style: normal;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+`;
+
 function App() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [openFAQs, setOpenFAQs] = useState({});
@@ -391,12 +477,16 @@ function App() {
   
   // Track file size warnings
   const [fileSizeWarning, setFileSizeWarning] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [formValid, setFormValid] = useState(false);
 
   const images = [
-    { src: "/images/pink-cover.jpg", alt: "Pink cover with flowers" },
-    { src: "/images/blue-cover.jpg", alt: "Blue cover with clouds" },
-    { src: "/images/sample-page-1.jpg", alt: "Sample page from the book" },
-    { src: "/images/sample-page-2.jpg", alt: "Another sample page" }
+    { src: "/images/1.png", alt: "Pink cover with flowers" },
+    { src: "/images/2.png", alt: "Blue cover with clouds" },
+    { src: "/images/3.png", alt: "Sample page from the book" },
+    { src: "/images/4.png", alt: "Another sample page" },
+    { src: "/images/5.png", alt: "Third sample page" },
+    { src: "/images/6.png", alt: "Fourth sample page" }
   ];
 
   const handleThumbnailClick = (index) => {
@@ -416,10 +506,25 @@ function App() {
   };
 
   const toggleFAQ = (index) => {
-    setOpenFAQs(prev => ({
-      ...prev,
-      [index]: !prev[index]
-    }));
+    setOpenFAQs(prev => {
+      // If clicking on an already open section, close it
+      if (prev[index]) {
+        return {
+          ...prev,
+          [index]: false
+        };
+      }
+      
+      // Otherwise, close all sections and open the clicked one
+      const newState = {};
+      Object.keys(prev).forEach(key => {
+        newState[key] = false;
+      });
+      return {
+        ...newState,
+        [index]: true
+      };
+    });
   };
 
   // Function to resize/compress an image file
@@ -534,38 +639,43 @@ function App() {
     }
   };
 
-  // Function to handle form submission validation
-  const handleFormSubmit = (e) => {
-    // Calculate total file size
-    let totalSize = 0;
-    const fileInputs = ['parentBabyPhoto', 'datingPhoto', 'babyPhoto', 'familyPhoto'];
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
     
-    fileInputs.forEach(inputName => {
-      const input = document.getElementById(inputName);
-      if (input && input.files && input.files[0]) {
-        totalSize += input.files[0].size;
-      }
-    });
-    
-    // If total size is over 7.5MB (leaving some buffer), prevent submission
-    if (totalSize > 7.5 * 1024 * 1024) {
-      e.preventDefault();
-      setFileSizeWarning(`Your total uploads are ${(totalSize / (1024 * 1024)).toFixed(2)}MB, which exceeds Netlify's 8MB limit. Please use smaller images.`);
-      
-      // Scroll to warning
-      setTimeout(() => {
-        const warningElement = document.querySelector('.file-size-warning');
-        if (warningElement) {
-          warningElement.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-      
-      return false;
+    // Check if form is valid
+    const form = e.target.form;
+    if (form) {
+      setFormValid(form.checkValidity());
     }
-    
-    // Continue with submission
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
     setFormSubmitting(true);
-    // The form will submit normally
+
+    try {
+      // Submit to Netlify
+      const formElement = e.target;
+      const formData = new FormData(formElement);
+      
+      await fetch('/', {
+        method: 'POST',
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData).toString()
+      });
+
+      // If successful, show the Stripe payment button
+      setFormSuccess(true);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('There was an error submitting the form. Please try again.');
+    } finally {
+      setFormSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -635,6 +745,13 @@ function App() {
     }
   }, []);
 
+  const scrollToForm = () => {
+    const formSection = document.querySelector('.form-section');
+    if (formSection) {
+      formSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <GlobalStyles />
@@ -664,12 +781,14 @@ function App() {
                   src={images[currentImageIndex].src}
                   alt={images[currentImageIndex].alt}
                 />
-                <NavigationButton className="prev" onClick={handlePrevImage}>
-                  ‹
-                </NavigationButton>
-                <NavigationButton className="next" onClick={handleNextImage}>
-                  ›
-                </NavigationButton>
+                <div className="navigation-container">
+                  <NavigationButton className="prev" onClick={handlePrevImage}>
+                    ‹
+                  </NavigationButton>
+                  <NavigationButton className="next" onClick={handleNextImage}>
+                    ›
+                  </NavigationButton>
+                </div>
               </MainImageContainer>
             </ProductImagesContainer>
 
@@ -679,66 +798,54 @@ function App() {
               </p>
               <Price>$34.99+</Price>
               
-              {!stripeError ? (
-                stripeLoaded ? (
-                  <div>
-                    <stripe-buy-button
-                      buy-button-id="buy_btn_1QvpRoKo6NlmNYnt0SlX4NnU"
-                      publishable-key="pk_live_51MfrNYKo6NlmNYntKY84p45P0y7pUQowfb7ZobQt6AAENqJS1XvBojxEgrXJrtfMHmwYBcprSuRX0QxPWsCkpLOG00EHKs3tZ5"
-                    >
-                    </stripe-buy-button>
-                    <p style={{ 
-                      fontSize: "0.8rem", 
-                      color: "#666", 
-                      marginTop: "0.5rem", 
-                      textAlign: "center" 
-                    }}>
-                      Having trouble seeing the payment button? <a href="mailto:orders@ourfamilystorybook.com?subject=Book%20Order">Email us to order</a>
-                    </p>
-                  </div>
-                ) : (
-                  <div style={{ 
-                    textAlign: "center", 
-                    padding: "1rem", 
-                    border: "1px solid #ddd", 
-                    borderRadius: "4px" 
-                  }}>
-                    <p>Loading payment options...</p>
-                  </div>
-                )
-              ) : (
-                <div>
-                  <SubmitButton onClick={() => window.location.href = "mailto:orders@ourfamilystorybook.com?subject=Book Order"}>
-                    Contact Us to Order
-                  </SubmitButton>
-                  <p style={{ 
-                    fontSize: "0.8rem", 
-                    color: "#666", 
-                    marginTop: "0.5rem", 
-                    textAlign: "center" 
-                  }}>
-                    We detected that your browser may be blocking Stripe payments.
-                    Please disable your ad blocker or contact us directly.
-                  </p>
+              {!stripeLoaded ? (
+                <div style={{ 
+                  textAlign: "center", 
+                  padding: "1rem", 
+                  border: "1px solid #ddd", 
+                  borderRadius: "4px" 
+                }}>
+                  <p>Loading payment options...</p>
                 </div>
+              ) : (
+                <SubmitButton onClick={scrollToForm}>
+                  Start Your Family's Story
+                </SubmitButton>
               )}
 
               <Section>
                 <h2>How It Works</h2>
-                <Grid>
-                  <Card>
-                    <h3>1. Share Your Story</h3>
-                    <p>Tell us about your family's journey, including names, dates, and special memories.</p>
-                  </Card>
-                  <Card>
-                    <h3>2. Add Photos</h3>
-                    <p>Share your cherished family photos that will be beautifully integrated into your personalized book.</p>
-                  </Card>
-                  <Card>
-                    <h3>3. Receive Your Book</h3>
-                    <p>We'll create and deliver your custom hardcover book, perfect for reading together.</p>
-                  </Card>
-                </Grid>
+                <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+                  <CollapsibleSection>
+                    <CollapsibleHeader isOpen={openFAQs['howItWorks1']} onClick={() => toggleFAQ('howItWorks1')}>
+                      <h3>1. Share Your Story</h3>
+                      <span className="icon">▼</span>
+                    </CollapsibleHeader>
+                    <CollapsibleContent isOpen={openFAQs['howItWorks1']}>
+                      <p>Tell us about your family's journey, including names, dates, and special memories. We'll incorporate these details into a beautifully crafted narrative that resonates with your child.</p>
+                    </CollapsibleContent>
+                  </CollapsibleSection>
+
+                  <CollapsibleSection>
+                    <CollapsibleHeader isOpen={openFAQs['howItWorks2']} onClick={() => toggleFAQ('howItWorks2')}>
+                      <h3>2. Add Your Photos</h3>
+                      <span className="icon">▼</span>
+                    </CollapsibleHeader>
+                    <CollapsibleContent isOpen={openFAQs['howItWorks2']}>
+                      <p>Share your cherished family photos that will be beautifully integrated into your personalized book. We'll carefully place them throughout the story to create a meaningful connection between the narrative and your family's memories.</p>
+                    </CollapsibleContent>
+                  </CollapsibleSection>
+
+                  <CollapsibleSection>
+                    <CollapsibleHeader isOpen={openFAQs['howItWorks3']} onClick={() => toggleFAQ('howItWorks3')}>
+                      <h3>3. Receive Your Book</h3>
+                      <span className="icon">▼</span>
+                    </CollapsibleHeader>
+                    <CollapsibleContent isOpen={openFAQs['howItWorks3']}>
+                      <p>We'll create and deliver your custom hardcover book, perfect for reading together. Each book is carefully printed and bound to ensure it becomes a lasting family keepsake that can be passed down through generations.</p>
+                    </CollapsibleContent>
+                  </CollapsibleSection>
+                </div>
               </Section>
             </ProductInfo>
           </ProductGrid>
@@ -763,10 +870,10 @@ function App() {
                 <form
                   name="family-story" 
                   method="POST"
-                  netlify="true"
                   data-netlify="true"
                   netlify-honeypot="bot-field"
                   encType="multipart/form-data"
+                  onChange={handleFormChange}
                   onSubmit={handleFormSubmit}
                   style={{
                     maxWidth: "1000px",
@@ -968,48 +1075,59 @@ function App() {
                   </FormGrid>
                   
                   <div style={{ marginTop: "2rem", textAlign: "center" }}>
-                    <button 
-                      type="submit" 
-                      style={{
-                        backgroundColor: "var(--primary-color)",
-                        color: "white",
-                        border: "none",
-                        padding: "0.75rem 2rem",
-                        fontSize: "1.1rem",
-                        fontWeight: "600",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        transition: "all 0.3s ease",
-                        minWidth: "180px",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {formSubmitting ? (
-                        <>
-                          <span 
-                            style={{
-                              width: "20px",
-                              height: "20px",
-                              border: "3px solid rgba(255, 255, 255, 0.3)",
-                              borderRadius: "50%",
-                              borderTopColor: "white",
-                              animation: "spin 1s linear infinite",
-                              marginRight: "10px"
-                            }}
-                          ></span>
-                          Submitting...
-                        </>
-                      ) : (
-                        "Submit"
-                      )}
-                    </button>
+                    {formSuccess ? (
+                      <div>
+                        <stripe-buy-button
+                          buy-button-id="buy_btn_1QvpRoKo6NlmNYnt0SlX4NnU"
+                          publishable-key="pk_live_51MfrNYKo6NlmNYntKY84p45P0y7pUQowfb7ZobQt6AAENqJS1XvBojxEgrXJrtfMHmwYBcprSuRX0QxPWsCkpLOG00EHKs3tZ5"
+                        >
+                        </stripe-buy-button>
+                      </div>
+                    ) : (
+                      <button 
+                        type="submit" 
+                        disabled={!formValid || formSubmitting}
+                        style={{
+                          backgroundColor: "var(--primary-color)",
+                          color: "white",
+                          border: "none",
+                          padding: "0.75rem 2rem",
+                          fontSize: "1.1rem",
+                          fontWeight: "600",
+                          borderRadius: "4px",
+                          cursor: formValid ? "pointer" : "not-allowed",
+                          opacity: formValid ? 1 : 0.7,
+                          transition: "all 0.3s ease",
+                          minWidth: "180px",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {formSubmitting ? (
+                          <>
+                            <span className="loading-spinner"></span>
+                            Submitting...
+                          </>
+                        ) : (
+                          "Continue to Payment"
+                        )}
+                      </button>
+                    )}
                   </div>
                 </form>
               )}
             </Section>
           </FormSection>
+
+          <QuoteSection>
+            <div className="quote">
+              "In every personalized book, a child finds a reflection of their own limitless potential."
+            </div>
+            <div className="attribution">
+              Written and Illustrated by Sam Lapscher
+            </div>
+          </QuoteSection>
 
           <Section>
             <h2>Frequently Asked Questions</h2>
