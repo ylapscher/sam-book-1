@@ -90,7 +90,6 @@ const MainImageContainer = styled.div`
     width: 100%;
     height: auto;
     border-radius: 4px;
-    border: 1px solid #ddd;
   }
 
   .navigation-container {
@@ -275,16 +274,6 @@ const FAQItem = styled.div`
   }
 `;
 
-const FormGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
 const FormSection = styled.div`
   form {
     @media (max-width: 768px) {
@@ -309,103 +298,6 @@ const FormSection = styled.div`
     @media (max-width: 768px) {
       margin-bottom: 0.5rem;
     }
-  }
-`;
-
-const Form = styled.form`
-  max-width: 1000px;
-  margin: 0 auto;
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  &.submitting {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  display: flex;
-  flex-direction: column;
-  
-  .form-footer {
-    margin-top: 2rem;
-    text-align: center;
-  }
-  
-  button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.75rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 180px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    
-    &:hover {
-      background-color: var(--primary-dark);
-    }
-    
-    &:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-  }
-  
-  .loading-spinner {
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: white;
-    animation: spin 1s linear infinite;
-    margin-right: 10px;
-  }
-  
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 1.2rem;
-
-  .field-label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.4rem;
-    color: var(--secondary-color);
-    font-weight: bold;
-  }
-  
-  .field-number {
-    background-color: var(--accent-color);
-    color: white;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 0.5rem;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  input[type="text"], select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
   }
 `;
 
@@ -512,44 +404,6 @@ const HeaderContent = styled.div`
   }
 `;
 
-const CollapsibleSection = styled.div`
-  border-bottom: 1px solid #DDDDDD;
-  margin-bottom: 1rem;
-  max-width: 800px;
-  margin: 0 auto;
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-const CollapsibleHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 0;
-  cursor: pointer;
-  
-  h3 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 500;
-  }
-
-  .icon {
-    font-size: 24px;
-    transition: transform 0.3s ease;
-    transform: ${props => props.isOpen ? 'rotate(180deg)' : 'rotate(0)'};
-  }
-`;
-
-const CollapsibleContent = styled.div`
-  max-height: ${props => props.isOpen ? '500px' : '0'};
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-  padding-bottom: ${props => props.isOpen ? '1.5rem' : '0'};
-`;
-
 const QuoteSection = styled.div`
   background-image: url("/images/pink_banner.png");
   background-size: cover;
@@ -646,10 +500,45 @@ const StepBox = styled.div`
   }
 `;
 
+const FormGroup = styled.div`
+  margin-bottom: 1.2rem;
+
+  .field-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.4rem;
+    color: var(--secondary-color);
+    font-weight: bold;
+  }
+  
+  .field-number {
+    background-color: var(--accent-color);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  input[type="text"], select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+`;
+
 function App() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [openFAQs, setOpenFAQs] = useState({});
   const [stripeLoaded, setStripeLoaded] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [stripeError, setStripeError] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
@@ -662,7 +551,6 @@ function App() {
   
   // Track file size warnings
   const [fileSizeWarning, setFileSizeWarning] = useState(null);
-  const [formData, setFormData] = useState({});
   const [formValid, setFormValid] = useState(false);
 
   const images = [
@@ -825,17 +713,9 @@ function App() {
   };
 
   const handleFormChange = (e) => {
+    // eslint-disable-next-line no-unused-vars
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    
-    // Check if form is valid
-    const form = e.target.form;
-    if (form) {
-      setFormValid(form.checkValidity());
-    }
+    setFormValid(e.target.form.checkValidity());
   };
 
   const handleFormSubmit = async (e) => {
