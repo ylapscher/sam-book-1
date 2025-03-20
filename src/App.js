@@ -30,6 +30,7 @@ const ProductGrid = styled.div`
 
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
+    padding: 1rem;
   }
 `;
 
@@ -37,6 +38,11 @@ const ProductImagesContainer = styled.div`
   display: flex;
   gap: 2rem;
   position: relative;
+  
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
 `;
 
 const ThumbnailList = styled.div`
@@ -44,6 +50,19 @@ const ThumbnailList = styled.div`
   flex-direction: column;
   gap: 1rem;
   width: 75px;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    
+    img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+    }
+  }
 
   img {
     width: 100%;
@@ -71,6 +90,7 @@ const MainImageContainer = styled.div`
     width: 100%;
     height: auto;
     border-radius: 4px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   }
 
   .navigation-container {
@@ -116,6 +136,20 @@ const NavigationButton = styled.button`
   &.next {
     right: -24px;
   }
+  
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    
+    &.prev {
+      left: -10px;
+    }
+    
+    &.next {
+      right: -10px;
+    }
+  }
 `;
 
 const ProductInfo = styled.div`
@@ -130,12 +164,23 @@ const ProductInfo = styled.div`
   @media (max-width: 1024px) {
     padding: 0;
   }
+  
+  @media (max-width: 768px) {
+    p.subtitle {
+      font-size: 18px;
+      margin-bottom: 1.5rem;
+    }
+  }
 `;
 
 const Price = styled.div`
   font-size: 28px;
   font-weight: 500;
   margin: 1rem 0;
+  
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 const Section = styled.section`
@@ -147,6 +192,15 @@ const Section = styled.section`
   h2 {
     text-align: center;
     margin-bottom: 1.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+    
+    h2 {
+      font-size: 22px;
+      margin-bottom: 1rem;
+    }
   }
 `;
 
@@ -217,10 +271,31 @@ const FormGrid = styled.div`
   }
 `;
 
-const FormSection = styled.section`
-  background: var(--light-gray);
-  padding: 2rem;
-  margin: 2rem 0;
+const FormSection = styled.div`
+  form {
+    @media (max-width: 768px) {
+      padding: 1rem !important;
+    }
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+  
+  .form-group {
+    flex: 1;
+    
+    @media (max-width: 768px) {
+      margin-bottom: 0.5rem;
+    }
+  }
 `;
 
 const Form = styled.form`
@@ -354,38 +429,57 @@ const FileUpload = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  background-color: var(--primary-color);
+  background-color: var(--accent-color);
   color: white;
-  padding: 1rem 2rem;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 0.8rem 1.5rem;
   border: none;
-  border-radius: 30px;
-  font-size: 1.1rem;
-  font-weight: bold;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: var(--transition);
+  display: block;
   width: 100%;
-  margin-top: 2rem;
-
+  margin-bottom: 2rem;
+  
   &:hover {
-    transform: translateY(-2px);
+    background-color: #1a4580;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 16px;
+    padding: 0.7rem 1.2rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
 const Header = styled.header`
-  width: 100%;
-  padding: 3rem 2rem;
-  background: white;
-  border-bottom: 1px solid #DDDDDD;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  
+  @media (max-width: 768px) {
+    padding: 0.8rem 0;
+  }
 `;
 
 const HeaderContent = styled.div`
   max-width: 1400px;
   margin: 0 auto;
-
-  h1 {
-    font-size: 48px;
-    font-weight: 500;
-    color: #222222;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+    
+    h1 {
+      font-size: 22px;
+    }
   }
 `;
 

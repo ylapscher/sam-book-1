@@ -32,23 +32,39 @@ const GlobalStyles = createGlobalStyle`
     font-size: 28px;
     font-weight: 500;
     margin-bottom: 0.5rem;
+    
+    @media (max-width: 768px) {
+      font-size: 24px;
+    }
   }
 
   h2 {
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 1rem;
+    
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
   }
 
   h3 {
     font-size: 18px;
     font-weight: 500;
     margin-bottom: 0.5rem;
+    
+    @media (max-width: 768px) {
+      font-size: 16px;
+    }
   }
 
   p {
     margin-bottom: 1rem;
     color: var(--secondary-color);
+    
+    @media (max-width: 768px) {
+      font-size: 15px;
+    }
   }
 
   img {
@@ -87,6 +103,12 @@ const GlobalStyles = createGlobalStyle`
       outline: none;
       border-color: var(--accent-color);
     }
+    
+    @media (max-width: 768px) {
+      padding: 0.7rem;
+      font-size: 15px;
+      margin-bottom: 0.8rem;
+    }
   }
 
   select {
@@ -103,6 +125,10 @@ const GlobalStyles = createGlobalStyle`
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 2rem;
+    
+    @media (max-width: 768px) {
+      padding: 0 1rem;
+    }
   }
 
   /* Utility classes */
@@ -113,6 +139,13 @@ const GlobalStyles = createGlobalStyle`
   .mb-1 { margin-bottom: 1rem; }
   .mb-2 { margin-bottom: 2rem; }
   .mb-3 { margin-bottom: 3rem; }
+  
+  @media (max-width: 768px) {
+    .mt-2 { margin-top: 1.5rem; }
+    .mt-3 { margin-top: 2rem; }
+    .mb-2 { margin-bottom: 1.5rem; }
+    .mb-3 { margin-bottom: 2rem; }
+  }
 `;
 
 export default GlobalStyles; 
