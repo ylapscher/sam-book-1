@@ -5,8 +5,9 @@ const GlobalStyles = createGlobalStyle`
     --primary-color: #222222;
     --primary-dark: #111111;
     --secondary-color: #595959;
-    --accent-color: #2557A7;
+    --accent-color: #CB7171;
     --text-color: #222222;
+    --price-color: #238F52;
     --light-gray: #F5F5F5;
     --border-radius: 4px;
     --transition: all 0.2s ease;
