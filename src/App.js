@@ -24,7 +24,7 @@ const ProductGrid = styled.div`
   display: grid;
   grid-template-columns: 60% 40%;
   gap: 2rem;
-  padding: 2rem;
+  padding: 1rem 2rem;
   max-width: 1400px;
   margin: 0 auto;
 
@@ -468,11 +468,6 @@ const StepBox = styled.div`
   text-align: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  }
   
   .step-number {
     background-color: var(--accent-color);
@@ -1245,24 +1240,6 @@ function App() {
                 <p>Yes! We'll create a digital preview of your book for your approval before printing. You can request revisions if needed.</p>
               </FAQItem>
             </FAQ>
-          </Section>
-
-          <Section>
-            <h2>About the Book</h2>
-            <Grid>
-              <Card>
-                <h3>Personalized Story</h3>
-                <p>Each book is uniquely crafted to tell your family's immigration story, featuring real names, places, and photos of your loved ones.</p>
-              </Card>
-              <Card>
-                <h3>Beautiful Illustrations</h3>
-                <p>Hand-drawn illustrations bring your family's journey to life, creating a magical experience for children of all ages.</p>
-              </Card>
-              <Card>
-                <h3>Cultural Heritage</h3>
-                <p>Celebrate your family's roots and help your children understand their rich cultural heritage through storytelling.</p>
-              </Card>
-            </Grid>
           </Section>
         </MainContent>
 
