@@ -90,6 +90,7 @@ const MainImageContainer = styled.div`
     width: 100%;
     height: auto;
     border-radius: 4px;
+    border: 1px solid #ddd;
   }
 
   .navigation-container {
@@ -121,11 +122,13 @@ const NavigationButton = styled.button`
   z-index: 2;
   transition: all 0.3s ease;
   pointer-events: auto;
+  top: 50%;
+  transform: translateY(-50%);
 
   &:hover {
     background: #f5f5f5;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05);
+    transform: translateY(-50%) scale(1.05);
   }
 
   &.prev {
@@ -147,6 +150,10 @@ const NavigationButton = styled.button`
     
     &.next {
       right: -10px;
+    }
+    
+    &:hover {
+      transform: translateY(-50%);
     }
   }
 `;
@@ -567,6 +574,64 @@ const QuoteSection = styled.div`
   }
 `;
 
+const StepGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+`;
+
+const StepBox = styled.div`
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid #DDDDDD;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .step-number {
+    background-color: var(--accent-color);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-weight: 600;
+  }
+  
+  h3 {
+    margin-bottom: 0.75rem;
+    font-size: 17px;
+    color: var(--primary-color);
+  }
+  
+  p {
+    font-size: 14px;
+    color: var(--secondary-color);
+    line-height: 1.4;
+  }
+`;
+
 function App() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [openFAQs, setOpenFAQs] = useState({});
@@ -928,37 +993,33 @@ function App() {
 
               <Section>
                 <h2>How It Works</h2>
-                <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                  <CollapsibleSection>
-                    <CollapsibleHeader isOpen={openFAQs['howItWorks1']} onClick={() => toggleFAQ('howItWorks1')}>
-                      <h3>1. Share Your Story</h3>
-                      <span className="icon">▼</span>
-                    </CollapsibleHeader>
-                    <CollapsibleContent isOpen={openFAQs['howItWorks1']}>
-                      <p>Tell us about your family's journey, including names, dates, and special memories. We'll incorporate these details into a beautifully crafted narrative that resonates with your child.</p>
-                    </CollapsibleContent>
-                  </CollapsibleSection>
-
-                  <CollapsibleSection>
-                    <CollapsibleHeader isOpen={openFAQs['howItWorks2']} onClick={() => toggleFAQ('howItWorks2')}>
-                      <h3>2. Add Your Photos</h3>
-                      <span className="icon">▼</span>
-                    </CollapsibleHeader>
-                    <CollapsibleContent isOpen={openFAQs['howItWorks2']}>
-                      <p>Share your cherished family photos that will be beautifully integrated into your personalized book. We'll carefully place them throughout the story to create a meaningful connection between the narrative and your family's memories.</p>
-                    </CollapsibleContent>
-                  </CollapsibleSection>
-
-                  <CollapsibleSection>
-                    <CollapsibleHeader isOpen={openFAQs['howItWorks3']} onClick={() => toggleFAQ('howItWorks3')}>
-                      <h3>3. Receive Your Book</h3>
-                      <span className="icon">▼</span>
-                    </CollapsibleHeader>
-                    <CollapsibleContent isOpen={openFAQs['howItWorks3']}>
-                      <p>We'll create and deliver your custom hardcover book, perfect for reading together. Each book is carefully printed and bound to ensure it becomes a lasting family keepsake that can be passed down through generations.</p>
-                    </CollapsibleContent>
-                  </CollapsibleSection>
-                </div>
+                <StepGrid>
+                  <StepBox>
+                    <div className="step-number">1</div>
+                    <h3>Share Your Story</h3>
+                    <p>Add family origins, and names to be displayed throughout the story.</p>
+                  </StepBox>
+                  <StepBox>
+                    <div className="step-number">2</div>
+                    <h3>Choose Their Character</h3>
+                    <p>Select their gender, then choose from a selection of natural hair and skin tone options.</p>
+                  </StepBox>
+                  <StepBox>
+                    <div className="step-number">3</div>
+                    <h3>Upload Family Photos</h3>
+                    <p>These will proudly be displayed on the cover and throughout the story.</p>
+                  </StepBox>
+                  <StepBox>
+                    <div className="step-number">4</div>
+                    <h3>Write a Loving Message</h3>
+                    <p>We'll print it on the last page of the book.</p>
+                  </StepBox>
+                  <StepBox>
+                    <div className="step-number">5</div>
+                    <h3>Pick a Beautiful Cover</h3>
+                    <p>Make it extra-special with a choice of two cover options.</p>
+                  </StepBox>
+                </StepGrid>
               </Section>
             </ProductInfo>
           </ProductGrid>
