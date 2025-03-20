@@ -90,7 +90,6 @@ const MainImageContainer = styled.div`
     width: 100%;
     height: auto;
     border-radius: 4px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   }
 
   .navigation-container {
@@ -155,10 +154,14 @@ const NavigationButton = styled.button`
 const ProductInfo = styled.div`
   padding: 0 2rem;
 
-  p.subtitle {
-    font-size: 20px;
-    color: #595959;
+  .subtitle {
     margin-bottom: 2rem;
+    
+    p {
+      font-size: 16px;
+      color: var(--secondary-color);
+      margin-bottom: 1rem;
+    }
   }
 
   @media (max-width: 1024px) {
@@ -166,9 +169,18 @@ const ProductInfo = styled.div`
   }
   
   @media (max-width: 768px) {
-    p.subtitle {
-      font-size: 18px;
+    .subtitle {
       margin-bottom: 1.5rem;
+      
+      p {
+        font-size: 15px;
+        margin-bottom: 0.8rem;
+      }
+      
+      > div {
+        grid-template-columns: 1fr !important;
+        gap: 0.5rem !important;
+      }
     }
   }
 `;
@@ -887,9 +899,22 @@ function App() {
             </ProductImagesContainer>
 
             <ProductInfo>
-              <p className="subtitle">
-                Create a personalized children's book that celebrates your family's unique heritage
-              </p>
+              <div className="subtitle">
+                <p>A living family heirloom: This beautifully crafted book weaves your family's personal history into a captivating story for generations to cherish.</p>
+                <p>Bring your family's history to life with a beautifully crafted book that includes grandparents' names, significant locations, and cherished photographs, all woven together with captivating watercolor illustrations.</p>
+                <p>Welcome a new baby with a personalized tale based on your family's history. This adorable keepsake makes a special little one the star of their own story. Filled with hopes for their future – it's the perfect first addition to a baby's bookshelf.</p>
+                
+                <div style={{ marginTop: "1.5rem", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem" }}>
+                  <div>
+                    <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Recommended for ages 0-8</p>
+                    <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Printed and dispatched in 5 working days</p>
+                  </div>
+                  <div>
+                    <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Upload special photos to customize your story</p>
+                    <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> A beautiful gift for newborns and new parents</p>
+                  </div>
+                </div>
+              </div>
               <Price>$34.99+</Price>
               
               {!stripeLoaded ? (
