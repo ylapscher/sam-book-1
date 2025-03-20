@@ -900,19 +900,13 @@ function App() {
 
             <ProductInfo>
               <div className="subtitle">
-                <p>A living family heirloom: This beautifully crafted book weaves your family's personal history into a captivating story for generations to cherish.</p>
-                <p>Bring your family's history to life with a beautifully crafted book that includes grandparents' names, significant locations, and cherished photographs, all woven together with captivating watercolor illustrations.</p>
-                <p>Welcome a new baby with a personalized tale based on your family's history. This adorable keepsake makes a special little one the star of their own story. Filled with hopes for their future – it's the perfect first addition to a baby's bookshelf.</p>
+                <p>Welcome a new baby with a personalized tale that weaves your family's history into a captivating narrative. This beautifully crafted book includes grandparents' names and cherished photographs, making the little one the star of their own story. The story is brought to life with stunning hand-painted illustrations, creating a treasured keepsake that celebrates your family's journey and will be cherished for generations to come.</p>
                 
-                <div style={{ marginTop: "1.5rem", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem" }}>
-                  <div>
-                    <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Recommended for ages 0-8</p>
-                    <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Printed and dispatched in 5 working days</p>
-                  </div>
-                  <div>
-                    <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Upload special photos to customize your story</p>
-                    <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> A beautiful gift for newborns and new parents</p>
-                  </div>
+                <div style={{ marginTop: "1.5rem" }}>
+                  <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Recommended for ages 0-8</p>
+                  <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Printed and dispatched in 5 working days</p>
+                  <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Upload special photos to customize your story</p>
+                  <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> A beautiful gift for newborns and new parents</p>
                 </div>
               </div>
               <Price>$34.99+</Price>
@@ -928,7 +922,7 @@ function App() {
                 </div>
               ) : (
                 <SubmitButton onClick={scrollToForm}>
-                  Start Your Family's Story
+                  Personalize My Book
                 </SubmitButton>
               )}
 
