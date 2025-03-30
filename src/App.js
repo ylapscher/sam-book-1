@@ -10,6 +10,7 @@ const AppContainer = styled.div`
 
 const MainContent = styled.main`
   flex: 1;
+  padding-top: 0;
 `;
 
 const Footer = styled.footer`
@@ -27,6 +28,7 @@ const ProductGrid = styled.div`
   padding: 1rem 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  margin-top: 0;
 
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
@@ -130,10 +132,12 @@ const NavigationButton = styled.button`
 
   &.prev {
     left: -24px;
+    margin-left: 10px;
   }
 
   &.next {
     right: -24px;
+    margin-right: 10px;
   }
   
   @media (max-width: 768px) {
@@ -377,13 +381,13 @@ const SubmitButton = styled.button`
 const Header = styled.header`
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1rem 0;
+  padding: 0.7rem 0;
   position: sticky;
   top: 0;
   z-index: 10;
   
   @media (max-width: 768px) {
-    padding: 0.8rem 0;
+    padding: 0.6rem 0;
   }
 `;
 
@@ -561,17 +565,42 @@ function App() {
     setCurrentImageIndex(index);
   };
 
-  const handlePrevImage = () => {
+  const handlePrevImage = (e) => {
+    e.stopPropagation(); // Prevent event bubbling
     setCurrentImageIndex((prev) => 
       prev === 0 ? images.length - 1 : prev - 1
     );
   };
 
-  const handleNextImage = () => {
+  const handleNextImage = (e) => {
+    e.stopPropagation(); // Prevent event bubbling
     setCurrentImageIndex((prev) => 
       prev === images.length - 1 ? 0 : prev + 1
     );
   };
+
+  // Handle keyboard navigation for images
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        setCurrentImageIndex((prev) => 
+          prev === 0 ? images.length - 1 : prev - 1
+        );
+      } else if (e.key === 'ArrowRight') {
+        setCurrentImageIndex((prev) => 
+          prev === images.length - 1 ? 0 : prev + 1
+        );
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('keydown', handleKeyDown);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [images.length]); // Only re-run if images array length changes
 
   const toggleFAQ = (index) => {
     setOpenFAQs(prev => {
@@ -842,10 +871,18 @@ function App() {
                   alt={images[currentImageIndex].alt}
                 />
                 <div className="navigation-container">
-                  <NavigationButton className="prev" onClick={handlePrevImage}>
+                  <NavigationButton 
+                    className="prev" 
+                    onClick={handlePrevImage}
+                    aria-label="Previous image"
+                  >
                     ‹
                   </NavigationButton>
-                  <NavigationButton className="next" onClick={handleNextImage}>
+                  <NavigationButton 
+                    className="next" 
+                    onClick={handleNextImage}
+                    aria-label="Next image"
+                  >
                     ›
                   </NavigationButton>
                 </div>
@@ -853,6 +890,7 @@ function App() {
             </ProductImagesContainer>
 
             <ProductInfo>
+              <h2 style={{ marginBottom: "1rem", fontSize: "24px", color: "var(--primary-color)" }}>Details</h2>
               <div className="subtitle">
                 <p>Welcome a new baby with a personalized tale that weaves your family's history into a captivating narrative. This beautifully crafted book includes grandparents' names and cherished photographs, making the little one the star of their own story. The story is brought to life with stunning hand-painted illustrations, creating a treasured keepsake that celebrates your family's journey and will be cherished for generations to come.</p>
                 
