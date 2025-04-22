@@ -235,6 +235,7 @@ const HowItWorksSection = styled.div`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -242,6 +243,7 @@ const Grid = styled.div`
   margin-top: 2rem;
 `;
 
+// eslint-disable-next-line no-unused-vars
 const Card = styled.div`
   background: white;
   border-radius: 4px;
@@ -292,6 +294,7 @@ const FAQItem = styled.div`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const FormSection = styled.div`
   form {
     @media (max-width: 768px) {
@@ -319,6 +322,7 @@ const FormSection = styled.div`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const FileUpload = styled.div`
   border: 2px dashed #ddd;
   padding: 1.5rem;
@@ -367,7 +371,7 @@ const FileUpload = styled.div`
   }
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton = styled.a`
   background-color: var(--accent-color);
   color: white;
   font-size: 18px;
@@ -380,9 +384,13 @@ const SubmitButton = styled.button`
   display: block;
   width: 100%;
   margin-bottom: 2rem;
+  text-align: center;
+  text-decoration: none;
   
   &:hover {
     background-color: #b86565;
+    color: white;
+    text-decoration: none;
   }
   
   @media (max-width: 768px) {
@@ -395,11 +403,11 @@ const SubmitButton = styled.button`
 const Header = styled.header`
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   z-index: 10;
   
   @media (max-width: 768px) {
-    padding: 1.2rem 0;
+    padding: 0.8rem 0;
   }
 `;
 
@@ -411,11 +419,15 @@ const HeaderContent = styled.div`
   justify-content: space-between;
   align-items: center;
   
+  h1 {
+    font-size: 32px;
+  }
+  
   @media (max-width: 768px) {
     padding: 0 1rem;
     
     h1 {
-      font-size: 22px;
+      font-size: 26px;
     }
   }
 `;
@@ -478,6 +490,7 @@ const StepBox = styled.div`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const FormNavigation = styled.div`
   display: flex;
   justify-content: space-between;
@@ -512,6 +525,7 @@ const FormNavigation = styled.div`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const FormProgress = styled.div`
   display: flex;
   justify-content: center;
@@ -571,6 +585,7 @@ const FormProgress = styled.div`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const FormGroup = styled.div`
   margin-bottom: 1.5rem;
 
@@ -597,14 +612,23 @@ const FormGroup = styled.div`
   }
 `;
 
+const FAQSection = styled.div`
+  background-color: #fff;
+  width: 100%;
+  padding: 2rem 0;
+`;
+
 function App() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [openFAQs, setOpenFAQs] = useState({});
   const [stripeLoaded, setStripeLoaded] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [stripeError, setStripeError] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [formSubmitting, setFormSubmitting] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [formSuccess, setFormSuccess] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [fileUploads, setFileUploads] = useState({
     parentBabyPhoto: false,
     datingPhoto: false,
@@ -617,6 +641,7 @@ function App() {
   const totalSteps = 3;
   
   // Track step validity
+  // eslint-disable-next-line no-unused-vars
   const [stepsValid, setStepsValid] = useState({
     1: false,
     2: false,
@@ -624,7 +649,9 @@ function App() {
   });
   
   // Track file size warnings
+  // eslint-disable-next-line no-unused-vars
   const [fileSizeWarning, setFileSizeWarning] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [formValid, setFormValid] = useState(false);
 
   const images = [
@@ -766,6 +793,7 @@ function App() {
     });
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleFileChange = async (e) => {
     const { name, files } = e.target;
     if (files && files.length > 0) {
@@ -812,6 +840,7 @@ function App() {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleFormChange = (e) => {
     const form = e.target.form;
     const currentStepFields = Array.from(form.elements)
@@ -852,18 +881,21 @@ function App() {
     setFormValid(form.checkValidity());
   };
   
+  // eslint-disable-next-line no-unused-vars
   const nextStep = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
     }
   };
   
+  // eslint-disable-next-line no-unused-vars
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitting(true);
@@ -1014,7 +1046,7 @@ function App() {
             <ProductInfo>
               <h2 style={{ marginBottom: "1rem", fontSize: "24px", color: "var(--primary-color)" }}>About the Book</h2>
               <div className="subtitle">
-                <p>Welcome a new baby with a personalized tale that incorporates your family's history. This book features grandparents' names, cherished photographs, and hand-painted illustrations, making the little one the star of their story. A timeless keepsake to celebrate your family's journey for generations to come.</p>
+                <p>Welcome a new baby with a personalized story all about them—and the family who loves them! This book is filled with grandparents' names, family photos, and hand-painted illustrations, making the child the star of their own story. A timeless keepsake to celebrate a family's journey and show how the love and stories from generations before have helped grow the amazing person this child will become. With strong roots and lots of love, this little star can do anything!</p>
                 
                 <div style={{ marginTop: "1.5rem" }}>
                   <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Recommended for ages 0-8</p>
@@ -1023,7 +1055,7 @@ function App() {
                   <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> A beautiful gift for newborns and new parents</p>
                 </div>
               </div>
-              <Price>$34.99+</Price>
+              <Price>$38</Price>
               
               {!stripeLoaded ? (
                 <div style={{ 
@@ -1035,7 +1067,11 @@ function App() {
                   <p>Loading payment options...</p>
                 </div>
               ) : (
-                <SubmitButton onClick={scrollToForm}>
+                <SubmitButton 
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdzunmRUzyP1yr0De4Py5O_LTQQkwiWzraV-By75gtJqzL73g/viewform"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Personalize My Book
                 </SubmitButton>
               )}
@@ -1067,355 +1103,7 @@ function App() {
             </Section>
           </HowItWorksSection>
 
-          <FormSection className="form-section">
-            <Section>
-              <h2>Start Your Family's Story</h2>
-              {formSuccess ? (
-                <div style={{ 
-                  background: "#e6f7e6", 
-                  padding: "2rem", 
-                  borderRadius: "10px", 
-                  marginBottom: "2rem",
-                  textAlign: "center",
-                  maxWidth: "1000px",
-                  margin: "0 auto"
-                }}>
-                  <h3 style={{ color: "#2e7d32" }}>Thank you for your submission!</h3>
-                  <p>We've received your family story information. Our team will review it and contact you soon about your personalized book.</p>
-                </div>
-              ) : (
-                <form
-                  name="family-story" 
-                  method="POST"
-                  data-netlify="true"
-                  netlify-honeypot="bot-field"
-                  encType="multipart/form-data"
-                  onChange={handleFormChange}
-                  onSubmit={handleFormSubmit}
-                  style={{
-                    maxWidth: "600px",
-                    margin: "0 auto",
-                    background: "white",
-                    padding: "2rem",
-                    borderRadius: "10px",
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                    display: "flex",
-                    flexDirection: "column"
-                  }}
-                  className={formSubmitting ? "submitting" : ""}
-                >
-                  <input type="hidden" name="form-name" value="family-story" />
-                  <input type="hidden" name="bot-field" />
-                  
-                  {fileSizeWarning && (
-                    <div 
-                      className="file-size-warning"
-                      style={{
-                        backgroundColor: "#fff3cd",
-                        color: "#856404",
-                        padding: "1rem",
-                        borderRadius: "4px",
-                        marginBottom: "1.5rem",
-                        fontWeight: "bold"
-                      }}
-                    >
-                      {fileSizeWarning}
-                    </div>
-                  )}
-                  
-                  {/* Form Progress Indicator */}
-                  <FormProgress>
-                    <div className={`step ${currentStep >= 1 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}>
-                      <div className="step-number">1</div>
-                      <div className="step-title">Family Details</div>
-                    </div>
-                    <div className={`step ${currentStep >= 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}`}>
-                      <div className="step-number">2</div>
-                      <div className="step-title">Family Photos</div>
-                    </div>
-                    <div className={`step ${currentStep >= 3 ? 'active' : ''}`}>
-                      <div className="step-number">3</div>
-                      <div className="step-title">Customization</div>
-                    </div>
-                  </FormProgress>
-                  
-                  {/* Step 1: Family Details */}
-                  <div style={{ 
-                    display: currentStep === 1 ? 'block' : 'none',
-                    marginBottom: '2rem'
-                  }}>
-                    <h3 style={{ textAlign: 'center', marginBottom: '2rem' }}>Family Details</h3>
-                    
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">1.</span>
-                        <label htmlFor="babyName">Baby's Name</label>
-                      </div>
-                      <input type="text" name="babyName" id="babyName" required />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">2.</span>
-                        <label htmlFor="parentName">Parent's Name</label>
-                      </div>
-                      <input type="text" name="parentName" id="parentName" required />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">3.</span>
-                        <label htmlFor="parentOrigin">Parent's Country of Origin</label>
-                      </div>
-                      <input type="text" name="parentOrigin" id="parentOrigin" required />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">4.</span>
-                        <label htmlFor="grandparentName">Grandparent's Name</label>
-                      </div>
-                      <input type="text" name="grandparentName" id="grandparentName" required />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">5.</span>
-                        <label htmlFor="grandparentOrigin">Grandparent's Country of Origin</label>
-                      </div>
-                      <input type="text" name="grandparentOrigin" id="grandparentOrigin" required />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">6.</span>
-                        <label htmlFor="settlementLocation">Where Family Settled</label>
-                      </div>
-                      <input type="text" name="settlementLocation" id="settlementLocation" required />
-                    </FormGroup>
-                  </div>
-                  
-                  {/* Step 2: Family Photos */}
-                  <div style={{ 
-                    display: currentStep === 2 ? 'block' : 'none',
-                    marginBottom: '2rem'
-                  }}>
-                    <h3 style={{ textAlign: 'center', marginBottom: '2rem' }}>Family Photos</h3>
-                    
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">1.</span>
-                        <label>Parent's Baby Photo</label>
-                      </div>
-                      <FileUpload className={fileUploads.parentBabyPhoto ? "file-uploaded" : ""}>
-                        <label htmlFor="parentBabyPhoto">
-                          Click to upload or drag and drop (Max 1.5MB recommended)
-                        </label>
-                        <input 
-                          type="file" 
-                          name="parentBabyPhoto" 
-                          id="parentBabyPhoto" 
-                          accept="image/*"
-                          required 
-                          onChange={handleFileChange}
-                        />
-                        {fileUploads.parentBabyPhoto && (
-                          <div className="upload-success">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
-                            </svg>
-                            File uploaded successfully
-                          </div>
-                        )}
-                      </FileUpload>
-                    </FormGroup>
-
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">2.</span>
-                        <label>Parents' Dating Photo</label>
-                      </div>
-                      <FileUpload className={fileUploads.datingPhoto ? "file-uploaded" : ""}>
-                        <label htmlFor="datingPhoto">
-                          Click to upload or drag and drop (Max 1.5MB recommended)
-                        </label>
-                        <input 
-                          type="file" 
-                          name="datingPhoto" 
-                          id="datingPhoto" 
-                          accept="image/*"
-                          required 
-                          onChange={handleFileChange}
-                        />
-                        {fileUploads.datingPhoto && (
-                          <div className="upload-success">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
-                            </svg>
-                            File uploaded successfully
-                          </div>
-                        )}
-                      </FileUpload>
-                    </FormGroup>
-
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">3.</span>
-                        <label>Baby's Recent Photo</label>
-                      </div>
-                      <FileUpload className={fileUploads.babyPhoto ? "file-uploaded" : ""}>
-                        <label htmlFor="babyPhoto">
-                          Click to upload or drag and drop (Max 1.5MB recommended)
-                        </label>
-                        <input 
-                          type="file" 
-                          name="babyPhoto" 
-                          id="babyPhoto" 
-                          accept="image/*"
-                          required 
-                          onChange={handleFileChange}
-                        />
-                        {fileUploads.babyPhoto && (
-                          <div className="upload-success">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
-                            </svg>
-                            File uploaded successfully
-                          </div>
-                        )}
-                      </FileUpload>
-                    </FormGroup>
-
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">4.</span>
-                        <label>Current Family Photo</label>
-                      </div>
-                      <FileUpload className={fileUploads.familyPhoto ? "file-uploaded" : ""}>
-                        <label htmlFor="familyPhoto">
-                          Click to upload or drag and drop (Max 1.5MB recommended)
-                        </label>
-                        <input 
-                          type="file" 
-                          name="familyPhoto" 
-                          id="familyPhoto" 
-                          accept="image/*"
-                          required 
-                          onChange={handleFileChange}
-                        />
-                        {fileUploads.familyPhoto && (
-                          <div className="upload-success">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM11.7071 6.70711L7.70711 10.7071C7.31658 11.0976 6.68342 11.0976 6.29289 10.7071L4.29289 8.70711C3.90237 8.31658 3.90237 7.68342 4.29289 7.29289C4.68342 6.90237 5.31658 6.90237 5.70711 7.29289L7 8.58579L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711Z" fill="#2e7d32"/>
-                            </svg>
-                            File uploaded successfully
-                          </div>
-                        )}
-                      </FileUpload>
-                    </FormGroup>
-                    
-                    <div style={{ marginTop: "1rem", fontSize: "0.85rem", color: "#666", padding: "0.5rem", backgroundColor: "#f9f9f9", borderRadius: "4px" }}>
-                      <p style={{ margin: "0 0 0.5rem 0", fontWeight: "bold" }}>Important Notes:</p>
-                      <ul style={{ margin: "0", paddingLeft: "1.2rem" }}>
-                        <li>Total file size must be under 8MB</li>
-                        <li>Use small/compressed images when possible</li>
-                      </ul>
-                    </div>
-                  </div>
-                  
-                  {/* Step 3: Customization */}
-                  <div style={{ 
-                    display: currentStep === 3 ? 'block' : 'none',
-                    marginBottom: '2rem'
-                  }}>
-                    <h3 style={{ textAlign: 'center', marginBottom: '2rem' }}>Customization</h3>
-                    
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">1.</span>
-                        <label htmlFor="childGender">Book For</label>
-                      </div>
-                      <select name="childGender" id="childGender" required>
-                        <option value="">Select...</option>
-                        <option value="boy">Boy</option>
-                        <option value="girl">Girl</option>
-                      </select>
-                    </FormGroup>
-
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">2.</span>
-                        <label htmlFor="coverStyle">Cover Style</label>
-                      </div>
-                      <select name="coverStyle" id="coverStyle" required>
-                        <option value="">Select...</option>
-                        <option value="pink-flowers">Pink with Flowers</option>
-                        <option value="blue-clouds">Blue with Clouds</option>
-                      </select>
-                    </FormGroup>
-                    
-                    <FormGroup>
-                      <div className="field-label">
-                        <span className="field-number">3.</span>
-                        <label htmlFor="message">Message for Baby (Optional)</label>
-                      </div>
-                      <textarea 
-                        name="message" 
-                        id="message" 
-                        rows="4" 
-                        style={{ 
-                          width: "100%", 
-                          padding: "0.8rem",
-                          border: "1px solid #ddd",
-                          borderRadius: "4px",
-                          fontSize: "1rem",
-                          resize: "vertical"
-                        }}
-                        placeholder="Write a special message for the baby..."
-                      ></textarea>
-                    </FormGroup>
-                  </div>
-                  
-                  {/* Form Navigation */}
-                  <FormNavigation>
-                    {currentStep > 1 && (
-                      <button 
-                        type="button" 
-                        className="back-btn"
-                        onClick={prevStep}
-                      >
-                        Back
-                      </button>
-                    )}
-                    
-                    {currentStep < totalSteps ? (
-                      <button 
-                        type="button" 
-                        className="next-btn"
-                        onClick={nextStep}
-                        disabled={!stepsValid[currentStep]}
-                        style={{ marginLeft: currentStep === 1 ? 'auto' : '0' }}
-                      >
-                        Next
-                      </button>
-                    ) : (
-                      <button 
-                        type="submit" 
-                        disabled={!formValid || formSubmitting}
-                        style={{
-                          marginLeft: 'auto',
-                        }}
-                      >
-                        {formSubmitting ? "Submitting..." : "Complete Order"}
-                      </button>
-                    )}
-                  </FormNavigation>
-                </form>
-              )}
-            </Section>
-          </FormSection>
-
-          <div style={{ backgroundColor: "#F8EEE6", width: "100%" }}>
+          <FAQSection>
             <Section>
               <h2>Frequently Asked Questions</h2>
               <FAQ>
@@ -1433,7 +1121,7 @@ function App() {
                 </FAQItem>
               </FAQ>
             </Section>
-          </div>
+          </FAQSection>
         </MainContent>
 
         <Footer>
