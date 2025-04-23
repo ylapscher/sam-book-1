@@ -80,6 +80,7 @@ const ThumbnailList = styled.div`
 const MainImageContainer = styled.div`
   flex: 1;
   position: relative;
+  touch-action: pan-x;
   
   img {
     width: 100%;
@@ -275,7 +276,7 @@ const FAQItem = styled.div`
     padding-left: 0;
     
     @media (max-width: 768px) {
-      padding-left: 1rem;
+      padding-left: 0.5rem;
     }
     
     &::after {
@@ -295,7 +296,7 @@ const FAQItem = styled.div`
     padding-left: 0;
     
     @media (max-width: 768px) {
-      padding-left: 1rem;
+      padding-left: 0.5rem;
     }
   }
 `;
@@ -700,6 +701,8 @@ function App() {
   const [fileSizeWarning, setFileSizeWarning] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [formValid, setFormValid] = useState(false);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
   const images = [
     { src: "/images/1.png", alt: "Pink cover with flowers" },
@@ -1027,6 +1030,32 @@ function App() {
     }
   };
 
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe) {
+      handleNextImage({ stopPropagation: () => {} });
+    }
+    if (isRightSwipe) {
+      handlePrevImage({ stopPropagation: () => {} });
+    }
+    
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
   return (
     <>
       <GlobalStyles />
@@ -1051,7 +1080,11 @@ function App() {
                 ))}
               </ThumbnailList>
               
-              <MainImageContainer>
+              <MainImageContainer
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
                 <img
                   src={images[currentImageIndex].src}
                   alt={images[currentImageIndex].alt}
@@ -1078,7 +1111,7 @@ function App() {
             <ProductInfo>
               <h2 style={{ marginBottom: "1rem", fontSize: "24px", color: "var(--primary-color)" }}>About the Book</h2>
               <div className="subtitle">
-                <p>Welcome a new baby with a personalized story all about them. Featuring grandparents' names, family photos, and hand-painted illustrations, this book makes the child the star of their own story. A timeless keepsake celebrating a family's journey and the love and stories from generations past that help shape this amazing child. With strong roots and lots of love, this little star can do anything.</p>
+                <p>Welcome a new baby with a personalized story all about them. Featuring grandparents' names, family photos, and hand-painted illustrations, this book makes the child the star of their own story. A timeless keepsake celebrating a family's journey and the love and stories from generations past that help shape this amazing child. With strong roots and lots of love, this little star can do anything!</p>
                 
                 <div style={{ marginTop: "1.5rem" }}>
                   <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Recommended for ages 0-8</p>
