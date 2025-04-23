@@ -254,6 +254,11 @@ const Card = styled.div`
 const FAQ = styled.div`
   max-width: 800px;
   margin: 1rem auto;
+  padding: 0 1rem;
+  
+  @media (max-width: 768px) {
+    padding: 0 2rem;
+  }
 `;
 
 const FAQItem = styled.div`
@@ -267,6 +272,11 @@ const FAQItem = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-left: 0;
+    
+    @media (max-width: 768px) {
+      padding-left: 1rem;
+    }
     
     &::after {
       content: "${props => props.isOpen ? '▼' : '▶'}";
@@ -282,6 +292,11 @@ const FAQItem = styled.div`
     overflow: hidden;
     transition: max-height 0.3s ease;
     margin-bottom: ${props => props.isOpen ? '1rem' : '0'};
+    padding-left: 0;
+    
+    @media (max-width: 768px) {
+      padding-left: 1rem;
+    }
   }
 `;
 
@@ -738,25 +753,10 @@ function App() {
   }, [images.length]); // Only re-run if images array length changes
 
   const toggleFAQ = (index) => {
-    setOpenFAQs(prev => {
-      // If clicking on an already open section, close it
-      if (prev[index]) {
-        return {
-          ...prev,
-          [index]: false
-        };
-      }
-      
-      // Otherwise, close all sections and open the clicked one
-      const newState = {};
-      Object.keys(prev).forEach(key => {
-        newState[key] = false;
-      });
-      return {
-        ...newState,
-        [index]: true
-      };
-    });
+    setOpenFAQs(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
   };
 
   // Function to resize/compress an image file
@@ -1078,7 +1078,7 @@ function App() {
             <ProductInfo>
               <h2 style={{ marginBottom: "1rem", fontSize: "24px", color: "var(--primary-color)" }}>About the Book</h2>
               <div className="subtitle">
-                <p>Welcome a new baby with a personalized story all about them. Featuring grandparents’ names, family photos, and hand-painted illustrations, this book makes the child the star of their own story. A timeless keepsake celebrating a family’s journey and the love and stories from generations past that help shape this amazing child. With strong roots and lots of love, this little star can do anything.</p>
+                <p>Welcome a new baby with a personalized story all about them. Featuring grandparents' names, family photos, and hand-painted illustrations, this book makes the child the star of their own story. A timeless keepsake celebrating a family's journey and the love and stories from generations past that help shape this amazing child. With strong roots and lots of love, this little star can do anything.</p>
                 
                 <div style={{ marginTop: "1.5rem" }}>
                   <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Recommended for ages 0-8</p>
@@ -1104,7 +1104,7 @@ function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Personalize My Book
+                  Personalize Your Book
                 </SubmitButton>
               )}
             </ProductInfo>
