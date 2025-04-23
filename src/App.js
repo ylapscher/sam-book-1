@@ -609,6 +609,47 @@ const FAQSection = styled.div`
   padding: 2rem 0;
 `;
 
+const ContactSection = styled.div`
+  background-color: var(--light-gray);
+  padding: 3rem 0;
+  text-align: center;
+  
+  h2 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+  }
+  
+  p {
+    margin-bottom: 2rem;
+    color: var(--secondary-color);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 2rem 0;
+  }
+`;
+
+const ContactButton = styled.a`
+  display: inline-block;
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  transition: var(--transition);
+  text-decoration: none;
+  
+  &:hover {
+    background-color: #b86565;
+    text-decoration: none;
+    color: white;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0.7rem 1.5rem;
+  }
+`;
+
 function App() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [openFAQs, setOpenFAQs] = useState({});
@@ -1113,6 +1154,20 @@ function App() {
               </FAQ>
             </Section>
           </FAQSection>
+
+          <ContactSection>
+            <Section>
+              <h2>Have Any Questions?</h2>
+              <p>We're here to help! Reach out to us and we'll get back to you as soon as possible.</p>
+              <ContactButton 
+                href="mailto:samlapscher@gmail.com?subject=Question%20about%20Our%20Family%20Story%20Book"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Contact Us
+              </ContactButton>
+            </Section>
+          </ContactSection>
         </MainContent>
 
         <Footer>
