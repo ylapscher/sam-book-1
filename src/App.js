@@ -44,8 +44,8 @@ const ProductImagesContainer = styled.div`
   position: relative;
   
   @media (max-width: 768px) {
-    flex-direction: column-reverse;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0;
   }
 `;
 
@@ -56,16 +56,7 @@ const ThumbnailList = styled.div`
   width: 75px;
 
   @media (max-width: 768px) {
-    flex-direction: row;
-    width: 100%;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    
-    img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-    }
+    display: none;
   }
 
   img {
