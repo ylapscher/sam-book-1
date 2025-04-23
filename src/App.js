@@ -1078,7 +1078,7 @@ function App() {
             <ProductInfo>
               <h2 style={{ marginBottom: "1rem", fontSize: "24px", color: "var(--primary-color)" }}>About the Book</h2>
               <div className="subtitle">
-                <p>Welcome a new baby with a personalized story all about them—and the family who loves them! This book is filled with grandparents' names, family photos, and hand-painted illustrations, making the child the star of their own story. A timeless keepsake to celebrate a family's journey and show how the love and stories from generations before have helped grow the amazing person this child will become. With strong roots and lots of love, this little star can do anything!</p>
+                <p>Welcome a new baby with a personalized story all about them. Featuring grandparents’ names, family photos, and hand-painted illustrations, this book makes the child the star of their own story. A timeless keepsake celebrating a family’s journey and the love and stories from generations past that help shape this amazing child. With strong roots and lots of love, this little star can do anything.</p>
                 
                 <div style={{ marginTop: "1.5rem" }}>
                   <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> Recommended for ages 0-8</p>
@@ -1128,7 +1128,7 @@ function App() {
                 </StepBox>
                 <StepBox>
                   <div className="step-number">3</div>
-                  <h3>Write a Loving Message & Place Your Order</h3>
+                  <h3>Place Order</h3>
                   <p>Add a heartfelt message to be printed on the last page of the book. Then, complete your purchase, and we'll ship your custom baby book directly to you.</p>
                 </StepBox>
               </StepGrid>
