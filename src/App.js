@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import GlobalStyles from './styles/GlobalStyles';
+import { FilloutStandardEmbed } from '@fillout/react';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -378,7 +379,7 @@ const FileUpload = styled.div`
   }
 `;
 
-const SubmitButton = styled.a`
+const SubmitButton = styled.button`
   background-color: var(--accent-color);
   color: white;
   font-size: 18px;
@@ -1133,9 +1134,10 @@ function App() {
                 </div>
               ) : (
                 <SubmitButton 
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSdzunmRUzyP1yr0De4Py5O_LTQQkwiWzraV-By75gtJqzL73g/viewform"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={() => {
+                    const formSection = document.getElementById('form-section');
+                    formSection.scrollIntoView({ behavior: 'smooth' });
+                  }}
                 >
                   Personalize Your Book
                 </SubmitButton>
@@ -1167,6 +1169,14 @@ function App() {
               </StepGrid>
             </Section>
           </HowItWorksSection>
+
+          <Section id="form-section" style={{ padding: '1rem 0' }}>
+            <FilloutStandardEmbed
+              filloutId="wQgANXSphgus"
+              width="100%"
+              dynamicResize={true}
+            />
+          </Section>
 
           <FAQSection>
             <Section>
