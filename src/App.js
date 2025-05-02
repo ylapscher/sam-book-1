@@ -255,18 +255,18 @@ const Card = styled.div`
 
 const FAQ = styled.div`
   max-width: 800px;
-  margin: 1rem auto;
+  margin: 0 auto;
   padding: 0 1rem;
-  
+
   @media (max-width: 768px) {
-    padding: 0 2rem;
+    padding: 0 1rem;
   }
 `;
 
 const FAQItem = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   border-bottom: 1px solid #eee;
-  padding-bottom: 1rem;
+  padding-bottom: 0.8rem;
 
   h3 {
     margin-bottom: 0.5rem;
@@ -293,7 +293,7 @@ const FAQItem = styled.div`
     max-height: ${props => props.isOpen ? '1000px' : '0'};
     overflow: hidden;
     transition: max-height 0.3s ease;
-    margin-bottom: ${props => props.isOpen ? '1rem' : '0'};
+    margin-bottom: ${props => props.isOpen ? '0.8rem' : '0'};
     padding-left: 0;
     
     @media (max-width: 768px) {
@@ -628,21 +628,34 @@ const FAQSection = styled.div`
 
 const ContactSection = styled.div`
   background-color: var(--light-gray);
-  padding: 3rem 0;
-  text-align: center;
-  
+  padding: 2rem 0;
+  text-align: left;
+
+  > ${Section} {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 800px;
+  }
+
   h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     color: var(--primary-color);
   }
-  
+
   p {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     color: var(--secondary-color);
   }
-  
+
   @media (max-width: 768px) {
-    padding: 2rem 0;
+    padding: 1.5rem 0;
+    > ${Section} {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    p {
+      margin-bottom: 0.8rem;
+    }
   }
 `;
 
@@ -1178,7 +1191,7 @@ function App() {
             />
           </Section>
 
-          <FAQSection>
+          <ContactSection>
             <Section>
               <h2>Frequently Asked Questions</h2>
               <FAQ>
@@ -1195,20 +1208,17 @@ function App() {
                   <p>You'll need to share family names, countries of origin, settlement locations, and family photos including baby pictures and current photos.</p>
                 </FAQItem>
               </FAQ>
-            </Section>
-          </FAQSection>
-
-          <ContactSection>
-            <Section>
-              <h2>Have Any Questions?</h2>
-              <p>We're here to help! Reach out to us and we'll get back to you as soon as possible.</p>
-              <ContactButton 
-                href="mailto:samlapscher@gmail.com?subject=Question%20about%20Our%20Family%20Story%20Book"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Contact Us
-              </ContactButton>
+              
+              <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                <p>Have any other questions? Contact us below</p>
+                <ContactButton 
+                  href="mailto:samlapscher@gmail.com?subject=Question%20about%20Our%20Family%20Story%20Book"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Contact Us
+                </ContactButton>
+              </div>
             </Section>
           </ContactSection>
         </MainContent>
