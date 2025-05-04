@@ -64,7 +64,7 @@ const FAQItem = styled.div`
 const ContactButton = styled.a`
   display: inline-block;
   padding: 0.8rem 1.8rem;
-  background-color: var(--secondary-color);
+  background-color: var(--accent-color);
   color: white;
   border: none;
   border-radius: 4px;
@@ -75,7 +75,7 @@ const ContactButton = styled.a`
   text-decoration: none;
 
   &:hover {
-    background-color: #45657a; /* darker shade of secondary color */
+    background-color: #c15050; /* darker shade of accent color */
   }
 `;
 
@@ -90,7 +90,7 @@ function FAQSection() {
   };
 
   return (
-    <ContactSectionContainer>
+    <ContactSectionContainer id="faq-section">
       <Section>
         <h2>Frequently Asked Questions</h2>
         <FAQ>

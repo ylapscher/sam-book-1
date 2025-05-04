@@ -20,11 +20,11 @@ const ProductGrid = styled.div`
   }
 `;
 
-function ProductSection({ stripeLoaded }) {
+function ProductSection() {
   return (
     <ProductGrid>
       <ImageGallery />
-      <ProductInfo stripeLoaded={stripeLoaded} />
+      <ProductInfo />
     </ProductGrid>
   );
 }

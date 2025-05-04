@@ -71,7 +71,7 @@ const StepBox = styled.div`
 
 function HowItWorks() {
   return (
-    <HowItWorksContainer>
+    <HowItWorksContainer id="how-it-works">
       <Section>
         <h2>How It Works</h2>
         <StepGrid>

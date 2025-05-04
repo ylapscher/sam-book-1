@@ -51,7 +51,7 @@ const SubmitButton = styled.button`
   }
 `;
 
-function ProductInfo({ stripeLoaded }) {
+function ProductInfo() {
   const scrollToForm = () => {
     const formSection = document.getElementById('form-section');
     if (formSection) {
@@ -74,20 +74,9 @@ function ProductInfo({ stripeLoaded }) {
       </div>
       <Price>$38</Price>
       
-      {!stripeLoaded ? (
-        <div style={{ 
-          textAlign: "center", 
-          padding: "1rem", 
-          border: "1px solid #ddd", 
-          borderRadius: "4px" 
-        }}>
-          <p>Loading payment options...</p>
-        </div>
-      ) : (
-        <SubmitButton onClick={scrollToForm}>
-          Personalize Your Book
-        </SubmitButton>
-      )}
+      <SubmitButton onClick={scrollToForm}>
+        Personalize Your Book
+      </SubmitButton>
     </ProductInfoContainer>
   );
 }
