@@ -114,6 +114,7 @@ function Header() {
         <NavLinks isOpen={isMenuOpen}>
           <NavLink to="how-it-works" smooth={true} duration={500} onClick={closeMenu}>How It Works</NavLink>
           <NavLink to="form-section" smooth={true} duration={500} onClick={closeMenu}>Personalize</NavLink>
+          <NavLink to="testimonials" smooth={true} duration={500} onClick={closeMenu}>Testimonials</NavLink>
           <NavLink to="faq-section" smooth={true} duration={500} onClick={closeMenu}>FAQ</NavLink>
         </NavLinks>
       </HeaderContent>

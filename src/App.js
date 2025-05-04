@@ -8,6 +8,7 @@ import ProductSection from './components/ProductSection';
 import HowItWorks from './components/HowItWorks';
 import FormSection from './components/FormSection';
 import FAQSection from './components/FAQSection';
+import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
 
 const AppContainer = styled.div`
@@ -47,6 +48,7 @@ function App() {
           <ProductSection />
           <HowItWorks />
           <FormSection />
+          <Testimonials />
           <FAQSection />
         </MainContent>
         <Footer />

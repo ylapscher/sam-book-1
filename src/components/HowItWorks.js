@@ -37,12 +37,7 @@ const StepBox = styled.div`
   border-radius: 8px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  }
+  transition: none;
 
   .step-number {
     background-color: var(--accent-color);

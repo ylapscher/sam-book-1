@@ -109,7 +109,7 @@ function FAQSection() {
         </FAQ>
         
         <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-          <p>Have any other questions? Contact us below</p>
+          <p>Have any other questions?</p>
           <ContactButton 
             href="mailto:samlapscher@gmail.com?subject=Question%20about%20Our%20Family%20Story%20Book"
             target="_blank"
