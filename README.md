@@ -39,7 +39,7 @@ Our Family Story Book creates custom children's books that tell the story of you
 
 Books start at $38, with options for additional customization available.
 
-Contact us at orders@ourfamilystorybook.com for special requests or questions about your order.
+Contact us at book.lapscher.com for special requests or questions about your order.
 
 ---
 
