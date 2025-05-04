@@ -48,7 +48,6 @@ function App() {
           <ProductSection />
           <HowItWorks />
           <FormSection />
-          <Testimonials />
           <FAQSection />
         </MainContent>
         <Footer />
