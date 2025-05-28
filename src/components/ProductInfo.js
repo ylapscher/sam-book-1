@@ -72,7 +72,7 @@ function ProductInfo() {
           <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> A beautiful gift for newborns and new parents</p>
         </div>
       </div>
-      <Price>$38</Price>
+      <Price>$32-$38</Price>
       
       <SubmitButton onClick={scrollToForm}>
         Personalize Your Book
