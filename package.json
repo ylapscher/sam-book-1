@@ -2,6 +2,7 @@
   "name": "sam-book",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://www.samstorybook.com/",
   "dependencies": {
     "@fillout/react": "^2.0.12",
     "@testing-library/dom": "^10.4.0",
