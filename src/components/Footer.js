@@ -12,7 +12,7 @@ const FooterContainer = styled.footer`
 function Footer() {
   return (
     <FooterContainer>
-      <p>&copy; {new Date().getFullYear()} Our Family Story Book. All rights reserved.</p>
+      <p>&copy; {new Date().getFullYear()} Sam Story Book. All rights reserved.</p>
     </FooterContainer>
   );
 }

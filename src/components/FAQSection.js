@@ -39,7 +39,12 @@ const FAQItem = styled.div`
     color: var(--secondary-color);
     display: flex;
     justify-content: space-between;
+    gap: 0;
     align-items: center;
+
+    span.question-text {
+      padding-right: 2rem;
+    }
 
     &::after {
       content: '+';
@@ -95,15 +100,15 @@ function FAQSection() {
         <h2>Frequently Asked Questions</h2>
         <FAQ>
           <FAQItem isOpen={openFAQs[0]}>
-            <h3 onClick={() => toggleFAQ(0)}>What makes this book special?</h3>
+            <h3 onClick={() => toggleFAQ(0)}><span className="question-text">What makes this book special?</span></h3>
             <p>Our personalized children's book shares your family's special story using real names, places, and photos. It helps kids connect with their heritage while making reading fun and meaningful. Personalized books are great for building a love of reading because children see themselves in the story.</p>
           </FAQItem>
           <FAQItem isOpen={openFAQs[1]}>
-            <h3 onClick={() => toggleFAQ(1)}>How long does it take to create?</h3>
+            <h3 onClick={() => toggleFAQ(1)}><span className="question-text">How long does it take to create?</span></h3>
             <p>Once you've provided all information and photos, it typically takes 2-3 weeks to create, print, and deliver your personalized book.</p>
           </FAQItem>
           <FAQItem isOpen={openFAQs[2]}>
-            <h3 onClick={() => toggleFAQ(2)}>What information do I need to provide?</h3>
+            <h3 onClick={() => toggleFAQ(2)}><span className="question-text">What information do I need to provide?</span></h3>
             <p>You'll need to share family names, countries of origin, settlement locations, and family photos including baby pictures and current photos.</p>
           </FAQItem>
         </FAQ>

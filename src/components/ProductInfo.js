@@ -61,7 +61,7 @@ function ProductInfo() {
 
   return (
     <ProductInfoContainer>
-      <h2 style={{ marginBottom: "1rem", fontSize: "24px", color: "var(--primary-color)" }}>About the Book</h2>
+      <h2 style={{ marginBottom: "1rem", fontSize: "24px", color: "var(--primary-color)" }}>About Our Family Story</h2>
       <div className="subtitle">
         <p>Welcome a new baby with a personalized story all about them. Featuring grandparents' names, family photos, and hand-painted illustrations, this book makes the child the star of their own story. A timeless keepsake celebrating a family's journey and the love and stories from generations past that help shape this amazing child. With strong roots and lots of love, this little star can do anything!</p>
         

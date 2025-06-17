@@ -15,13 +15,13 @@ const ProductImagesContainer = styled.div`
 const ThumbnailList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.4rem;
   max-height: 600px;
   overflow-y: auto;
 
   img {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     object-fit: cover;
     cursor: pointer;
     border: 2px solid transparent;
@@ -45,8 +45,8 @@ const ThumbnailList = styled.div`
     order: 2; /* Show thumbnails below main image on mobile */
 
     img {
-      width: 60px;
-      height: 60px;
+      width: 48px;
+      height: 48px;
     }
   }
 `;

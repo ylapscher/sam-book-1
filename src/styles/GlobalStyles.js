@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import '@fontsource/lavishly-yours';
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -11,6 +12,7 @@ const GlobalStyles = createGlobalStyle`
     --light-gray: #F5F5F5;
     --border-radius: 4px;
     --transition: all 0.2s ease;
+    --handwritten-font: 'Lavishly Yours', cursive;
   }
 
   * {
