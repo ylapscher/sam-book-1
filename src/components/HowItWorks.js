@@ -73,19 +73,17 @@ function HowItWorks() {
           <StepBox>
             <div className="step-number">1</div>
             <h3>Share Your Story</h3>
-            <p>Enter the baby's details and upload photos.</p>
-            <p>Add family origins and names to be displayed throughout the story.</p>
+            <p>Fill out the details about the baby and family. Add family origins and names to be displayed throughout the story.</p>
           </StepBox>
           <StepBox>
             <div className="step-number">2</div>
             <h3>Customize Your Book</h3>
-            <p>Select the baby's gender and choose a book cover.</p>
-            <p>Make it uniquely yours with these personal touches.</p>
+            <p>Upload family photos and choose a book cover. Make it uniquely yours with these personal touches!</p>
           </StepBox>
           <StepBox>
             <div className="step-number">3</div>
-            <h3>Place Order</h3>
-            <p>Add a heartfelt message to be printed on the last page of the book. Then, complete your purchase, and we'll ship your custom baby book directly to you.</p>
+            <h3>Place Your Order</h3>
+            <p>Add a heartfelt message to include in the book. Then, complete your purchase, and we'll ship your custom baby book directly to you!</p>
           </StepBox>
         </StepGrid>
       </Section>
