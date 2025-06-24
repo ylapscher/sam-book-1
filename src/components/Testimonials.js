@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const testimonials = [
@@ -177,8 +177,24 @@ const ReviewButton = styled.a`
 
 function CustomTestimonials() {
   const [start, setStart] = useState(0);
-  const visibleCount = 3;
+  const [visibleCount, setVisibleCount] = useState(3);
   const total = testimonials.length;
+
+  // Responsive visibleCount
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth <= 600) {
+        setVisibleCount(1);
+      } else if (window.innerWidth <= 900) {
+        setVisibleCount(2);
+      } else {
+        setVisibleCount(3);
+      }
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const prev = () => {
     if (start > 0) setStart(start - 1);
@@ -187,7 +203,7 @@ function CustomTestimonials() {
     if (start < total - visibleCount) setStart(start + 1);
   };
 
-  // Get the 3 testimonials to show, wrapping around if needed
+  // Get the testimonials to show, wrapping around if needed
   const visibleTestimonials = testimonials.slice(start, start + visibleCount);
 
   return (

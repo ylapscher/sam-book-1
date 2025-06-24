@@ -78,7 +78,7 @@ const Headshot = styled.img`
   display: block;
   @media (max-width: 1200px) {
     width: 260px;
-    height: 260px;
+    height: auto;
   }
   @media (max-width: 600px) {
     width: 100%;
