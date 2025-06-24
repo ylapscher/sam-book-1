@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import authorHeadshot from '../assets/author-headshot.png';
 
 const HandwrittenHeadline = styled.div`
-  font-family: var(--handwritten-font);
-  font-size: 5rem;
+  font-family: 'Oooh Baby', cursive;
+  font-size: 4rem;
   color: #B49781;
   margin-bottom: 0.5rem;
   margin-left: 2px;
@@ -16,7 +16,7 @@ const HandwrittenHeadline = styled.div`
 
 const StorySectionContainer = styled.section`
   background-color: #f9f9f9;
-  padding: 3rem 0;
+  padding: 1rem 0 2rem 0;
 `;
 
 const Section = styled.div`
@@ -71,18 +71,18 @@ const Section = styled.div`
 `;
 
 const Headshot = styled.img`
-  width: 360px;
+  width: 288px;
   height: auto;
   border-radius: 32px;
   margin: 0 auto;
   display: block;
   @media (max-width: 1200px) {
-    width: 260px;
+    width: 208px;
     height: auto;
   }
   @media (max-width: 600px) {
     width: 100%;
-    max-width: 220px;
+    max-width: 176px;
     height: auto;
     margin-bottom: 1.5rem;
   }

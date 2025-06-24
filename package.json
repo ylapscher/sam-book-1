@@ -5,9 +5,9 @@
   "homepage": "https://www.samstorybook.com/",
   "dependencies": {
     "@fillout/react": "^2.0.12",
-    "@fontsource/lavishly-yours": "^5.2.6",
     "@fontsource/pacifico": "^5.2.6",
     "@fontsource/satisfy": "^5.2.6",
+    "@fontsource/oooh-baby": "^5.2.6",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",

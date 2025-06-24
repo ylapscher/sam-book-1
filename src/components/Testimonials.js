@@ -17,7 +17,7 @@ const testimonials = [
   {
     name: 'Jenna S',
     date: 'May 14',
-    text: "It's so special - it's truly like the most incredible gift!",
+    text: "The quality, personalization, and heartfelt storytelling completely blew me away. I gave it as a gift for my friend's daughter's first birthday, and she actually cried when she opened it and said it was truly the most amazing gift.  You can truly feel the love and care that went into every page. I can't recommend this enough!",
     stars: 5
   },
   {
@@ -144,31 +144,13 @@ const Date = styled.div`
 const Stars = styled.div`
   color: #ffc107;
   font-size: 1.3rem;
-  margin: 0.5rem 0 0.5rem 0;
+  margin: 0.2rem 0 0.2rem 0;
 `;
 
 const Text = styled.div`
   font-size: 1.1rem;
   color: #222;
   line-height: 1.4;
-`;
-
-const ReviewButton = styled.a`
-  display: inline-block;
-  margin: 1rem auto 0 auto;
-  padding: 0.8rem 2rem;
-  background-color: var(--accent-color);
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.2s;
-  &:hover {
-    background: #c15050;
-  }
 `;
 
 function CustomTestimonials() {
@@ -199,7 +181,7 @@ function CustomTestimonials() {
     if (start < total - visibleCount) setStart(start + 1);
   };
 
-  // Get the testimonials to show, wrapping around if needed
+  // Get the testimonials to show
   const visibleTestimonials = testimonials.slice(start, start + visibleCount);
 
   return (
@@ -224,7 +206,6 @@ function CustomTestimonials() {
         </Carousel>
         <ArrowButton onClick={next} aria-label="Next testimonial" disabled={start >= total - visibleCount}>&#8594;</ArrowButton>
       </CarouselOuter>
-      <ReviewButton href="mailto:samlapscher@gmail.com?subject=New%20Review">Submit a Review</ReviewButton>
     </TestimonialsContainer>
   );
 }

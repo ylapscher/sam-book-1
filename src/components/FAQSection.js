@@ -33,7 +33,7 @@ const FAQItem = styled.div`
   padding-bottom: 0.8rem;
 
   h3 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-bottom: 0.5rem;
     cursor: pointer;
     color: var(--secondary-color);
@@ -55,7 +55,7 @@ const FAQItem = styled.div`
   }
 
   p {
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.6;
     color: #555;
     max-height: ${props => props.isOpen ? '1000px' : '0'};
@@ -84,13 +84,11 @@ const ContactButton = styled.a`
   }
 `;
 
-const Divider = styled.hr`
-  border: none;
+const Divider = styled.hr`  border: none;
   border-top: 2px solid #eee;
   margin: 1rem 0 2rem 0;
   width: 100%;
 `;
-
 function FAQSection() {
   const [openFAQs, setOpenFAQs] = useState({});
 
@@ -140,3 +138,5 @@ function FAQSection() {
 }
 
 export default FAQSection;
+
+
