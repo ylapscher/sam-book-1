@@ -95,7 +95,7 @@ const TestimonialCard = styled.div`
   gap: 1rem;
   min-width: 340px;
   max-width: 400px;
-  height: 340px;
+  min-height: 340px;
   justify-content: flex-start;
   align-items: center;
   overflow: visible;
@@ -150,11 +150,7 @@ const Stars = styled.div`
 const Text = styled.div`
   font-size: 1.1rem;
   color: #222;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 7;
-  -webkit-box-orient: vertical;
+  line-height: 1.4;
 `;
 
 const ReviewButton = styled.a`
