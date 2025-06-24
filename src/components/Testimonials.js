@@ -17,20 +17,20 @@ const testimonials = [
   {
     name: 'Jenna S',
     date: 'May 14',
-    text: "It's so special sammi it's truly like the most incredible gift",
+    text: "It's so special - it's truly like the most incredible gift!",
     stars: 5
   },
   {
     name: 'Evelyn L',
     date: 'June 2',
-    text: 'I ordered this photo book as a gift, and it completely exceeded expectations. The quality was outstanding, and the layout brought the memories to life in such a meaningful way. I couldn\'t be happier with how it turned out.',
+    text: 'I ordered this photo book as a gift & it completely exceeded expectations. The quality was outstanding, and the illustrations brought the memories to life in a meaningful way. I\'m so happy how it turned out!',
     stars: 5
   }
 ];
 
 const TestimonialsContainer = styled.section`
   background-color: #fff;
-  padding: 3rem 0;
+  padding: 3rem 0 1.2rem 0;
   text-align: center;
 `;
 
@@ -57,14 +57,21 @@ const ArrowButton = styled.button`
   color: #bbb;
   cursor: pointer;
   padding: 0 1rem;
-  transition: color 0.2s;
+  transition: color 0.2s, opacity 0.2s, cursor 0.2s;
   z-index: 2;
   display: flex;
   align-items: center;
   height: 100%;
   position: relative;
-  &:hover {
+  
+  &:hover:enabled {
     color: var(--primary-color);
+  }
+
+  &:disabled {
+    color: #eee;
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 
@@ -81,7 +88,7 @@ const TestimonialCard = styled.div`
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   padding: 2rem 1.5rem 1.5rem 1.5rem;
-  text-align: left;
+  text-align: center;
   border: 1px solid #eee;
   display: flex;
   flex-direction: column;
@@ -90,13 +97,32 @@ const TestimonialCard = styled.div`
   max-width: 400px;
   height: 340px;
   justify-content: flex-start;
-  overflow: hidden;
+  align-items: center;
+  overflow: visible;
+  position: relative;
+`;
+
+const QuoteIcon = styled.span`
+  position: absolute;
+  top: -1.7rem;
+  left: calc(-1.7rem + 45px);
+  font-size: 5.5rem;
+  color: var(--accent-color);
+  font-family: 'Georgia', serif;
+  font-weight: 900;
+  line-height: 1;
+  user-select: none;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.5;
 `;
 
 const CardHeader = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 `;
 
 const NameDate = styled.div`
@@ -133,7 +159,7 @@ const Text = styled.div`
 
 const ReviewButton = styled.a`
   display: inline-block;
-  margin: 2rem auto 0 auto;
+  margin: 1rem auto 0 auto;
   padding: 0.8rem 2rem;
   background-color: var(--accent-color);
   color: #fff;
@@ -154,20 +180,25 @@ function CustomTestimonials() {
   const visibleCount = 3;
   const total = testimonials.length;
 
-  const prev = () => setStart((start - 1 + total) % total);
-  const next = () => setStart((start + 1) % total);
+  const prev = () => {
+    if (start > 0) setStart(start - 1);
+  };
+  const next = () => {
+    if (start < total - visibleCount) setStart(start + 1);
+  };
 
   // Get the 3 testimonials to show, wrapping around if needed
-  const visibleTestimonials = Array.from({ length: visibleCount }, (_, i) => testimonials[(start + i) % total]);
+  const visibleTestimonials = testimonials.slice(start, start + visibleCount);
 
   return (
     <TestimonialsContainer id="testimonials">
-      <TestimonialsTitle>Testimonials</TestimonialsTitle>
+      <TestimonialsTitle>Customer Reviews</TestimonialsTitle>
       <CarouselOuter>
-        <ArrowButton onClick={prev} aria-label="Previous testimonial">&#8592;</ArrowButton>
+        <ArrowButton onClick={prev} aria-label="Previous testimonial" disabled={start === 0}>&#8592;</ArrowButton>
         <Carousel>
           {visibleTestimonials.map((t, idx) => (
             <TestimonialCard key={idx}>
+              <QuoteIcon>&ldquo;</QuoteIcon>
               <CardHeader>
                 <NameDate>
                   <Name>{t.name}</Name>
@@ -179,7 +210,7 @@ function CustomTestimonials() {
             </TestimonialCard>
           ))}
         </Carousel>
-        <ArrowButton onClick={next} aria-label="Next testimonial">&#8594;</ArrowButton>
+        <ArrowButton onClick={next} aria-label="Next testimonial" disabled={start >= total - visibleCount}>&#8594;</ArrowButton>
       </CarouselOuter>
       <ReviewButton href="mailto:samlapscher@gmail.com?subject=New%20Review">Submit a Review</ReviewButton>
     </TestimonialsContainer>

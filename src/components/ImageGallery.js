@@ -79,9 +79,9 @@ const MainImageContainer = styled.div`
 `;
 
 const NavigationButton = styled.button`
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
+  background-color: #fff;
+  color: #222;
+  border: 2px solid #222;
   padding: 0.5rem 1rem;
   font-size: 1.5rem;
   cursor: pointer;
@@ -91,11 +91,14 @@ const NavigationButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   pointer-events: auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: #f0f0f0;
+    border-color: #111;
+    color: #111;
   }
 `;
 

@@ -84,6 +84,13 @@ const ContactButton = styled.a`
   }
 `;
 
+const Divider = styled.hr`
+  border: none;
+  border-top: 2px solid #eee;
+  margin: 1rem 0 2rem 0;
+  width: 100%;
+`;
+
 function FAQSection() {
   const [openFAQs, setOpenFAQs] = useState({});
 
@@ -97,6 +104,7 @@ function FAQSection() {
   return (
     <ContactSectionContainer id="faq-section">
       <Section>
+        <Divider />
         <h2>Frequently Asked Questions</h2>
         <FAQ>
           <FAQItem isOpen={openFAQs[0]}>
@@ -114,14 +122,17 @@ function FAQSection() {
         </FAQ>
         
         <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-          <p>Have any other questions?</p>
-          <ContactButton 
-            href="mailto:samlapscher@gmail.com?subject=Question%20about%20Our%20Family%20Story%20Book"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Contact Us
-          </ContactButton>
+          <p>
+            Have any other questions?{' '}
+            <a 
+              href="mailto:samlapscher@gmail.com?subject=Question%20about%20Our%20Family%20Story%20Book"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--accent-color)', fontWeight: 500, textDecoration: 'underline' }}
+            >
+              Email us
+            </a>
+          </p>
         </div>
       </Section>
     </ContactSectionContainer>

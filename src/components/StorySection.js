@@ -80,6 +80,12 @@ const Headshot = styled.img`
     width: 260px;
     height: 260px;
   }
+  @media (max-width: 600px) {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    margin-bottom: 1.5rem;
+  }
 `;
 
 function StorySection() {
