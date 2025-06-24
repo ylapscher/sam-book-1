@@ -5,9 +5,9 @@
   "homepage": "https://www.samstorybook.com/",
   "dependencies": {
     "@fillout/react": "^2.0.12",
+    "@fontsource/oooh-baby": "^5.2.6",
     "@fontsource/pacifico": "^5.2.6",
     "@fontsource/satisfy": "^5.2.6",
-    "@fontsource/oooh-baby": "^5.2.6",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
@@ -26,7 +26,8 @@
     "start": "react-scripts start",
     "build": "CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src"
   },
   "eslintConfig": {
     "extends": [
@@ -45,5 +46,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1"
   }
 }
