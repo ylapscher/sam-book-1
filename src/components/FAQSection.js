@@ -66,29 +66,12 @@ const FAQItem = styled.div`
   }
 `;
 
-const ContactButton = styled.a`
-  display: inline-block;
-  padding: 0.8rem 1.8rem;
-  background-color: var(--accent-color);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-decoration: none;
-
-  &:hover {
-    background-color: #c15050; /* darker shade of accent color */
-  }
-`;
-
 const Divider = styled.hr`  border: none;
   border-top: 2px solid #eee;
   margin: 1rem 0 2rem 0;
   width: 100%;
 `;
+
 function FAQSection() {
   const [openFAQs, setOpenFAQs] = useState({});
 

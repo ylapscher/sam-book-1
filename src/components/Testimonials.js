@@ -30,7 +30,7 @@ const testimonials = [
 
 const TestimonialsContainer = styled.section`
   background-color: #fff;
-  padding: 3rem 0 1.2rem 0;
+  padding: 3rem 0 0.3rem 0;
   text-align: center;
 `;
 
@@ -153,6 +153,25 @@ const Text = styled.div`
   line-height: 1.4;
 `;
 
+const AddReviewButton = styled.button`
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+  display: inline-block;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #c15050;
+  }
+`;
+
 function CustomTestimonials() {
   const [start, setStart] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
@@ -181,6 +200,12 @@ function CustomTestimonials() {
     if (start < total - visibleCount) setStart(start + 1);
   };
 
+  const handleAddReview = () => {
+    const subject = encodeURIComponent('Book Review');
+    const mailtoLink = `mailto:samlapscher@gmail.com?subject=${subject}`;
+    window.open(mailtoLink);
+  };
+
   // Get the testimonials to show
   const visibleTestimonials = testimonials.slice(start, start + visibleCount);
 
@@ -206,6 +231,9 @@ function CustomTestimonials() {
         </Carousel>
         <ArrowButton onClick={next} aria-label="Next testimonial" disabled={start >= total - visibleCount}>&#8594;</ArrowButton>
       </CarouselOuter>
+      <AddReviewButton onClick={handleAddReview}>
+        Add Your Review
+      </AddReviewButton>
     </TestimonialsContainer>
   );
 }
