@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 const testimonials = [
@@ -47,7 +47,14 @@ const CarouselOuter = styled.div`
   max-width: 1300px;
   margin: 0 auto 2rem auto;
   position: relative;
-  min-height: 370px;
+  min-height: 390px;
+  overflow: visible;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    min-height: 440px;
+    padding: 0 1rem;
+  }
 `;
 
 const ArrowButton = styled.button`
@@ -73,6 +80,45 @@ const ArrowButton = styled.button`
     opacity: 0.5;
     cursor: not-allowed;
   }
+  
+  @media (max-width: 768px) {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.8rem;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    
+    &:first-of-type {
+      left: 10px;
+    }
+    
+    &:last-of-type {
+      right: 10px;
+    }
+    
+    &:hover:enabled {
+      background: rgba(255, 255, 255, 1);
+      border-color: #ccc;
+    }
+  }
+`;
+
+const CarouselContainer = styled.div`
+  position: relative;
+  width: 100%;
+  overflow: visible;
+  
+  @media (max-width: 768px) {
+    order: 1;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
 `;
 
 const Carousel = styled.div`
@@ -81,6 +127,14 @@ const Carousel = styled.div`
   flex: 1;
   justify-content: center;
   align-items: stretch;
+  transition: transform 0.3s ease;
+  overflow: visible;
+  
+  @media (max-width: 768px) {
+    gap: 1rem;
+    transform: translateX(${props => props.translateX}px);
+    width: ${props => props.totalWidth}px;
+  }
 `;
 
 const TestimonialCard = styled.div`
@@ -100,21 +154,36 @@ const TestimonialCard = styled.div`
   align-items: center;
   overflow: visible;
   position: relative;
+  margin-top: 1.5rem;
+  
+  @media (max-width: 768px) {
+    min-width: calc(100vw - 4rem);
+    max-width: calc(100vw - 4rem);
+    margin: 1.5rem 1rem 0 1rem;
+    padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+    min-height: 320px;
+  }
 `;
 
 const QuoteIcon = styled.span`
   position: absolute;
-  top: -1.7rem;
-  left: calc(-1.7rem + 45px);
-  font-size: 5.5rem;
+  top: -1.5rem;
+  left: 1rem;
+  font-size: 4.5rem;
   color: var(--accent-color);
   font-family: 'Georgia', serif;
   font-weight: 900;
   line-height: 1;
   user-select: none;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.4;
+  
+  @media (max-width: 768px) {
+    top: -1rem;
+    left: 0.8rem;
+    font-size: 3.5rem;
+  }
 `;
 
 const CardHeader = styled.div`
@@ -153,6 +222,32 @@ const Text = styled.div`
   line-height: 1.4;
 `;
 
+const DotIndicators = styled.div`
+  display: none;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  
+  @media (max-width: 768px) {
+    display: flex;
+    order: 2;
+  }
+`;
+
+const Dot = styled.button`
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background-color: ${props => props.active ? 'var(--accent-color)' : '#ddd'};
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: ${props => props.active ? 'var(--accent-color)' : '#bbb'};
+  }
+`;
+
 const AddReviewButton = styled.button`
   background-color: var(--accent-color);
   color: white;
@@ -175,6 +270,9 @@ const AddReviewButton = styled.button`
 function CustomTestimonials() {
   const [start, setStart] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  const carouselRef = useRef(null);
   const total = testimonials.length;
 
   // Responsive visibleCount
@@ -206,6 +304,37 @@ function CustomTestimonials() {
     window.open(mailtoLink);
   };
 
+  // Touch handlers for mobile swipe
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe && start < total - visibleCount) {
+      next();
+    }
+    if (isRightSwipe && start > 0) {
+      prev();
+    }
+    
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  const goToSlide = (index) => {
+    setStart(index);
+  };
+
   // Get the testimonials to show
   const visibleTestimonials = testimonials.slice(start, start + visibleCount);
 
@@ -214,22 +343,39 @@ function CustomTestimonials() {
       <TestimonialsTitle>Customer Reviews</TestimonialsTitle>
       <CarouselOuter>
         <ArrowButton onClick={prev} aria-label="Previous testimonial" disabled={start === 0}>&#8592;</ArrowButton>
-        <Carousel>
-          {visibleTestimonials.map((t, idx) => (
-            <TestimonialCard key={idx}>
-              <QuoteIcon>&ldquo;</QuoteIcon>
-              <CardHeader>
-                <NameDate>
-                  <Name>{t.name}</Name>
-                  {t.date && <Date>{t.date}</Date>}
-                </NameDate>
-              </CardHeader>
-              <Stars>{'★'.repeat(t.stars)}</Stars>
-              <Text>{t.text}</Text>
-            </TestimonialCard>
-          ))}
-        </Carousel>
+        <CarouselContainer>
+          <Carousel
+            ref={carouselRef}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            {visibleTestimonials.map((t, idx) => (
+              <TestimonialCard key={idx}>
+                <QuoteIcon>&ldquo;</QuoteIcon>
+                <CardHeader>
+                  <NameDate>
+                    <Name>{t.name}</Name>
+                    {t.date && <Date>{t.date}</Date>}
+                  </NameDate>
+                </CardHeader>
+                <Stars>{'★'.repeat(t.stars)}</Stars>
+                <Text>{t.text}</Text>
+              </TestimonialCard>
+            ))}
+          </Carousel>
+        </CarouselContainer>
         <ArrowButton onClick={next} aria-label="Next testimonial" disabled={start >= total - visibleCount}>&#8594;</ArrowButton>
+        <DotIndicators>
+          {testimonials.map((_, idx) => (
+            <Dot
+              key={idx}
+              active={idx >= start && idx < start + visibleCount}
+              onClick={() => goToSlide(idx)}
+              aria-label={`Go to testimonial ${idx + 1}`}
+            />
+          ))}
+        </DotIndicators>
       </CarouselOuter>
       <AddReviewButton onClick={handleAddReview}>
         Add Your Review

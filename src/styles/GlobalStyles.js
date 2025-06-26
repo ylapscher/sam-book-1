@@ -132,6 +132,30 @@ const GlobalStyles = createGlobalStyle`
       padding: 0 1rem;
     }
   }
+  
+  /* Mobile optimization */
+  @media (max-width: 768px) {
+    /* Improve touch targets */
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Prevent zoom on input focus */
+    input, textarea, select {
+      font-size: 16px !important;
+    }
+    
+    /* Better mobile spacing */
+    section {
+      padding: 2rem 1rem;
+    }
+    
+    /* Reduce margins on mobile */
+    h1, h2, h3 {
+      margin-bottom: 0.8rem;
+    }
+  }
 
   /* Utility classes */
   .text-center { text-align: center; }
