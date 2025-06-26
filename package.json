@@ -23,6 +23,11 @@
     "web-vitals": "^2.1.4",
     "yup": "^1.6.1"
   },
+  "overrides": {
+    "svgo": "^2.0.1",
+    "postcss": "^8.4.38",
+    "webpack-dev-server": "^4.15.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "CI=false react-scripts build",
