@@ -270,7 +270,7 @@ function ImageGallery() {
     return () => {
       window.removeEventListener('keydown', handleArrowKeys);
     };
-  }, [currentImageIndex, images.length, preloadImage]);
+  }, [currentImageIndex, images, preloadImage]);
 
   const handleTouchStart = (e) => {
     setTouchStart(e.targetTouches[0].clientX);

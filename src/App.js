@@ -92,7 +92,7 @@ function App() {
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-EM0KL5NT5L', {
-              page_title: 'Sam Story Book - Personalized Children\'s Books',
+              page_title: "Sam Story Book - Personalized Children's Books",
               page_location: window.location.href
             });
           `}
