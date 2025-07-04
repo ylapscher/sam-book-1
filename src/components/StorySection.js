@@ -48,8 +48,13 @@ const Section = styled.div`
     margin-bottom: 1.5rem;
     font-size: 1.3rem;
     color: var(--primary-color);
+    
     @media (max-width: 1200px) {
       text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+      font-size: 1.6rem;
     }
   }
 

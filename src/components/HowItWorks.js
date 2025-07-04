@@ -21,6 +21,10 @@ const Section = styled.div`
     margin-bottom: 2rem;
     font-size: 2rem;
     color: var(--primary-color);
+    
+    @media (max-width: 768px) {
+      font-size: 1.6rem;
+    }
   }
 `;
 

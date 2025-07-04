@@ -46,7 +46,7 @@ const GlobalStyles = createGlobalStyle`
     margin-bottom: 1rem;
     
     @media (max-width: 768px) {
-      font-size: 20px;
+      font-size: 1.6rem;
     }
   }
 
