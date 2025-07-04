@@ -38,6 +38,10 @@ const TestimonialsTitle = styled.h2`
   color: var(--primary-color);
   margin-bottom: 2rem;
   font-size: 2rem;
+  
+  @media (max-width: 768px) {
+    font-size: 1.6rem;
+  }
 `;
 
 const CarouselOuter = styled.div`
@@ -93,6 +97,7 @@ const ArrowButton = styled.button`
     top: 50%;
     transform: translateY(-50%);
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    justify-content: center;
     
     &:first-of-type {
       left: 10px;
@@ -234,7 +239,7 @@ const DotIndicators = styled.div`
   }
 `;
 
-const Dot = styled.button`
+const Dot = styled.div`
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -245,6 +250,18 @@ const Dot = styled.button`
   
   &:hover {
     background-color: ${props => props.active ? 'var(--accent-color)' : '#bbb'};
+  }
+  
+  @media (max-width: 768px) {
+    width: 6px;
+    height: 6px;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    font-size: 0;
+    line-height: 0;
+    transform: scale(1.5);
+    /* background-color: blue; For testing visibility */
   }
 `;
 

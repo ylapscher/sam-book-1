@@ -10,6 +10,10 @@ const HeaderContainer = styled.header`
   top: 0;
   z-index: 1000; 
   border-bottom: 1px solid #DDDDDD;
+
+  @media (max-width: 768px) {
+    padding: 0.4rem 0.8rem;
+  }
 `;
 
 const HeaderContent = styled.div`
@@ -33,6 +37,10 @@ const HeaderContent = styled.div`
     flex-direction: column;
     padding: 1rem;
     gap: 1rem;
+    
+    h1 {
+      font-size: 1.3rem;
+    }
   }
 `;
 
@@ -121,7 +129,7 @@ const StickyCtaButton = styled.button`
   display: none;
   
   @media (max-width: 768px) {
-    display: block;
+    display: none;
     position: fixed;
     bottom: 1rem;
     left: 1rem;
