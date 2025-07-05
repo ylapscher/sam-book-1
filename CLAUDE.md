@@ -21,6 +21,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Build may occasionally fail due to ajv version conflicts in webpack toolchain
 - Use `npm install --legacy-peer-deps` for all package operations
 
+## Deployment
+
+### Netlify
+- **Important**: `.npmrc` file with `legacy-peer-deps=true` is required for Netlify builds
+- This resolves React 19 peer dependency conflicts during CI/CD
+- Build command: `npm run build` (already configured with proper flags)
+- Publish directory: `build`
+
+### Deployment Notes
+- The app uses React 19 which requires legacy peer dependency resolution
+- ESLint is disabled in build scripts to prevent warnings from blocking deployment
+- `CI=false` prevents treating warnings as errors in production builds
+
 ## Architecture Overview
 
 ### Application Structure
