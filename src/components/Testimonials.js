@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const testimonials = [
@@ -17,7 +17,7 @@ const testimonials = [
   {
     name: 'Jenna S',
     date: 'May 14',
-    text: "The quality, personalization, and heartfelt storytelling completely blew me away. I gave it as a gift for my friend's daughter's first birthday, and she actually cried when she opened it and said it was truly the most amazing gift.  You can truly feel the love and care that went into every page. I can't recommend this enough!",
+    text: "The quality, personalization, and heartfelt storytelling completely blew me away. I gave it as a gift for my friend's daughter's first birthday, and she actually cried when she opened it and said it was truly the most amazing gift. You can truly feel the love and care that went into every page. I can't recommend this enough!",
     stars: 5
   },
   {
@@ -30,12 +30,8 @@ const testimonials = [
 
 const TestimonialsContainer = styled.section`
   background-color: #fff;
-  padding: 2rem 0 1rem 0;
+  padding: 3rem 0;
   text-align: center;
-  
-  @media (max-width: 768px) {
-    padding: 1.5rem 0 0.5rem 0;
-  }
 `;
 
 const TestimonialsTitle = styled.h2`
@@ -48,293 +44,56 @@ const TestimonialsTitle = styled.h2`
   }
 `;
 
-const CarouselOuter = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 1300px;
-  margin: 0 auto 2rem auto;
-  position: relative;
-  min-height: 470px;
-  overflow: visible;
-  
-  @media (max-width: 1200px) {
-    min-height: 500px;
-  }
+const ReviewsList = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem;
   
   @media (max-width: 768px) {
-    flex-direction: column;
-    min-height: 450px;
     padding: 0 1rem;
   }
 `;
 
-const ArrowButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 2.5rem;
-  color: #bbb;
-  cursor: pointer;
-  padding: 0 1rem;
-  transition: color 0.2s, opacity 0.2s, cursor 0.2s;
-  z-index: 2;
+const ReviewItem = styled.div`
+  text-align: left;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #eee;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const ReviewHeader = styled.div`
   display: flex;
   align-items: center;
-  height: 100%;
-  position: relative;
-  
-  &:hover:enabled {
-    color: var(--primary-color);
-  }
-
-  &:disabled {
-    color: #eee;
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const MobileArrowButton = styled.button`
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid #ddd;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 1.5rem;
-  padding: 0;
-  color: #bbb;
-  cursor: pointer;
-  transition: color 0.2s, opacity 0.2s, cursor 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  &:hover:enabled {
-    background: rgba(255, 255, 255, 1);
-    border-color: #ccc;
-    color: var(--primary-color);
-  }
-
-  &:disabled {
-    color: #eee;
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-`;
-
-const CarouselContainer = styled.div`
-  position: relative;
-  overflow: hidden;
-  
-  /* Large desktop: fit 3 cards (380px each + 2 gaps of 32px) */
-  @media (min-width: 1201px) {
-    width: calc(3 * 380px + 2 * 32px);
-    max-width: 1300px;
-  }
-  
-  /* Medium: fit 2 cards (420px each + 1 gap of 32px) */
-  @media (max-width: 1200px) {
-    width: calc(2 * 420px + 32px);
-    max-width: 872px;
-  }
-  
-  /* Mobile: fit 1 card */
-  @media (max-width: 768px) {
-    width: 100%;
-    order: 1;
-    margin-bottom: 1rem;
-  }
-`;
-
-const Carousel = styled.div`
-  display: flex;
-  gap: 2rem;
-  flex: 1;
-  justify-content: flex-start;
-  align-items: stretch;
-  transition: transform 0.5s ease;
-  overflow: hidden;
-  transform: translateX(${props => props.$translateX || 0}px);
-  width: ${props => props.$totalWidth}px;
-  
-  @media (max-width: 768px) {
-    gap: 0;
-  }
-`;
-
-const TestimonialCard = styled.div`
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  padding: 2rem 1.5rem 1.5rem 1.5rem;
-  text-align: center;
-  border: 1px solid #eee;
-  display: flex;
-  flex-direction: column;
   gap: 1rem;
-  min-height: 420px;
-  justify-content: flex-start;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-  margin-top: 1.5rem;
-  flex-shrink: 0;
-  word-wrap: break-word;
-  
-  /* Desktop >1200px: 3 cards visible - 33.333% width */
-  @media (min-width: 1201px) {
-    flex: 0 0 33.333%;
-    max-width: 33.333%;
-  }
-  
-  /* Medium 768-1200px: 2 cards visible - 50% width */
-  @media (min-width: 769px) and (max-width: 1200px) {
-    flex: 0 0 50%;
-    max-width: 50%;
-    min-height: 450px;
-  }
-  
-  /* Mobile ≤768px: 1 card visible - 100% width */
-  @media (max-width: 768px) {
-    flex: 0 0 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 1.5rem 0 0 0;
-    padding: 1.5rem 1.2rem 1.2rem 1.2rem;
-    min-height: 400px;
-  }
+  margin-bottom: 0.5rem;
 `;
 
-const QuoteIcon = styled.span`
-  position: absolute;
-  top: -1.5rem;
-  left: 1rem;
-  font-size: 4.5rem;
-  color: var(--accent-color);
-  font-family: 'Georgia', serif;
-  font-weight: 900;
-  line-height: 1;
-  user-select: none;
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0.4;
-  
-  @media (max-width: 768px) {
-    top: -1rem;
-    left: 0.8rem;
-    font-size: 3.5rem;
-  }
-`;
-
-const CardHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-`;
-
-const NameDate = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Name = styled.div`
-  font-weight: 600;
+const ReviewerName = styled.h3`
   font-size: 1.1rem;
-  color: #222;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 0;
 `;
 
-const Date = styled.div`
-  font-size: 0.95rem;
+const ReviewDate = styled.span`
+  font-size: 0.9rem;
   color: #888;
 `;
 
 const Stars = styled.div`
   color: #ffc107;
-  font-size: 1.3rem;
-  margin: 0.2rem 0 0.2rem 0;
-`;
-
-const Text = styled.div`
   font-size: 1.1rem;
-  color: #222;
-  line-height: 1.4;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-  
-  @media (max-width: 1200px) {
-    font-size: 1.05rem;
-  }
-  
-  @media (max-width: 768px) {
-    font-size: 1rem;
-    line-height: 1.5;
-  }
+  margin: 0.5rem 0;
 `;
 
-const DotIndicators = styled.div`
-  display: none;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 1rem 0;
-  
-  @media (max-width: 768px) {
-    display: flex;
-    order: 2;
-  }
-`;
-
-const MobileNavigation = styled.div`
-  display: none;
-  
-  @media (max-width: 768px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    order: 3;
-    margin-top: 0.5rem;
-  }
-`;
-
-const Dot = styled.div`
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: none;
-  background-color: ${props => props.$active ? 'var(--accent-color)' : '#ddd'};
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  
-  &:hover {
-    background-color: ${props => props.$active ? 'var(--accent-color)' : '#bbb'};
-  }
-  
-  @media (max-width: 768px) {
-    width: 6px;
-    height: 6px;
-    min-width: 0;
-    min-height: 0;
-    padding: 0;
-    font-size: 0;
-    line-height: 0;
-    transform: scale(1.5);
-    /* background-color: blue; For testing visibility */
-  }
+const ReviewText = styled.p`
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--secondary-color);
+  margin: 0.75rem 0 0 0;
 `;
 
 const AddReviewButton = styled.button`
@@ -347,7 +106,7 @@ const AddReviewButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 1rem;
+  margin-top: 2rem;
   display: inline-block;
   text-decoration: none;
 
@@ -357,160 +116,27 @@ const AddReviewButton = styled.button`
 `;
 
 function CustomTestimonials() {
-  const [start, setStart] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(3);
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchEnd, setTouchEnd] = useState(null);
-  const carouselRef = useRef(null);
-  const cardMeasurementRef = useRef(null);
-  const [carouselTranslateX, setCarouselTranslateX] = useState(0);
-  const [carouselTotalWidth, setCarouselTotalWidth] = useState(0);
-  const total = testimonials.length;
-  
-  // Calculate currentIndex (0-based) and cardsPerView
-  const currentIndex = start;
-  const cardsPerView = visibleCount;
-
-  // Responsive visibleCount
-  useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth <= 768) {
-        setVisibleCount(1);
-      } else if (window.innerWidth <= 1200) {
-        setVisibleCount(2);
-      } else {
-        setVisibleCount(3);
-      }
-    }
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Calculate carousel dimensions for proper sliding
-  useEffect(() => {
-    const updateCarouselDimensions = () => {
-      let cardWidth, gap;
-      
-      if (window.innerWidth <= 768) {
-        // Mobile: full width cards with padding from CarouselOuter
-        cardWidth = window.innerWidth - 32; // 2rem padding from CarouselOuter
-        gap = 0;
-      } else if (window.innerWidth <= 1200) {
-        // Medium: 2 cards
-        cardWidth = 420;
-        gap = 32; // 2rem
-      } else {
-        // Large: 3 cards
-        cardWidth = 380;
-        gap = 32; // 2rem
-      }
-      
-      // Dynamic width calculation: cardWidth * totalCards + gaps between cards
-      const totalCards = testimonials.length;
-      const totalGaps = Math.max(0, totalCards - 1) * gap;
-      const totalWidth = cardWidth * totalCards + totalGaps;
-      
-      setCarouselTotalWidth(totalWidth);
-      
-      // Use percentage-based translateX calculation: -currentIndex * (100/cardsPerView)%
-      const translateXPercentage = -currentIndex * (100 / cardsPerView);
-      setCarouselTranslateX(translateXPercentage);
-    };
-
-    updateCarouselDimensions();
-    window.addEventListener('resize', updateCarouselDimensions);
-    return () => window.removeEventListener('resize', updateCarouselDimensions);
-  }, [start, testimonials.length, visibleCount, currentIndex, cardsPerView]);
-
-  const prev = () => {
-    if (start > 0) setStart(start - 1);
-  };
-  const next = () => {
-    if (start < total - visibleCount) setStart(start + 1);
-  };
-
   const handleAddReview = () => {
     const subject = encodeURIComponent('Book Review');
     const mailtoLink = `mailto:samlapscher@gmail.com?subject=${subject}`;
     window.open(mailtoLink);
   };
 
-  const handleTouchStart = (e) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-    
-    if (isLeftSwipe && start < total - visibleCount) {
-      next();
-    }
-    if (isRightSwipe && start > 0) {
-      prev();
-    }
-    
-    setTouchStart(null);
-    setTouchEnd(null);
-  };
-
-  const goToSlide = (index) => {
-    setStart(index);
-  };
-
   return (
     <TestimonialsContainer id="testimonials">
       <TestimonialsTitle>Customer Reviews</TestimonialsTitle>
-      <CarouselOuter>
-        <ArrowButton onClick={prev} aria-label="Previous testimonial" disabled={start === 0}>&#8592;</ArrowButton>
-        <CarouselContainer>
-          <Carousel
-            ref={carouselRef}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            $translateX={carouselTranslateX}
-            $totalWidth={carouselTotalWidth}
-          >
-            {testimonials.map((t, idx) => (
-              <TestimonialCard key={idx} ref={idx === 0 ? cardMeasurementRef : null}>
-                <QuoteIcon>&ldquo;</QuoteIcon>
-                <CardHeader>
-                  <NameDate>
-                    <Name>{t.name}</Name>
-                    {t.date && <Date>{t.date}</Date>}
-                  </NameDate>
-                </CardHeader>
-                <Stars>{'★'.repeat(t.stars)}</Stars>
-                <Text>{t.text}</Text>
-              </TestimonialCard>
-            ))}
-          </Carousel>
-        </CarouselContainer>
-        <ArrowButton onClick={next} aria-label="Next testimonial" disabled={start >= total - visibleCount}>&#8594;</ArrowButton>
-        <DotIndicators>
-          {testimonials.map((_, idx) => (
-            <Dot
-              key={idx}
-              $active={idx === start}
-              onClick={() => goToSlide(idx)}
-              aria-label={`Go to testimonial ${idx + 1}`}
-            />
-          ))}
-        </DotIndicators>
-        <MobileNavigation>
-          <MobileArrowButton onClick={prev} aria-label="Previous testimonial" disabled={start === 0}>&#8592;</MobileArrowButton>
-          <MobileArrowButton onClick={next} aria-label="Next testimonial" disabled={start >= total - visibleCount}>&#8594;</MobileArrowButton>
-        </MobileNavigation>
-      </CarouselOuter>
+      <ReviewsList>
+        {testimonials.map((review, index) => (
+          <ReviewItem key={index}>
+            <ReviewHeader>
+              <ReviewerName>{review.name}</ReviewerName>
+              <ReviewDate>{review.date}</ReviewDate>
+            </ReviewHeader>
+            <Stars>{'★'.repeat(review.stars)}</Stars>
+            <ReviewText>{review.text}</ReviewText>
+          </ReviewItem>
+        ))}
+      </ReviewsList>
       <AddReviewButton onClick={handleAddReview}>
         Add Your Review
       </AddReviewButton>
