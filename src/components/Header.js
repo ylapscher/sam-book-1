@@ -216,7 +216,7 @@ function Header() {
       <HeaderContainer>
         <HeaderContent>
           <LogoContainer onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <img src="/images/heart-logo.svg" alt="Sam Story Book Logo" />
+            <img src="/images/heart-logo.jpg" alt="Sam Story Book Logo" />
             <h1>Sam Story Book</h1>
           </LogoContainer>
           <MobileMenuToggle onClick={toggleMenu}>

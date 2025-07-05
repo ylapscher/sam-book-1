@@ -55,13 +55,17 @@ const CarouselOuter = styled.div`
   max-width: 1300px;
   margin: 0 auto 2rem auto;
   position: relative;
-  min-height: 390px;
+  min-height: 470px;
   overflow: visible;
+  
+  @media (max-width: 1200px) {
+    min-height: 500px;
+  }
   
   @media (max-width: 768px) {
     flex-direction: column;
-    min-height: 400px;
-    padding: 0;
+    min-height: 450px;
+    padding: 0 1rem;
   }
 `;
 
@@ -125,13 +129,25 @@ const MobileArrowButton = styled.button`
 
 const CarouselContainer = styled.div`
   position: relative;
-  width: 100%;
-  overflow: visible;
+  overflow: hidden;
   
+  /* Large desktop: fit 3 cards (380px each + 2 gaps of 32px) */
+  @media (min-width: 1201px) {
+    width: calc(3 * 380px + 2 * 32px);
+    max-width: 1300px;
+  }
+  
+  /* Medium: fit 2 cards (420px each + 1 gap of 32px) */
+  @media (max-width: 1200px) {
+    width: calc(2 * 420px + 32px);
+    max-width: 872px;
+  }
+  
+  /* Mobile: fit 1 card */
   @media (max-width: 768px) {
+    width: 100%;
     order: 1;
     margin-bottom: 1rem;
-    overflow: hidden;
   }
 `;
 
@@ -141,15 +157,13 @@ const Carousel = styled.div`
   flex: 1;
   justify-content: flex-start;
   align-items: stretch;
-  transition: transform 0.3s ease;
-  overflow: visible;
+  transition: transform 0.5s ease;
+  overflow: hidden;
+  transform: translateX(${props => props.$translateX || 0}px);
+  width: ${props => props.$totalWidth}px;
   
   @media (max-width: 768px) {
     gap: 0;
-    overflow: hidden;
-    transform: translateX(${props => props.$translateX}px);
-    width: ${props => props.$totalWidth}px;
-    justify-content: flex-start;
   }
 `;
 
@@ -163,24 +177,36 @@ const TestimonialCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  min-width: 340px;
-  max-width: 400px;
-  min-height: 340px;
+  min-height: 420px;
   justify-content: flex-start;
   align-items: center;
-  overflow: visible;
+  overflow: hidden;
   position: relative;
   margin-top: 1.5rem;
+  flex-shrink: 0;
+  word-wrap: break-word;
   
+  /* Desktop >1200px: 3 cards visible - 33.333% width */
+  @media (min-width: 1201px) {
+    flex: 0 0 33.333%;
+    max-width: 33.333%;
+  }
+  
+  /* Medium 768-1200px: 2 cards visible - 50% width */
+  @media (min-width: 769px) and (max-width: 1200px) {
+    flex: 0 0 50%;
+    max-width: 50%;
+    min-height: 450px;
+  }
+  
+  /* Mobile ≤768px: 1 card visible - 100% width */
   @media (max-width: 768px) {
-    width: calc(100vw - 2rem);
-    min-width: calc(100vw - 2rem);
-    max-width: calc(100vw - 2rem);
+    flex: 0 0 100%;
+    max-width: 100%;
     box-sizing: border-box;
-    margin: 1.5rem 1rem 0 1rem;
+    margin: 1.5rem 0 0 0;
     padding: 1.5rem 1.2rem 1.2rem 1.2rem;
-    min-height: 320px;
-    flex-shrink: 0;
+    min-height: 400px;
   }
 `;
 
@@ -239,6 +265,25 @@ const Text = styled.div`
   font-size: 1.1rem;
   color: #222;
   line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  
+  @media (max-width: 1200px) {
+    font-size: 1.05rem;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 `;
 
 const DotIndicators = styled.div`
@@ -321,13 +366,17 @@ function CustomTestimonials() {
   const [carouselTranslateX, setCarouselTranslateX] = useState(0);
   const [carouselTotalWidth, setCarouselTotalWidth] = useState(0);
   const total = testimonials.length;
+  
+  // Calculate currentIndex (0-based) and cardsPerView
+  const currentIndex = start;
+  const cardsPerView = visibleCount;
 
   // Responsive visibleCount
   useEffect(() => {
     function handleResize() {
-      if (window.innerWidth <= 600) {
+      if (window.innerWidth <= 768) {
         setVisibleCount(1);
-      } else if (window.innerWidth <= 900) {
+      } else if (window.innerWidth <= 1200) {
         setVisibleCount(2);
       } else {
         setVisibleCount(3);
@@ -341,22 +390,38 @@ function CustomTestimonials() {
   // Calculate carousel dimensions for proper sliding
   useEffect(() => {
     const updateCarouselDimensions = () => {
-      if (cardMeasurementRef.current) {
-        const singleCardContentWidth = cardMeasurementRef.current.offsetWidth;
-        const cardHorizontalMargins = window.innerWidth <= 768 ? 16 * 2 : 0; 
-        const effectiveCardWidthForTranslation = singleCardContentWidth + cardHorizontalMargins;
-        
-        const calculatedTotalWidth = testimonials.length * effectiveCardWidthForTranslation;
-        setCarouselTotalWidth(calculatedTotalWidth);
-
-        setCarouselTranslateX(-start * effectiveCardWidthForTranslation);
+      let cardWidth, gap;
+      
+      if (window.innerWidth <= 768) {
+        // Mobile: full width cards with padding from CarouselOuter
+        cardWidth = window.innerWidth - 32; // 2rem padding from CarouselOuter
+        gap = 0;
+      } else if (window.innerWidth <= 1200) {
+        // Medium: 2 cards
+        cardWidth = 420;
+        gap = 32; // 2rem
+      } else {
+        // Large: 3 cards
+        cardWidth = 380;
+        gap = 32; // 2rem
       }
+      
+      // Dynamic width calculation: cardWidth * totalCards + gaps between cards
+      const totalCards = testimonials.length;
+      const totalGaps = Math.max(0, totalCards - 1) * gap;
+      const totalWidth = cardWidth * totalCards + totalGaps;
+      
+      setCarouselTotalWidth(totalWidth);
+      
+      // Use percentage-based translateX calculation: -currentIndex * (100/cardsPerView)%
+      const translateXPercentage = -currentIndex * (100 / cardsPerView);
+      setCarouselTranslateX(translateXPercentage);
     };
 
     updateCarouselDimensions();
     window.addEventListener('resize', updateCarouselDimensions);
     return () => window.removeEventListener('resize', updateCarouselDimensions);
-  }, [start, testimonials.length]);
+  }, [start, testimonials.length, visibleCount, currentIndex, cardsPerView]);
 
   const prev = () => {
     if (start > 0) setStart(start - 1);

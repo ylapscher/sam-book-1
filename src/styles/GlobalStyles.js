@@ -157,6 +157,27 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
+  /* Responsive card utilities */
+  .card {
+    /* Desktop >1200px: 3 cards visible - 33.333% width */
+    @media (min-width: 1201px) {
+      flex: 0 0 33.333%;
+      max-width: 33.333%;
+    }
+    
+    /* Medium 768-1200px: 2 cards visible - 50% width */
+    @media (min-width: 769px) and (max-width: 1200px) {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+    
+    /* Mobile ≤768px: 1 card visible - 100% width */
+    @media (max-width: 768px) {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+
   /* Utility classes */
   .text-center { text-align: center; }
   .mt-1 { margin-top: 1rem; }
