@@ -67,7 +67,7 @@ const ReviewItem = styled.div`
 const ReviewHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between;
   margin-bottom: 0.5rem;
 `;
 
@@ -79,8 +79,9 @@ const ReviewerName = styled.h3`
 `;
 
 const ReviewDate = styled.span`
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #888;
+  text-align: right;
 `;
 
 const Stars = styled.div`
@@ -90,7 +91,7 @@ const Stars = styled.div`
 `;
 
 const ReviewText = styled.p`
-  font-size: 1rem;
+  font-size: 1.2rem;
   line-height: 1.6;
   color: var(--secondary-color);
   margin: 0.75rem 0 0 0;
@@ -102,7 +103,7 @@ const AddReviewButton = styled.button`
   border: none;
   border-radius: 4px;
   padding: 0.8rem 1.5rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease;

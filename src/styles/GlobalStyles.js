@@ -31,41 +31,42 @@ const GlobalStyles = createGlobalStyle`
   }
 
   h1 {
-    font-size: 28px;
+    font-size: 2.2rem;
     font-weight: 500;
     margin-bottom: 0.5rem;
     
     @media (max-width: 768px) {
-      font-size: 24px;
+      font-size: 2rem;
     }
   }
 
   h2 {
-    font-size: 24px;
+    font-size: 2rem;
     font-weight: 500;
     margin-bottom: 1rem;
     
     @media (max-width: 768px) {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
     }
   }
 
   h3 {
-    font-size: 18px;
+    font-size: 1.5rem;
     font-weight: 500;
     margin-bottom: 0.5rem;
     
     @media (max-width: 768px) {
-      font-size: 16px;
+      font-size: 1.3rem;
     }
   }
 
   p {
+    font-size: 1.2rem;
     margin-bottom: 1rem;
     color: var(--secondary-color);
     
     @media (max-width: 768px) {
-      font-size: 15px;
+      font-size: 1.2rem;
     }
   }
 
@@ -98,7 +99,7 @@ const GlobalStyles = createGlobalStyle`
     border: 1px solid #DDDDDD;
     border-radius: var(--border-radius);
     font-family: inherit;
-    font-size: 16px;
+    font-size: 1.2rem;
     background-color: white;
 
     &:focus {
@@ -108,7 +109,7 @@ const GlobalStyles = createGlobalStyle`
     
     @media (max-width: 768px) {
       padding: 0.7rem;
-      font-size: 15px;
+      font-size: 1.2rem;
       margin-bottom: 0.8rem;
     }
   }
@@ -143,7 +144,7 @@ const GlobalStyles = createGlobalStyle`
     
     /* Prevent zoom on input focus */
     input, textarea, select {
-      font-size: 16px !important;
+      font-size: 1.2rem !important;
     }
     
     /* Better mobile spacing */

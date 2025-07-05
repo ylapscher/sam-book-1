@@ -67,6 +67,7 @@ const LogoContainer = styled.div`
   }
 `;
 
+
 const NavLinks = styled.nav`
   display: flex;
   gap: 1.5rem;
@@ -107,7 +108,7 @@ const MobileOverlay = styled.div`
 const NavLink = styled(Link)`
   text-decoration: none;
   color: var(--secondary-color);
-  font-size: 1rem;
+  font-size: 1.2rem;
   cursor: pointer;
   transition: color 0.3s ease;
   padding: 0.5rem 0;
@@ -162,7 +163,7 @@ const StickyCtaButton = styled.button`
     border: none;
     border-radius: 8px;
     padding: 1rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
     z-index: 999;
@@ -216,8 +217,8 @@ function Header() {
       <HeaderContainer>
         <HeaderContent>
           <LogoContainer onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <img src="/images/heart-logo.jpg" alt="Sam Story Book Logo" />
-            <h1>Sam Story Book</h1>
+            <img src="/images/heart-logo.jpg" alt="Our Family Story Logo" />
+            <h1>Our Family Story</h1>
           </LogoContainer>
           <MobileMenuToggle onClick={toggleMenu}>
             {isMenuOpen ? '✕' : '☰'}

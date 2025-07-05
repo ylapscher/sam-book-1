@@ -14,18 +14,18 @@ const ProductInfoContainer = styled.div`
   }
 
   h2 {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     color: var(--primary-color);
     margin-bottom: 1rem;
     
     @media (max-width: 768px) {
-      font-size: 1.6rem;
+      font-size: 2rem;
       margin-bottom: 0.8rem;
     }
   }
 
   .subtitle {
-    font-size: 1rem;
+    font-size: 1.2rem;
     line-height: 1.6;
     color: var(--secondary-color);
     margin-bottom: 1.5rem;
@@ -41,7 +41,7 @@ const ProductInfoContainer = styled.div`
 `;
 
 const Price = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
   color: var(--primary-color);
   margin: 1.5rem 0;
@@ -56,7 +56,7 @@ const SubmitButton = styled.button`
   color: white;
   border: none;
   border-radius: 4px;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease;
