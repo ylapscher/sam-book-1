@@ -47,6 +47,26 @@ const HeaderContent = styled.div`
   }
 `;
 
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  
+  img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+  
+  @media (max-width: 768px) {
+    img {
+      width: 28px;
+      height: 28px;
+    }
+  }
+`;
+
 const NavLinks = styled.nav`
   display: flex;
   gap: 1.5rem;
@@ -166,10 +186,9 @@ const MobileMenuToggle = styled.button`
   padding: 0.5rem;
 
   @media (max-width: 768px) {
-    display: block;
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 1002;
   }
 `;
@@ -196,13 +215,15 @@ function Header() {
     <>
       <HeaderContainer>
         <HeaderContent>
-          <h1 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Sam Story Book</h1>
+          <LogoContainer onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <img src="/images/heart-logo.svg" alt="Sam Story Book Logo" />
+            <h1>Sam Story Book</h1>
+          </LogoContainer>
           <MobileMenuToggle onClick={toggleMenu}>
             {isMenuOpen ? '✕' : '☰'}
           </MobileMenuToggle>
           <MobileOverlay $isOpen={isMenuOpen} onClick={closeMenu} />
           <NavLinks $isOpen={isMenuOpen}>
-            <CloseButton onClick={closeMenu}>✕</CloseButton>
             <NavLink to="how-it-works" smooth={true} duration={500} onClick={closeMenu}>How It Works</NavLink>
             <NavLink to="form-section" smooth={true} duration={500} onClick={closeMenu}>Personalize</NavLink>
             <NavLink to="story-section" smooth={true} duration={500} onClick={closeMenu}>About</NavLink>

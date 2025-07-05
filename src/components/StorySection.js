@@ -20,19 +20,23 @@ const StorySectionContainer = styled.section`
 `;
 
 const Section = styled.div`
-  padding: 2rem 0;
+  padding: 2rem 2rem 2rem 3rem;
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 360px 1fr;
-  gap: 2.5rem;
+  gap: 1.5rem;
   align-items: center;
 
   @media (max-width: 1200px) {
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 2rem 2rem;
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 2rem;
+    gap: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 2rem 1rem 2rem 1.5rem;
   }
 
   .text-content {
@@ -64,8 +68,10 @@ const Section = styled.div`
     color: var(--secondary-color);
     margin-bottom: 1rem;
     text-align: left;
+    margin-left: 6px;
+    margin-right: 6px;
     @media (max-width: 1200px) {
-      text-align: center;
+      text-align: left;
     }
   }
 

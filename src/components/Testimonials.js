@@ -61,7 +61,7 @@ const CarouselOuter = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     min-height: 400px;
-    padding: 0 1rem;
+    padding: 0;
   }
 `;
 
@@ -90,31 +90,36 @@ const ArrowButton = styled.button`
   }
   
   @media (max-width: 768px) {
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid #ddd;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 1.8rem;
-    padding: 0;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    justify-content: center;
-    
-    &:first-of-type {
-      left: 10px;
-    }
-    
-    &:last-of-type {
-      right: 10px;
-    }
-    
-    &:hover:enabled {
-      background: rgba(255, 255, 255, 1);
-      border-color: #ccc;
-    }
+    display: none;
+  }
+`;
+
+const MobileArrowButton = styled.button`
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  padding: 0;
+  color: #bbb;
+  cursor: pointer;
+  transition: color 0.2s, opacity 0.2s, cursor 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover:enabled {
+    background: rgba(255, 255, 255, 1);
+    border-color: #ccc;
+    color: var(--primary-color);
+  }
+
+  &:disabled {
+    color: #eee;
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 
@@ -168,13 +173,14 @@ const TestimonialCard = styled.div`
   margin-top: 1.5rem;
   
   @media (max-width: 768px) {
-    /* min-width: calc(100vw - 4rem); */
-    /* max-width: calc(100vw - 4rem); */
-    width: 100%;
+    width: calc(100vw - 2rem);
+    min-width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
     box-sizing: border-box;
-    margin: 1.5rem 0 0 0;
+    margin: 1.5rem 1rem 0 1rem;
     padding: 1.5rem 1.2rem 1.2rem 1.2rem;
     min-height: 320px;
+    flex-shrink: 0;
   }
 `;
 
@@ -244,6 +250,19 @@ const DotIndicators = styled.div`
   @media (max-width: 768px) {
     display: flex;
     order: 2;
+  }
+`;
+
+const MobileNavigation = styled.div`
+  display: none;
+  
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    order: 3;
+    margin-top: 0.5rem;
   }
 `;
 
@@ -422,6 +441,10 @@ function CustomTestimonials() {
             />
           ))}
         </DotIndicators>
+        <MobileNavigation>
+          <MobileArrowButton onClick={prev} aria-label="Previous testimonial" disabled={start === 0}>&#8592;</MobileArrowButton>
+          <MobileArrowButton onClick={next} aria-label="Next testimonial" disabled={start >= total - visibleCount}>&#8594;</MobileArrowButton>
+        </MobileNavigation>
       </CarouselOuter>
       <AddReviewButton onClick={handleAddReview}>
         Add Your Review
