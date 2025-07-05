@@ -5,6 +5,13 @@ const ProductInfoContainer = styled.div`
   padding: 1rem;
   background-color: #ffffff;
   border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  
+  @media (max-width: 768px) {
+    padding: 1rem 0.5rem;
+    margin-top: 1rem;
+  }
 
   h2 {
     font-size: 1.8rem;
@@ -13,6 +20,7 @@ const ProductInfoContainer = styled.div`
     
     @media (max-width: 768px) {
       font-size: 1.6rem;
+      margin-bottom: 0.8rem;
     }
   }
 
@@ -21,6 +29,10 @@ const ProductInfoContainer = styled.div`
     line-height: 1.6;
     color: var(--secondary-color);
     margin-bottom: 1.5rem;
+    
+    @media (max-width: 768px) {
+      margin-bottom: 1rem;
+    }
   }
 
   p {
@@ -76,7 +88,7 @@ function ProductInfo() {
           <p style={{ margin: "0" }}><span style={{ fontWeight: "500" }}>✓</span> A beautiful gift for newborns and new parents</p>
         </div>
       </div>
-      <Price>$32-$38</Price>
+      <Price>$38</Price>
       
       <SubmitButton onClick={scrollToForm}>
         Personalize Your Book

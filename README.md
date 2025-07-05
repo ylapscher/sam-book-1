@@ -1,10 +1,10 @@
-# Our Family Story Book
+# Sam Story Book
 
-A personalized children's book that celebrates your family's unique heritage and immigration journey, perfect for sharing your family's story with the next generation.
+A personalized children's book that celebrates your family's unique heritage and journey, perfect for sharing your family's story with the next generation.
 
 ## About Our Books
 
-Our Family Story Book creates custom children's books that tell the story of your family's immigration journey. Each book is uniquely crafted to feature:
+Sam Story Book creates custom children's books that tell the story of your family's journey. Each book is uniquely crafted to feature:
 
 - Your family's real names and places
 - Actual photos of family members
@@ -15,15 +15,9 @@ Our Family Story Book creates custom children's books that tell the story of you
 
 1. **Share Your Story**: Provide details about your family's journey, including names, countries of origin, and where your family settled
    
-2. **Add Your Photos**: Upload treasured family photos that will be incorporated directly into your book:
-   - Parent's baby photo
-   - Parents' dating photo
-   - Baby's recent photo
-   - Current family photo
+2. **Customize Your Book**: Upload family photos and choose a book cover. Make it uniquely yours with these personal touches!
    
-3. **Choose Your Style**: Select a beautiful cover design and customize the book for a boy or girl
-
-4. **Receive Your Book**: Your personalized hardcover book will be created, printed, and delivered to your door
+3. **Place Your Order**: Add a heartfelt message to include in the book. Then, complete your purchase, and we'll ship your custom baby book directly to you!
 
 ## What Makes Our Books Special
 
@@ -37,10 +31,15 @@ Our Family Story Book creates custom children's books that tell the story of you
 
 ## Pricing
 
-Books start at $32, with options for additional customization available.
+**$38** - Complete personalized hardcover book
 
-Contact us at book.lapscher.com for special requests or questions about your order.
+✓ Recommended for ages 0-8  
+✓ Printed and dispatched in 5 working days  
+✓ Upload special photos to customize your story  
+✓ A beautiful gift for newborns and new parents
+
+For questions about your order, contact us through our website form.
 
 ---
 
-© Our Family Story Book. All rights reserved.
+© Sam Story Book. All rights reserved.

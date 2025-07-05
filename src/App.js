@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import GlobalStyles from './styles/GlobalStyles';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 // Import components
 import Header from './components/Header';
@@ -17,11 +17,17 @@ const AppContainer = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 `;
 
 const MainContent = styled.main`
   flex: 1;
   padding-top: 0;
+  margin-top: 0;
+
+  @media (max-width: 768px) {
+    padding-top: 60px;
+  }
 `;
 
 function App() {
@@ -79,7 +85,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <HelmetProvider>
       <Helmet>
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
@@ -111,7 +117,7 @@ function App() {
         </MainContent>
         <Footer />
       </AppContainer>
-    </>
+    </HelmetProvider>
   );
 }
 

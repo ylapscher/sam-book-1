@@ -13,10 +13,16 @@ const ProductGrid = styled.div`
   margin-top: 0;
   padding-top: 50px;
   padding-bottom: 50px;
+  box-sizing: border-box;
 
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
     padding: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
   }
 `;
 
