@@ -13,7 +13,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Build Notes
 - ESLint is disabled via `DISABLE_ESLINT_PLUGIN=true` in both start and build scripts
 - Production build uses `CI=false` to prevent treating warnings as errors
-- `--legacy-peer-deps` may be needed for some package installations due to React 19 compatibility
+- **IMPORTANT**: Always use `--legacy-peer-deps` for npm install due to React 19 compatibility
+- If build fails with ajv/schema-utils errors, run: `rm -rf node_modules package-lock.json && npm install --legacy-peer-deps`
+
+### Known Issues
+- `react-helmet-async` may cause peer dependency warnings with React 19 - this is expected
+- Build may occasionally fail due to ajv version conflicts in webpack toolchain
+- Use `npm install --legacy-peer-deps` for all package operations
 
 ## Architecture Overview
 
