@@ -107,7 +107,7 @@ const MobileOverlay = styled.div`
 const NavLink = styled(Link)`
   text-decoration: none;
   color: var(--secondary-color);
-  font-size: 1rem;
+  font-size: 1.2rem;
   cursor: pointer;
   transition: color 0.3s ease;
   padding: 0.5rem 0;
@@ -162,7 +162,7 @@ const StickyCtaButton = styled.button`
     border: none;
     border-radius: 8px;
     padding: 1rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
     z-index: 999;

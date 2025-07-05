@@ -63,7 +63,7 @@ const Section = styled.div`
   }
 
   p {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     line-height: 1.6;
     color: var(--secondary-color);
     margin-bottom: 1rem;

@@ -37,7 +37,7 @@ const FAQItem = styled.div`
   padding-bottom: 0.8rem;
 
   h3 {
-    font-size: 1rem;
+    font-size: 1.2rem;
     margin-bottom: 0.5rem;
     cursor: pointer;
     color: var(--secondary-color);
@@ -59,7 +59,7 @@ const FAQItem = styled.div`
   }
 
   p {
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     line-height: 1.6;
     color: #555;
     max-height: ${props => props.isOpen ? '1000px' : '0'};

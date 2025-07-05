@@ -68,7 +68,7 @@ const StepBox = styled.div`
   }
 
   p {
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     color: #555;
     line-height: 1.5;
   }
