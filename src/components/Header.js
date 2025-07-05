@@ -67,6 +67,7 @@ const LogoContainer = styled.div`
   }
 `;
 
+
 const NavLinks = styled.nav`
   display: flex;
   gap: 1.5rem;
@@ -216,8 +217,8 @@ function Header() {
       <HeaderContainer>
         <HeaderContent>
           <LogoContainer onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <img src="/images/heart-logo.jpg" alt="Sam Story Book Logo" />
-            <h1>Sam Story Book</h1>
+            <img src="/images/heart-logo.jpg" alt="Our Family Story Logo" />
+            <h1>Our Family Story</h1>
           </LogoContainer>
           <MobileMenuToggle onClick={toggleMenu}>
             {isMenuOpen ? '✕' : '☰'}
