@@ -30,8 +30,12 @@ const testimonials = [
 
 const TestimonialsContainer = styled.section`
   background-color: #fff;
-  padding: 3rem 0 0.3rem 0;
+  padding: 2rem 0 1rem 0;
   text-align: center;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem 0 0.5rem 0;
+  }
 `;
 
 const TestimonialsTitle = styled.h2`
@@ -56,7 +60,7 @@ const CarouselOuter = styled.div`
   
   @media (max-width: 768px) {
     flex-direction: column;
-    min-height: 440px;
+    min-height: 400px;
     padding: 0 1rem;
   }
 `;
@@ -130,15 +134,17 @@ const Carousel = styled.div`
   display: flex;
   gap: 2rem;
   flex: 1;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: stretch;
   transition: transform 0.3s ease;
   overflow: visible;
   
   @media (max-width: 768px) {
-    gap: 1rem;
-    transform: translateX(${props => props.translateX}px);
-    width: ${props => props.totalWidth}px;
+    gap: 0;
+    overflow: hidden;
+    transform: translateX(${props => props.$translateX}px);
+    width: ${props => props.$totalWidth}px;
+    justify-content: flex-start;
   }
 `;
 
@@ -162,9 +168,11 @@ const TestimonialCard = styled.div`
   margin-top: 1.5rem;
   
   @media (max-width: 768px) {
-    min-width: calc(100vw - 4rem);
-    max-width: calc(100vw - 4rem);
-    margin: 1.5rem 1rem 0 1rem;
+    /* min-width: calc(100vw - 4rem); */
+    /* max-width: calc(100vw - 4rem); */
+    width: 100%;
+    box-sizing: border-box;
+    margin: 1.5rem 0 0 0;
     padding: 1.5rem 1.2rem 1.2rem 1.2rem;
     min-height: 320px;
   }
@@ -244,12 +252,12 @@ const Dot = styled.div`
   height: 12px;
   border-radius: 50%;
   border: none;
-  background-color: ${props => props.active ? 'var(--accent-color)' : '#ddd'};
+  background-color: ${props => props.$active ? 'var(--accent-color)' : '#ddd'};
   cursor: pointer;
   transition: background-color 0.3s ease;
   
   &:hover {
-    background-color: ${props => props.active ? 'var(--accent-color)' : '#bbb'};
+    background-color: ${props => props.$active ? 'var(--accent-color)' : '#bbb'};
   }
   
   @media (max-width: 768px) {
@@ -290,6 +298,9 @@ function CustomTestimonials() {
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   const carouselRef = useRef(null);
+  const cardMeasurementRef = useRef(null);
+  const [carouselTranslateX, setCarouselTranslateX] = useState(0);
+  const [carouselTotalWidth, setCarouselTotalWidth] = useState(0);
   const total = testimonials.length;
 
   // Responsive visibleCount
@@ -308,6 +319,26 @@ function CustomTestimonials() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Calculate carousel dimensions for proper sliding
+  useEffect(() => {
+    const updateCarouselDimensions = () => {
+      if (cardMeasurementRef.current) {
+        const singleCardContentWidth = cardMeasurementRef.current.offsetWidth;
+        const cardHorizontalMargins = window.innerWidth <= 768 ? 16 * 2 : 0; 
+        const effectiveCardWidthForTranslation = singleCardContentWidth + cardHorizontalMargins;
+        
+        const calculatedTotalWidth = testimonials.length * effectiveCardWidthForTranslation;
+        setCarouselTotalWidth(calculatedTotalWidth);
+
+        setCarouselTranslateX(-start * effectiveCardWidthForTranslation);
+      }
+    };
+
+    updateCarouselDimensions();
+    window.addEventListener('resize', updateCarouselDimensions);
+    return () => window.removeEventListener('resize', updateCarouselDimensions);
+  }, [start, testimonials.length]);
+
   const prev = () => {
     if (start > 0) setStart(start - 1);
   };
@@ -321,7 +352,6 @@ function CustomTestimonials() {
     window.open(mailtoLink);
   };
 
-  // Touch handlers for mobile swipe
   const handleTouchStart = (e) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
@@ -352,9 +382,6 @@ function CustomTestimonials() {
     setStart(index);
   };
 
-  // Get the testimonials to show
-  const visibleTestimonials = testimonials.slice(start, start + visibleCount);
-
   return (
     <TestimonialsContainer id="testimonials">
       <TestimonialsTitle>Customer Reviews</TestimonialsTitle>
@@ -366,9 +393,11 @@ function CustomTestimonials() {
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            $translateX={carouselTranslateX}
+            $totalWidth={carouselTotalWidth}
           >
-            {visibleTestimonials.map((t, idx) => (
-              <TestimonialCard key={idx}>
+            {testimonials.map((t, idx) => (
+              <TestimonialCard key={idx} ref={idx === 0 ? cardMeasurementRef : null}>
                 <QuoteIcon>&ldquo;</QuoteIcon>
                 <CardHeader>
                   <NameDate>
@@ -387,7 +416,7 @@ function CustomTestimonials() {
           {testimonials.map((_, idx) => (
             <Dot
               key={idx}
-              active={idx >= start && idx < start + visibleCount}
+              $active={idx === start}
               onClick={() => goToSlide(idx)}
               aria-label={`Go to testimonial ${idx + 1}`}
             />

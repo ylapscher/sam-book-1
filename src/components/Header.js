@@ -10,9 +10,10 @@ const HeaderContainer = styled.header`
   top: 0;
   z-index: 1000; 
   border-bottom: 1px solid #DDDDDD;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 0.4rem 0.8rem;
+    padding: 0.5rem 0.8rem;
   }
 `;
 
@@ -24,6 +25,7 @@ const HeaderContent = styled.div`
   align-items: center;
   padding: 0 1rem;
   position: relative;
+  box-sizing: border-box;
 
   h1 {
     margin: 0;
@@ -34,12 +36,13 @@ const HeaderContent = styled.div`
   }
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 1rem;
-    gap: 1rem;
+    flex-direction: row;
+    padding: 0.5rem 1rem;
+    gap: 0;
     
     h1 {
       font-size: 1.3rem;
+      margin: 0;
     }
   }
 `;
@@ -52,7 +55,7 @@ const NavLinks = styled.nav`
   @media (max-width: 768px) {
     position: fixed;
     top: 0;
-    right: ${props => props.isOpen ? '0' : '-100%'};
+    right: ${props => props.$isOpen ? '0' : '-100%'};
     width: 280px;
     height: 100vh;
     background-color: white;
@@ -70,7 +73,7 @@ const MobileOverlay = styled.div`
   display: none;
   
   @media (max-width: 768px) {
-    display: ${props => props.isOpen ? 'block' : 'none'};
+    display: ${props => props.$isOpen ? 'block' : 'none'};
     position: fixed;
     top: 0;
     left: 0;
@@ -197,8 +200,8 @@ function Header() {
           <MobileMenuToggle onClick={toggleMenu}>
             {isMenuOpen ? '✕' : '☰'}
           </MobileMenuToggle>
-          <MobileOverlay isOpen={isMenuOpen} onClick={closeMenu} />
-          <NavLinks isOpen={isMenuOpen}>
+          <MobileOverlay $isOpen={isMenuOpen} onClick={closeMenu} />
+          <NavLinks $isOpen={isMenuOpen}>
             <CloseButton onClick={closeMenu}>✕</CloseButton>
             <NavLink to="how-it-works" smooth={true} duration={500} onClick={closeMenu}>How It Works</NavLink>
             <NavLink to="form-section" smooth={true} duration={500} onClick={closeMenu}>Personalize</NavLink>

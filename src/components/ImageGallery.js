@@ -5,10 +5,12 @@ const ProductImagesContainer = styled.div`
   display: flex;
   gap: 2rem;
   position: relative;
+  box-sizing: border-box;
+  width: 100%;
   
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 0;
+    gap: 0.5rem;
   }
 `;
 
@@ -83,21 +85,19 @@ const MainImageContainer = styled.div`
   position: relative;
   overflow: hidden;
   background-color: #f8f8f8;
-  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: ${props => props.isZoomed ? 'zoom-out' : 'zoom-in'};
+  cursor: ${props => props.$isZoomed ? 'zoom-out' : 'zoom-in'};
 
   img {
     width: 100%;
-    max-height: 600px;
     object-fit: cover;
     display: block;
     border-radius: 8px;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    transform-origin: ${props => `${props.zoomX}% ${props.zoomY}%`};
-    transform: ${props => props.isZoomed ? 'scale(2)' : 'scale(1)'};
+    transform-origin: ${props => `${props.$zoomX}% ${props.$zoomY}%`};
+    transform: ${props => props.$isZoomed ? 'scale(2)' : 'scale(1)'};
     
     &.loading {
       opacity: 0;
@@ -119,32 +119,13 @@ const MainImageContainer = styled.div`
     justify-content: space-between;
     padding: 0 0.5rem;
     pointer-events: none;
-    opacity: ${props => props.isZoomed ? '0' : '1'};
+    opacity: ${props => props.$isZoomed ? '0' : '1'};
     transition: opacity 0.3s ease;
-  }
-`;
-
-const ZoomIndicator = styled.div`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(0,0,0,0.7);
-  color: white;
-  padding: 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  display: ${props => props.show ? 'block' : 'none'};
-  z-index: 10;
-  
-  @media (max-width: 768px) {
-    display: none;
   }
 `;
 
 const LoadingSkeleton = styled.div`
   width: 100%;
-  max-height: 600px;
-  height: 400px;
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
@@ -341,14 +322,11 @@ function ImageGallery() {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        isZoomed={isZoomed}
-        zoomX={zoomPosition.x}
-        zoomY={zoomPosition.y}
+        $isZoomed={isZoomed}
+        $zoomX={zoomPosition.x}
+        $zoomY={zoomPosition.y}
       >
         {isLoading && <LoadingSkeleton />}
-        <ZoomIndicator show={!isZoomed && window.innerWidth > 768}>
-          Click to zoom
-        </ZoomIndicator>
         <img
           ref={el => imageRefs.current[currentImageIndex] = el}
           src={images[currentImageIndex].src}

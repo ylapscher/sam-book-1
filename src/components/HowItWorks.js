@@ -5,12 +5,18 @@ const HowItWorksContainer = styled.section`
   background-color: #f9f9f9;
   padding-top: 3rem;
   padding-bottom: 3rem;
+
+  @media (max-width: 768px) {
+    padding-top: 2rem;
+  }
 `;
 
 const Section = styled.div`
   padding: 2rem 0;
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 
   @media (max-width: 1200px) {
     padding: 2rem 1rem;
