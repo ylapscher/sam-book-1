@@ -3,27 +3,27 @@ import styled from 'styled-components';
 
 const testimonials = [
   {
-    name: 'Sharon G',
-    date: 'May 21',
-    text: 'The most beautifully illustrated and customized book for our baby and us 🥹😍 I have never seen anything like this and the art to the poems were so heartwarming and special.',
-    stars: 5
-  },
-  {
     name: 'Michael Z',
     date: 'June 3',
     text: 'Thank you! What an amazing gift - Daniel loves it. I read it to him again today!',
     stars: 5
   },
   {
-    name: 'Jenna S',
-    date: 'May 14',
-    text: "The quality, personalization, and heartfelt storytelling completely blew me away. I gave it as a gift for my friend's daughter's first birthday, and she actually cried when she opened it and said it was truly the most amazing gift. You can truly feel the love and care that went into every page. I can't recommend this enough!",
-    stars: 5
-  },
-  {
     name: 'Evelyn L',
     date: 'June 2',
     text: 'I ordered this photo book as a gift & it completely exceeded expectations. The quality was outstanding, and the illustrations brought the memories to life in a meaningful way. I\'m so happy how it turned out!',
+    stars: 5
+  },
+  {
+    name: 'Sharon G',
+    date: 'May 21',
+    text: 'The most beautifully illustrated and customized book for our baby and us 🥹😍 I have never seen anything like this and the art to the poems were so heartwarming and special.',
+    stars: 5
+  },
+  {
+    name: 'Jenna S',
+    date: 'May 14',
+    text: "The quality, personalization, and heartfelt storytelling completely blew me away. I gave it as a gift for my friend's daughter's first birthday, and she actually cried when she opened it and said it was truly the most amazing gift. You can truly feel the love and care that went into every page. I can't recommend this enough!",
     stars: 5
   }
 ];

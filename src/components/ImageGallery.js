@@ -84,7 +84,6 @@ const MainImageContainer = styled.div`
   flex: 1;
   position: relative;
   overflow: hidden;
-  background-color: #f8f8f8;
   display: flex;
   align-items: center;
   justify-content: center;
