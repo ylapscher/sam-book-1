@@ -74,6 +74,15 @@ function App() {
   useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.has('submission-success')) {
+      // Fire Meta Pixel Lead event (form/email signup submitted)
+      if (typeof window.fbq === 'function') {
+        window.fbq('track', 'Lead');
+      }
+      // Fire Meta Pixel Purchase event (order completed)
+      if (typeof window.fbq === 'function') {
+        const value = parseFloat(url.searchParams.get('value') || url.searchParams.get('amount') || url.searchParams.get('order_value')) || 38;
+        window.fbq('track', 'Purchase', { value, currency: 'USD' });
+      }
       // Scroll to the form section to show the success message
       setTimeout(() => {
         const formSection = document.querySelector('#form-section');
