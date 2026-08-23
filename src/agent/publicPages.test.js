@@ -136,7 +136,7 @@ describe('public markdown siblings stay in sync', () => {
 describe('edge function packaging', () => {
   test('does not import application source from outside netlify/edge-functions', () => {
     const source = fs.readFileSync(
-      path.join(__dirname, '../../netlify/edge-functions/negotiate.js'),
+      path.join(__dirname, '../../netlify/edge-functions/negotiate.ts'),
       'utf8'
     );
     expect(source.includes('../../src/')).toBe(false);

@@ -1,8 +1,10 @@
+import type { Config, Context } from "@netlify/edge-functions";
+
 const VARY = "Accept, Accept-Encoding";
 const MARKDOWN_TYPE = "text/markdown; charset=utf-8";
 const ORIGIN = "https://www.samstorybook.com";
 
-const PAGE_TO_MARKDOWN = {
+const PAGE_TO_MARKDOWN: Record<string, string> = {
   "/": "/index.md",
   "/index.html": "/index.md",
   "/about": "/about.md",
@@ -34,7 +36,15 @@ This path does not exist on Sam Story Book. Nothing is hidden behind it — the 
 If you were sent here by a guessed docs or API path, stop: Sam Story Book does not publish a developer API. Use the homepage form or contact page instead.
 `;
 
-function normalizePathname(pathname) {
+type AcceptRange = {
+  type: string;
+  subtype: string;
+  q: number;
+  index: number;
+  raw: string;
+};
+
+function normalizePathname(pathname: string): string {
   const path = pathname.split("?")[0].split("#")[0];
   if (path.length > 1 && path.endsWith("/")) {
     return path.slice(0, -1);
@@ -42,7 +52,7 @@ function normalizePathname(pathname) {
   return path === "" ? "/" : path;
 }
 
-function shouldPassThrough(pathname) {
+function shouldPassThrough(pathname: string): boolean {
   if (pathname.startsWith("/images/") || pathname.startsWith("/static/") || pathname.startsWith("/css/")) {
     return true;
   }
@@ -52,7 +62,7 @@ function shouldPassThrough(pathname) {
   return /\.(?:css|js|mjs|map|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|eot|json|md|txt|xml)$/i.test(pathname);
 }
 
-function parseAccept(header) {
+function parseAccept(header: string | null): AcceptRange[] | null {
   if (header == null) return null;
   const trimmed = String(header).trim();
   if (trimmed === "") return [];
@@ -81,10 +91,10 @@ function parseAccept(header) {
       }
       return { type, subtype, q, index, raw: media };
     })
-    .filter(Boolean);
+    .filter((item): item is AcceptRange => item != null);
 }
 
-function rangeMatches(serverType, range) {
+function rangeMatches(serverType: string, range: AcceptRange): { specificity: number } | null {
   if (range.raw === "*/*" || (range.type === "*" && range.subtype === "*")) {
     return { specificity: 1 };
   }
@@ -98,7 +108,7 @@ function rangeMatches(serverType, range) {
   return null;
 }
 
-function negotiate(acceptHeader) {
+function negotiate(acceptHeader: string | null): string {
   const produced = ["text/markdown", "text/html"];
   const defaultType = "text/html";
   const ranges = parseAccept(acceptHeader);
@@ -141,7 +151,7 @@ function negotiate(acceptHeader) {
   return "none";
 }
 
-function markdownHeaders(status) {
+function markdownHeaders(status: number): Record<string, string> {
   return {
     "Content-Type": MARKDOWN_TYPE,
     Vary: VARY,
@@ -149,15 +159,15 @@ function markdownHeaders(status) {
   };
 }
 
-function mergeVary(existing) {
-  const seen = new Set();
+function mergeVary(existing: string | null): string {
+  const seen = new Set<string>();
   String(existing || "")
     .split(",")
     .concat(VARY.split(","))
     .map((item) => item.trim().toLowerCase())
     .filter(Boolean)
     .forEach((token) => seen.add(token));
-  const ordered = [];
+  const ordered: string[] = [];
   ["accept", "accept-encoding"].forEach((token) => {
     if (seen.delete(token)) {
       ordered.push(token === "accept" ? "Accept" : "Accept-Encoding");
@@ -167,7 +177,23 @@ function mergeVary(existing) {
   return ordered.join(", ");
 }
 
-export default async (request, context) => {
+function applySiteHeaders(headers: Headers): Headers {
+  headers.set("Access-Control-Allow-Origin", "*");
+  headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  headers.set("Access-Control-Allow-Headers", "Content-Type");
+  return headers;
+}
+
+function respond(body: BodyInit | null, init: ResponseInit): Response {
+  const headers = applySiteHeaders(new Headers(init.headers));
+  return new Response(body, { ...init, headers });
+}
+
+export default async (request: Request, context: Context) => {
+  if (request.method === "OPTIONS") {
+    return respond(null, { status: 204, headers: { Vary: VARY } });
+  }
+
   const url = new URL(request.url);
   const pathname = normalizePathname(url.pathname);
 
@@ -181,7 +207,7 @@ export default async (request, context) => {
 
   const chosen = negotiate(request.headers.get("Accept"));
   if (chosen === "none") {
-    return new Response("Not Acceptable\n", {
+    return respond("Not Acceptable\n", {
       status: 406,
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
@@ -193,20 +219,20 @@ export default async (request, context) => {
   if (chosen === "text/markdown") {
     const mdPath = PAGE_TO_MARKDOWN[pathname];
     if (!mdPath) {
-      return new Response(request.method === "HEAD" ? null : NOT_FOUND_MARKDOWN, {
+      return respond(request.method === "HEAD" ? null : NOT_FOUND_MARKDOWN, {
         status: 404,
         headers: markdownHeaders(404),
       });
     }
     const origin = await fetch(new URL(mdPath, url.origin));
     if (!origin.ok) {
-      return new Response(request.method === "HEAD" ? null : NOT_FOUND_MARKDOWN, {
+      return respond(request.method === "HEAD" ? null : NOT_FOUND_MARKDOWN, {
         status: 404,
         headers: markdownHeaders(404),
       });
     }
     const body = request.method === "HEAD" ? null : await origin.text();
-    return new Response(body, {
+    return respond(body, {
       status: 200,
       headers: markdownHeaders(200),
     });
@@ -215,6 +241,7 @@ export default async (request, context) => {
   const originResponse = await context.next();
   const headers = new Headers(originResponse.headers);
   headers.set("Vary", mergeVary(headers.get("Vary")));
+  applySiteHeaders(headers);
   return new Response(originResponse.body, {
     status: originResponse.status,
     statusText: originResponse.statusText,
@@ -222,6 +249,14 @@ export default async (request, context) => {
   });
 };
 
-export const config = {
+export const config: Config = {
   path: "/*",
+  excludedPath: [
+    "/images/*",
+    "/static/*",
+    "/css/*",
+    "/favicon.ico",
+    "/manifest.json",
+    "/robots.txt",
+  ],
 };
