@@ -1,5 +1,23 @@
-# https://www.robotstxt.org/robotstxt.html
-User-agent: *
+# User-agent: *
 Allow: /
 
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Agent index: https://www.samstorybook.com/llms.txt
 Sitemap: https://www.samstorybook.com/sitemap.xml
