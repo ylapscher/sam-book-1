@@ -12,7 +12,6 @@ import StorySection from './components/StorySection';
 import FAQSection from './components/FAQSection';
 import CustomTestimonials from './components/Testimonials';
 import Footer from './components/Footer';
-import { structuredDataJson } from './agent/structuredData';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -58,9 +57,6 @@ function App() {
   return (
     <HelmetProvider>
       <Helmet>
-        <script type="application/ld+json">
-          {structuredDataJson()}
-        </script>
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-EM0KL5NT5L"></script>
         <script>
