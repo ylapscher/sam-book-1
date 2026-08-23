@@ -2,7 +2,7 @@ const VARY = "Accept, Accept-Encoding";
 const MARKDOWN_TYPE = "text/markdown; charset=utf-8";
 const ORIGIN = "https://www.samstorybook.com";
 
-const PAGE_TO_MARKDOWN: Record<string, string> = {
+const PAGE_TO_MARKDOWN = {
   "/": "/index.md",
   "/index.html": "/index.md",
   "/about": "/about.md",
@@ -34,7 +34,7 @@ This path does not exist on Sam Story Book. Nothing is hidden behind it — the 
 If you were sent here by a guessed docs or API path, stop: Sam Story Book does not publish a developer API. Use the homepage form or contact page instead.
 `;
 
-function normalizePathname(pathname: string) {
+function normalizePathname(pathname) {
   const path = pathname.split("?")[0].split("#")[0];
   if (path.length > 1 && path.endsWith("/")) {
     return path.slice(0, -1);
@@ -42,25 +42,19 @@ function normalizePathname(pathname: string) {
   return path === "" ? "/" : path;
 }
 
-function shouldPassThrough(pathname: string) {
+function shouldPassThrough(pathname) {
   if (pathname.startsWith("/images/") || pathname.startsWith("/static/") || pathname.startsWith("/css/")) {
     return true;
   }
-  if (
-    pathname === "/favicon.ico" ||
-    pathname === "/manifest.json" ||
-    pathname === "/robots.txt"
-  ) {
+  if (pathname === "/favicon.ico" || pathname === "/manifest.json" || pathname === "/robots.txt") {
     return true;
   }
-  return /\.(?:css|js|mjs|map|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|eot|json|md|txt|xml)$/i.test(
-    pathname
-  );
+  return /\.(?:css|js|mjs|map|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|eot|json|md|txt|xml)$/i.test(pathname);
 }
 
-function parseAccept(header: string | null) {
+function parseAccept(header) {
   if (header == null) return null;
-  const trimmed = header.trim();
+  const trimmed = String(header).trim();
   if (trimmed === "") return [];
 
   return trimmed
@@ -87,13 +81,10 @@ function parseAccept(header: string | null) {
       }
       return { type, subtype, q, index, raw: media };
     })
-    .filter(Boolean) as Array<{ type: string; subtype: string; q: number; index: number; raw: string }>;
+    .filter(Boolean);
 }
 
-function rangeMatches(
-  serverType: string,
-  range: { type: string; subtype: string; raw: string }
-) {
+function rangeMatches(serverType, range) {
   if (range.raw === "*/*" || (range.type === "*" && range.subtype === "*")) {
     return { specificity: 1 };
   }
@@ -107,7 +98,7 @@ function rangeMatches(
   return null;
 }
 
-function negotiate(acceptHeader: string | null) {
+function negotiate(acceptHeader) {
   const produced = ["text/markdown", "text/html"];
   const defaultType = "text/html";
   const ranges = parseAccept(acceptHeader);
@@ -117,14 +108,11 @@ function negotiate(acceptHeader: string | null) {
     let best = { q: 0, specificity: 0, clientIndex: Number.MAX_SAFE_INTEGER };
     for (const range of ranges) {
       const match = rangeMatches(type, range);
-      if (!match) continue;
-      if (range.q === 0) continue;
+      if (!match || range.q === 0) continue;
       if (
         match.specificity > best.specificity ||
         (match.specificity === best.specificity && range.q > best.q) ||
-        (match.specificity === best.specificity &&
-          range.q === best.q &&
-          range.index < best.clientIndex)
+        (match.specificity === best.specificity && range.q === best.q && range.index < best.clientIndex)
       ) {
         best = { q: range.q, specificity: match.specificity, clientIndex: range.index };
       }
@@ -144,18 +132,16 @@ function negotiate(acceptHeader: string | null) {
   const best = scores[0];
   if (best && best.q > 0) {
     const tiedWildcard =
-      best.specificity === 1 &&
-      scores.every((item) => item.q === best.q && item.specificity === 1);
+      best.specificity === 1 && scores.every((item) => item.q === best.q && item.specificity === 1);
     if (tiedWildcard) return defaultType;
     return best.type;
   }
 
-  const anyPositive = ranges.some((range) => range.q > 0);
-  if (!anyPositive) return defaultType;
+  if (!ranges.some((range) => range.q > 0)) return defaultType;
   return "none";
 }
 
-function markdownHeaders(status: number) {
+function markdownHeaders(status) {
   return {
     "Content-Type": MARKDOWN_TYPE,
     Vary: VARY,
@@ -163,21 +149,25 @@ function markdownHeaders(status: number) {
   };
 }
 
-function mergeVary(existing: string | null) {
-  const seen = new Set<string>();
-  for (const raw of `${existing || ""},${VARY}`.split(",")) {
-    const token = raw.trim().toLowerCase();
-    if (token) seen.add(token);
-  }
+function mergeVary(existing) {
+  const seen = new Set();
+  String(existing || "")
+    .split(",")
+    .concat(VARY.split(","))
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean)
+    .forEach((token) => seen.add(token));
   const ordered = [];
-  for (const name of ["Accept", "Accept-Encoding"]) {
-    if (seen.delete(name.toLowerCase())) ordered.push(name);
-  }
+  ["accept", "accept-encoding"].forEach((token) => {
+    if (seen.delete(token)) {
+      ordered.push(token === "accept" ? "Accept" : "Accept-Encoding");
+    }
+  });
   seen.forEach((token) => ordered.push(token));
   return ordered.join(", ");
 }
 
-export default async (request: Request, context: { next: () => Promise<Response> }) => {
+export default async (request, context) => {
   const url = new URL(request.url);
   const pathname = normalizePathname(url.pathname);
 
@@ -234,6 +224,4 @@ export default async (request: Request, context: { next: () => Promise<Response>
 
 export const config = {
   path: "/*",
-  excludedPath: ["/images/*", "/static/*", "/css/*"],
-  method: ["GET", "HEAD"],
 };
