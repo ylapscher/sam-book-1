@@ -21,18 +21,44 @@ function readPublic(name) {
 }
 
 function readableText(html) {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  let text = '';
+  let index = 0;
+  while (index < html.length) {
+    const open = html.indexOf('<', index);
+    if (open === -1) {
+      text += html.slice(index);
+      break;
+    }
+    text += html.slice(index, open);
+    const close = html.indexOf('>', open + 1);
+    if (close === -1) {
+      text += html.slice(open);
+      break;
+    }
+    index = close + 1;
+  }
+  return text.replace(/\s+/g, ' ').trim();
 }
 
 function innerRoot(html) {
-  const match = html.match(/<div id="root">([\s\S]*?)<\/div>\s*<\/body>/);
-  expect(match).not.toBeNull();
-  return match[1];
+  const startMarker = '<div id="root">';
+  const start = html.indexOf(startMarker);
+  expect(start).toBeGreaterThan(-1);
+  const after = start + startMarker.length;
+  const bodyClose = html.lastIndexOf('</body>');
+  const end = html.lastIndexOf('</div>', bodyClose);
+  expect(end).toBeGreaterThan(after);
+  return html.slice(after, end);
+}
+
+function jsonLdFromHomepage(html) {
+  const startMarker = '<script type="application/ld+json">';
+  const start = html.indexOf(startMarker);
+  expect(start).toBeGreaterThan(-1);
+  const after = start + startMarker.length;
+  const end = html.indexOf('</script>', after);
+  expect(end).toBeGreaterThan(after);
+  return JSON.parse(html.slice(after, end));
 }
 
 describe('homepage HTML without JavaScript', () => {
@@ -41,21 +67,19 @@ describe('homepage HTML without JavaScript', () => {
   const text = readableText(root);
 
   test('includes a brand H1 and 500+ characters of copy', () => {
-    expect(root).toMatch(/<h1[^>]*>\s*Sam Story Book\s*<\/h1>/);
+    expect(root.includes('<h1>Sam Story Book</h1>')).toBe(true);
     expect(text.length).toBeGreaterThanOrEqual(500);
-    expect(root).toMatch(/<h2[^>]*>/);
-    expect(root).toMatch(/<h3[^>]*>/);
+    expect(root.includes('<h2>')).toBe(true);
+    expect(root.includes('<h3>')).toBe(true);
   });
 
   test('embeds Organization JSON-LD with contactPoint and address', () => {
-    const match = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
-    expect(match).not.toBeNull();
-    const data = JSON.parse(match[1]);
+    const data = jsonLdFromHomepage(html);
     expect(data).toEqual(structuredData);
     const org = data['@graph'].find((node) => node['@type'] === 'Organization');
     expect(org.name).toBe('Sam Story Book');
     expect(org.contactPoint.email).toBe('samlapscher@gmail.com');
-    expect(org.contactPoint.telephone).toMatch(/\+1-845-825-3180/);
+    expect(org.contactPoint.telephone).toBe('+1-845-825-3180');
     expect(org.contactPoint.contactType).toBe('customer service');
     expect(org.address['@type']).toBe('PostalAddress');
     expect(org.address.addressLocality).toBe('New York');
@@ -70,7 +94,7 @@ describe('trust pages', () => {
   ])('%s has an H1 and 500+ characters', (filename, heading) => {
     const html = readPublic(filename);
     const text = readableText(html);
-    expect(html).toMatch(new RegExp(`<h1[^>]*>\\s*${heading}\\s*</h1>`));
+    expect(html.includes(`<h1>${heading}</h1>`)).toBe(true);
     expect(text.length).toBeGreaterThanOrEqual(500);
   });
 });
@@ -78,20 +102,20 @@ describe('trust pages', () => {
 describe('agent-friendly 404 HTML', () => {
   test('points agents at llms.txt, sitemap, and contact', () => {
     const html = readPublic('404.html');
-    expect(html).toMatch(/llms\.txt/);
-    expect(html).toMatch(/sitemap/);
-    expect(html).toMatch(/\/contact/);
-    expect(html).toMatch(/\/about/);
+    expect(html.includes('llms.txt')).toBe(true);
+    expect(html.includes('sitemap')).toBe(true);
+    expect(html.includes('/contact')).toBe(true);
+    expect(html.includes('/about')).toBe(true);
   });
 });
 
 describe('llms.txt', () => {
   test('follows llmstxt.org shape and includes when-to-use guidance', () => {
     expect(llmsTxt.startsWith('# Sam Story Book\n')).toBe(true);
-    expect(llmsTxt).toMatch(/^> /m);
-    expect(llmsTxt).toMatch(/## When to use this/);
-    expect(llmsTxt).toMatch(/How an agent should call us/);
-    expect(llmsTxt).toMatch(/When not to use this/);
+    expect(llmsTxt.includes('> ')).toBe(true);
+    expect(llmsTxt.includes('## When to use this')).toBe(true);
+    expect(llmsTxt.includes('How an agent should call us')).toBe(true);
+    expect(llmsTxt.includes('When not to use this')).toBe(true);
     expect(readPublic('llms.txt').trim()).toBe(llmsTxt.trim());
   });
 });
@@ -106,5 +130,17 @@ describe('public markdown siblings stay in sync', () => {
     ['llms-full.txt', llmsFullTxt],
   ])('%s matches pages.js', (filename, expected) => {
     expect(readPublic(filename).trim()).toBe(expected.trim());
+  });
+});
+
+describe('edge function packaging', () => {
+  test('does not import application source from outside netlify/edge-functions', () => {
+    const source = fs.readFileSync(
+      path.join(__dirname, '../../netlify/edge-functions/negotiate.ts'),
+      'utf8'
+    );
+    expect(source.includes('../../src/')).toBe(false);
+    expect(source.includes('text/markdown')).toBe(true);
+    expect(source.includes('Vary')).toBe(true);
   });
 });

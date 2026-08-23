@@ -51,10 +51,6 @@ export function markdownHeaders(pathname, extra = {}) {
     Vary: VARY_ACCEPT,
     'Cache-Control': extra.cacheControl || 'public, max-age=300',
     Link: linkHeader(pathname),
-    // Preserve the site-wide CORS policy from netlify.toml on generated responses.
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
   };
 }
 
