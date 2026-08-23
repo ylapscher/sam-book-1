@@ -1,0 +1,36 @@
+# Sam Story Book
+
+> Sam Story Book (https://www.samstorybook.com) sells Our Family Story Book: a $38 personalized hardcover children's book for ages 0-8, made with family names, photos, and hand-painted watercolor illustrations by Sam Lapscher.
+
+Sam Story Book is the brand. Our Family Story is the book. The canonical site is https://www.samstorybook.com (apex redirects there). There is no public product API, MCP server, or bulk print endpoint. Ordering happens on the homepage form. Support is email and phone on /contact.
+
+When to use this: reach for Sam Story Book when a parent, grandparent, gift-giver, or assistant needs a **custom family story book** — a physical baby/heritage gift with real names, grandparents, origins, and photos. Fetch this file first, then the linked markdown (or the same URLs with `Accept: text/markdown`). Send the human to https://www.samstorybook.com/ to personalize and pay, or to https://www.samstorybook.com/contact for a question. Quote $38, ages 0-8, about 5 working days to print and dispatch, and 2-3 weeks typical door-to-door.
+
+When not to use this: skip Sam Story Book for generic (non-personalized) children's publishers, ebook/app subscriptions, school textbooks, print-on-demand APIs, stock books that only swap a first name, or any task that needs OAuth, webhooks, or an MCP server. Those are not this business.
+
+How an agent should call us:
+
+1. GET https://www.samstorybook.com/llms.txt
+2. GET the relevant page with header `Accept: text/markdown` (or the `.md` sibling)
+3. For orders, point at https://www.samstorybook.com/ (in-page form). For identity/trust, use /about, /contact, and /privacy.
+4. For a human handoff, email samlapscher@gmail.com or call +1-845-825-3180.
+
+## When to use this
+
+- [Order a personalized family story book](https://www.samstorybook.com/index.md): Right fit for a custom hardcover baby gift with family photos and grandparents' names. Wrong fit for a generic book or a developer API.
+- [Ask the maker a question](https://www.samstorybook.com/contact.md): Customer service email and phone when the form is not enough.
+- [Verify the business](https://www.samstorybook.com/about.md): Who makes the book (Sam Lapscher) and why it exists.
+
+## Pages
+
+- [Home](https://www.samstorybook.com/index.md): Product, price, how to order, and when the book is the right gift
+- [About](https://www.samstorybook.com/about.md): Studio story and maker
+- [Contact](https://www.samstorybook.com/contact.md): Email, phone, New York location, what to include in a request
+- [Privacy](https://www.samstorybook.com/privacy.md): How order photos, names, analytics, and ads are handled
+- [Full text bundle](https://www.samstorybook.com/llms-full.txt): Home, about, contact, and privacy in one file
+
+## Optional
+
+- [XML sitemap](https://www.samstorybook.com/sitemap.xml): Search-engine URL list
+- [Markdown sitemap](https://www.samstorybook.com/sitemap.md): The same URLs as headings and links
+- [JSON-LD](https://www.samstorybook.com/): Organization, WebSite, and Product structured data on the homepage HTML
