@@ -5,7 +5,7 @@ import ProductInfo from './ProductInfo';
 
 const ProductGrid = styled.div`
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   gap: 2rem;
   padding: 1rem 2rem;
   max-width: 1400px;
@@ -16,7 +16,7 @@ const ProductGrid = styled.div`
   box-sizing: border-box;
 
   @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     padding: 1rem;
   }
 
