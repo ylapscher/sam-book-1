@@ -68,8 +68,6 @@ const Section = styled.div`
     color: var(--secondary-color);
     margin-bottom: 1rem;
     text-align: left;
-    margin-left: 6px;
-    margin-right: 6px;
     @media (max-width: 1200px) {
       text-align: left;
     }

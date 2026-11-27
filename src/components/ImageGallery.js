@@ -7,9 +7,11 @@ const ProductImagesContainer = styled.div`
   position: relative;
   box-sizing: border-box;
   width: 100%;
+  align-items: flex-start;
   
   @media (max-width: 768px) {
     flex-direction: column;
+    align-items: stretch;
     gap: 0.5rem;
   }
 `;
@@ -82,6 +84,7 @@ const ThumbnailList = styled.div`
 
 const MainImageContainer = styled.div`
   flex: 1;
+  min-width: 0;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -120,6 +123,16 @@ const MainImageContainer = styled.div`
     pointer-events: none;
     opacity: ${props => props.$isZoomed ? '0' : '1'};
     transition: opacity 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    padding-bottom: 52px;
+
+    .navigation-container {
+      align-items: flex-end;
+      justify-content: center;
+      gap: 1rem;
+    }
   }
 `;
 
